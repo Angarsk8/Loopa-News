@@ -9,3 +9,18 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Microscope.{Repo, User}
+
+[
+  %{
+    username: "agarcia038",
+    password: "12345678"
+  },
+  %{
+    username: "angarsk8",
+    password: "12345678"
+  },
+]
+|> Enum.map(&User.changeset(%User{}, &1))
+|> Enum.each(&Repo.insert!(&1))

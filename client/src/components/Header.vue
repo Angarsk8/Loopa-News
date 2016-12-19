@@ -30,13 +30,13 @@
 </template>
 <script>
 import Notification from './Notification'
-import LoginWidget from './LoginWidget'
+import AuthWidget   from './Auth/Widget'
 
 export default {
   name: "Header",
   components: {
     'notifications-panel': Notification,
-    'login-widget': LoginWidget
+    'login-widget': AuthWidget
   }
 }
 </script>

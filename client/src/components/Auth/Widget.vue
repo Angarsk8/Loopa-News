@@ -5,16 +5,20 @@
         href="#"
         class="dropdown-toggle"
         data-toggle="dropdown"
-      >
-        Login<span class="caret"></span>
+      >Login<span class="caret"></span>
       </a>
-      <ul id="login-dp" class="dropdown-menu">
+      <ul id="login-dp" class="dropdown-menu" v-if="this.isAuthenticated">
+        <button class="btn btn-block btn-primary" @click="logout()">
+          Sign out
+        </button>
+      </ul>
+      <ul id="login-dp" class="dropdown-menu" v-else>
         <li>
           <div class="row">
             <div class="col-md-12">
-              <login-form v-if="isLogin"></login-form>
+              <login-form v-if="showLogin"></login-form>
               <signup-form v-else></signup-form>
-              <div v-if="isLogin" class="bottom text-center">
+              <div v-if="showLogin" class="bottom text-center">
                 <span class="bottom-text">Not registered?</span>
                 <a @click="toggleLogin">Create account</a>
               </div>
@@ -30,24 +34,30 @@
   </ul>
 </template>
 <script>
-import LoginForm  from './LoginForm'
-import SignupForm from './SignupForm'
+import auth from '../../services/auth'
+
+import Login  from './components/Login'
+import Signup from './components/Signup'
 
 export default {
-  name: 'LoginWidget',
+  name: 'AuthWidget',
   components: {
-    'login-form': LoginForm,
-    'signup-form': SignupForm,
+    'login-form': Login,
+    'signup-form': Signup,
   },
   data: () => {
     return {
-      isLogin: true
+      showLogin: true,
+      isAuthenticated: auth.user.authenticated
     }
   },
   methods: {
     toggleLogin(e){
       e.stopPropagation();
-      this.isLogin = !this.isLogin;
+      this.showLogin = !this.showLogin;
+    },
+    logout(){
+      auth.logout(this, { headers: auth.getAuthHeader() })
     }
   }
 }
@@ -77,9 +87,5 @@ export default {
 }
 #login-dp .form-group {
   margin-bottom: 10px;
-}
-#login-dp .form-group button {
-  width: 90%;
-  margin: auto 5%;
 }
 </style>

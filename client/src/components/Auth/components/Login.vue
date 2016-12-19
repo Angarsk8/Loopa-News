@@ -1,5 +1,5 @@
 <template>
-  <form class="form" role="form" accept-charset="UTF-8" id="signup-nav">
+  <form class="form" role="form" accept-charset="UTF-8" id="login-nav">
     <div class="form-group">
       <label class="sr-only" for="email-address">Email address</label>
       <input
@@ -22,23 +22,12 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="sr-only" for="confirm-password-value">Confirm password</label>
-      <input
-        type="password"
-        class="form-control"
-        id="confirm-password-value"
-        placeholder="Confirm password"
-        required
-      />
-      </div>
-    </div>
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
     </div>
   </form>
 </template>
 <script>
 export default {
-  name: "SignupForm"
+  name: "Login",
 }
 </script>

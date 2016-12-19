@@ -17,6 +17,14 @@ config :microscope, Microscope.Endpoint,
   pubsub: [name: Microscope.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+config :guardian, Guardian,
+  issuer: "Microscope",
+  ttl: { 3, :days },
+  verify_issuer: true,
+  allowed_algos: ["HS256"],
+  secret_key: %{"k" => "5Fn8i7r5cRWZW_yyr9Flkg", "kty" => "oct"},
+  serializer: Microscope.GuardianSerializer
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

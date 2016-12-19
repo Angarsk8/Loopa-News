@@ -5,6 +5,10 @@ import VueResource from 'vue-resource'
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
+import auth from './services/auth'
+
+auth.checkAuth()
+
 import App from './App'
 import { router } from './router'
 

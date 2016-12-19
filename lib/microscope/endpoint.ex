@@ -36,5 +36,9 @@ defmodule Microscope.Endpoint do
     key: "_microscope_key",
     signing_salt: "A23NL5CS"
 
+  plug Corsica,
+    origins: "*",
+    allow_headers: ["content-type", "authorization"]
+
   plug Microscope.Router
 end
