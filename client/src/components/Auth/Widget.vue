@@ -5,9 +5,9 @@
         href="#"
         class="dropdown-toggle"
         data-toggle="dropdown"
-      >Login<span class="caret"></span>
+      >{{ currentUser.username ? currentUser.username : 'Login / Signup'}}<span class="caret"></span>
       </a>
-      <ul id="login-dp" class="dropdown-menu" v-if="this.isAuthenticated">
+      <ul id="login-dp" class="dropdown-menu" v-if="currentUser.username">
         <button class="btn btn-block btn-primary" @click="logout()">
           Sign out
         </button>
@@ -34,8 +34,6 @@
   </ul>
 </template>
 <script>
-import auth from '../../services/auth'
-
 import Login  from './components/Login'
 import Signup from './components/Signup'
 
@@ -48,7 +46,11 @@ export default {
   data: () => {
     return {
       showLogin: true,
-      isAuthenticated: auth.user.authenticated
+    }
+  },
+  computed: {
+    currentUser(){
+      return this.$store.state.currentUser
     }
   },
   methods: {
@@ -57,7 +59,7 @@ export default {
       this.showLogin = !this.showLogin;
     },
     logout(){
-      auth.logout(this, { headers: auth.getAuthHeader() })
+      this.$store.dispatch('SIGN_OUT')
     }
   }
 }

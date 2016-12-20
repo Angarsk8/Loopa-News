@@ -1,11 +1,10 @@
 import VueRouter from 'vue-router'
-
 import Home from './components/Home'
 import SubmitForm from './components/SubmitForm'
 import NotFound from './components/NotFound'
 import PostPage from './components/PostPage'
 
-export const router = new VueRouter({
+export default new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [

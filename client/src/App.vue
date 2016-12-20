@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container-fluid">
+  <!-- <div id="app" class="container-fluid" @click="clearAuthErrors"> -->
     <custom-header/></custom-header/>
     <div id="main">
       <router-view></router-view>
@@ -8,11 +9,18 @@
 </template>
 <script>
 import Header from './components/Header'
+
 export default {
   name: 'App',
   components: {
     'custom-header': Header
-  }
+  },
+  // methods: {
+  //   clearAuthErrors(){
+  //     this.$store.dispatch('CLEAR_SESSION_ERROR')
+  //     this.$store.dispatch('CLEAR_REGISTRATION_ERRORS')
+  //   }
+  // }
 }
 </script>
 <style>

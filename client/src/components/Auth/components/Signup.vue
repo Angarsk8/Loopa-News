@@ -47,8 +47,6 @@
   </form>
 </template>
 <script>
-import auth from '../../../services/auth'
-
 export default {
   name: "Signup",
   data() {
@@ -57,13 +55,20 @@ export default {
         username: '',
         password: '',
         password_confirmation: ''
-      },
-      errors: Object.assign({}, this.credentials)
+      }
+    }
+  },
+  mounted(){
+    this.$store.commit('CLEAR_REGISTRATIONS_ERRORS')
+  },
+  computed: {
+    errors(){
+      return this.$store.state.registrationErrors
     }
   },
   methods: {
     signup() {
-      auth.signup(this, {user: this.credentials})
+      this.$store.dispatch('SIGN_UP', {user: this.credentials})
     },
     hasError(property){
       return this.errors[property] ? 'has-error' : ''
