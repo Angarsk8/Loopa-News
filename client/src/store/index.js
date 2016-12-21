@@ -2,13 +2,12 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router'
 import { Socket } from 'phoenix-elixir'
-
 import {
   httpGet,
   httpPost,
   httpDelete,
   httpUpdate,
-  API_URL
+  apiURL
 }  from '../utils'
 
 Vue.use(Vuex)
@@ -24,26 +23,14 @@ const initialState = {
   post: null
 }
 
-export function setCurrentUser(commit, user) {
-  commit('SET_CURRENT_USER', user)
-  const socket = new Socket('ws://localhost:4000/socket', {
-    params: { token: localStorage.getItem('id_token') },
-  })
-  socket.connect();
-  const channel = socket.channel(`users:${user.id}`)
-  channel.join().receive('ok', () => {
-    commit('SOCKET_CONNECTED', { socket, channel })
-  })
-}
-
 const store = new Vuex.Store({
   state: { ...initialState },
   actions: {
     SIGN_IN ({ commit }, credentials) {
-      return httpPost(`${API_URL}/sessions`, credentials)
+      return httpPost(`${apiURL}/sessions`, credentials)
         .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
-          setCurrentUser(commit, { username, id, jwt })
+          commit('SET_CURRENT_USER', { username, id, jwt })
           commit('CLEAR_SESSION_ERROR')
         })
         .catch((error) => {
@@ -54,7 +41,7 @@ const store = new Vuex.Store({
         })
     },
     SIGN_OUT ({ commit }) {
-      return httpDelete(`${API_URL}/sessions`)
+      return httpDelete(`${apiURL}/sessions`)
         .then((_) => {
           localStorage.removeItem('id_token')
           commit('USER_SIGNED_OUT')
@@ -64,10 +51,10 @@ const store = new Vuex.Store({
         })
     },
     SIGN_UP ({ commit }, credentials) {
-      return httpPost(`${API_URL}/registrations`, credentials)
+      return httpPost(`${apiURL}/registrations`, credentials)
         .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
-          setCurrentUser(commit, { username, id, jwt })
+          commit('SET_CURRENT_USER', { username, id, jwt })
           commit('CLEAR_REGISTRATIONS_ERRORS')
         })
         .catch((error) => {
@@ -78,17 +65,17 @@ const store = new Vuex.Store({
         })
     },
     GET_CURRENT_USER ({ commit }) {
-      return httpGet(`${API_URL}/current_user`)
+      return httpGet(`${apiURL}/current_user`)
         .then(({ user: { username, id } }) => {
           const jwt = localStorage.getItem('id_token');
-          setCurrentUser(commit, { username, id, jwt })
+          commit('SET_CURRENT_USER', { username, id, jwt })
         })
         .catch((error) => {
           console.log(error)
         })
     },
     GET_POSTS ({ commit }) {
-      return httpGet(`${API_URL}/posts`)
+      return httpGet(`${apiURL}/posts`)
         .then(({ posts }) => {
           commit('SET_POSTS', posts)
         })
@@ -97,7 +84,7 @@ const store = new Vuex.Store({
         })
     },
     GET_POST ({ commit }, id) {
-      return httpGet(`${API_URL}/posts/${id}`)
+      return httpGet(`${apiURL}/posts/${id}`)
         .then(({ post }) => {
           commit('SET_POST', post)
         })
@@ -106,7 +93,7 @@ const store = new Vuex.Store({
         })
     },
     CREATE_POST ({ commit }, post) {
-      return httpPost(`${API_URL}/posts`, post)
+      return httpPost(`${apiURL}/posts`, post)
         .then(({ post }) => {
           router.push(`/post/${post.id}`)
         })
@@ -118,13 +105,13 @@ const store = new Vuex.Store({
         })
     },
     DELETE_POST ({ commit }, id) {
-      return httpDelete(`${API_URL}/posts/${id}`)
+      return httpDelete(`${apiURL}/posts/${id}`)
         .then((_) => {
           router.push('/')
         })
     },
     UPDATE_POST ({ commit }, { id, post }) {
-      return httpUpdate(`${API_URL}/posts/${id}`, post)
+      return httpUpdate(`${apiURL}/posts/${id}`, post)
         .then(({ post }) => {
           router.push(`/post/${post.id}`)
         })
@@ -136,7 +123,7 @@ const store = new Vuex.Store({
         })
     },
     CREATE_COMMENT ({ commit, dispatch }, { id, comment }) {
-      return httpPost(`${API_URL}/posts/${id}/comments`, comment)
+      return httpPost(`${apiURL}/posts/${id}/comments`, comment)
         .then((_) => {
           dispatch('GET_POST', id)
         })

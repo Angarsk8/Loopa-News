@@ -16,7 +16,7 @@ function buildHeaders() {
   return { ...defaultHeaders, Authorization: authToken }
 }
 
-export const API_URL = `${SCHEME}://${HOSTNAME}/api`
+export const apiURL = `${SCHEME}://${HOSTNAME}/api`
 
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {

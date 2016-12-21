@@ -11,7 +11,10 @@
           v-model="post.url"
           required
         />
-        <p class="help-block" v-if="'url' in errors">{{ errors.url }}</p>
+        <p
+          class="help-block"
+          v-if="'url' in postErrors"
+        >{{ postErrors.url }}</p>
       </div>
     </div>
     <div :class="`form-group ${hasError('title')}`">
@@ -25,7 +28,10 @@
           v-model="post.title"
           required
         />
-        <p class="help-block" v-if="'title' in errors">{{ errors.title }}</p>
+        <p
+          class="help-block"
+          v-if="'title' in postErrors"
+        >{{ postErrors.title }}</p>
       </div>
     </div>
     <input type="submit" value="Submit" class="btn btn-primary" />
@@ -34,6 +40,7 @@
 </template>
 <script>
 import AccessDenied from './AccessDenied'
+import { mapState } from 'vuex'
 
 export default {
   name: "SubmitForm",
@@ -51,21 +58,17 @@ export default {
   mounted(){
     this.$store.commit('CLEAR_POST_ERRORS')
   },
-  computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    },
-    errors(){
-      return this.$store.state.postErrors
-    }
-  },
+  computed: mapState([
+    'currentUser',
+    'postErrors'
+  ]),
   methods: {
     create() {
       const post = {post: this.post}
       this.$store.dispatch('CREATE_POST', post)
     },
     hasError(property){
-      return this.errors[property] ? 'has-error' : ''
+      return this.postErrors[property] ? 'has-error' : ''
     }
   }
 }

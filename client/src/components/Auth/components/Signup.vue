@@ -12,8 +12,8 @@
       />
       <p
         class="help-block"
-        v-if="'username' in errors"
-      >{{ errors.username }}</p>
+        v-if="'username' in registrationErrors"
+      >{{ registrationErrors.username }}</p>
     </div>
     <div :class="`form-group ${hasError('password')}`">
       <label class="sr-only" for="password">Password</label>
@@ -27,8 +27,8 @@
       />
       <p
         class="help-block"
-        v-if="'password' in errors"
-      >{{ errors.password }}</p>
+        v-if="'password' in registrationErrors"
+      >{{ registrationErrors.password }}</p>
     </div>
     </div>
     <div :class="`form-group ${hasError('password_confirmation')}`">
@@ -43,8 +43,8 @@
       />
       <p
         class="help-block"
-        v-if="'password_confirmation' in errors"
-      >{{ errors.password_confirmation }}</p>
+        v-if="'password_confirmation' in registrationErrors"
+      >{{ registrationErrors.password_confirmation }}</p>
       </div>
     </div>
     <div class="form-group">
@@ -53,6 +53,8 @@
   </form>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: "Signup",
   data() {
@@ -67,18 +69,16 @@ export default {
   mounted(){
     this.$store.commit('CLEAR_REGISTRATIONS_ERRORS')
   },
-  computed: {
-    errors(){
-      return this.$store.state.registrationErrors
-    }
-  },
+  computed: mapState([
+    'registrationErrors'
+  ]),
   methods: {
     signup() {
       const credentials = {user: this.credentials}
       this.$store.dispatch('SIGN_UP', credentials)
     },
     hasError(property){
-      return this.errors[property] ? 'has-error' : ''
+      return this.registrationErrors[property] ? 'has-error' : ''
     }
   }
 }

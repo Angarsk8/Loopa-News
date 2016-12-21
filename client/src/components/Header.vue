@@ -31,6 +31,7 @@
 <script>
 import Notification from './Notification'
 import AuthWidget   from './Auth/Widget'
+import { mapState } from 'vuex'
 
 export default {
   name: "Header",
@@ -38,11 +39,9 @@ export default {
     'notifications-panel': Notification,
     'login-widget': AuthWidget
   },
-  computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    }
-  },
+  computed: mapState([
+    'currentUser'
+  ]),
   methods: {
     activeRouteClass(...routes){
       const active = routes.some(route => this.$route.name == route)

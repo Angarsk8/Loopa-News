@@ -5,16 +5,15 @@
 </template>
 <script>
 import PostItem from './PostItem'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
     'post-item': PostItem
   },
-  computed: {
-    posts(){
-      return this.$store.state.posts
-    }
-  }
+  computed: mapState([
+    'posts'
+  ])
 }
 </script>

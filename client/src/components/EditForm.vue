@@ -19,8 +19,8 @@
         />
         <p
           class="help-block"
-          v-if="'url' in errors"
-        >{{ errors.url }}</p>
+          v-if="'url' in postErrors"
+        >{{ postErrors.url }}</p>
       </div>
     </div>
     <div :class="`form-group ${hasError('title')}`">
@@ -36,8 +36,8 @@
         />
         <p
           class="help-block"
-          v-if="'title' in errors"
-        >{{ errors.title }}</p>
+          v-if="'title' in postErrors"
+        >{{ postErrors.title }}</p>
       </div>
     </div>
     <input type="submit" value="Submit" class="btn btn-primary" />
@@ -56,6 +56,7 @@
 <script>
 import AccessDenied from './AccessDenied'
 import NotFound from './NotFound'
+import { mapState } from 'vuex'
 
 export default {
   name: "EditForm",
@@ -67,19 +68,18 @@ export default {
     this.$store.commit('CLEAR_POST_ERRORS')
   },
   computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    },
-    post(){
-      return this.$store.state.post
-    },
-    ownPost(){
-      return this.post.user.id === this.currentUser.id
-    },
-    errors(){
-      return this.$store.state.postErrors
-    }
+    ...mapState([
+      'currentUser',
+      'postErrors',
+      'post'
+    ]),
+    ...mapState({
+      ownPost ({ post, currentUser }) {
+        return post.user.id === currentUser.id
+      }
+    })
   },
+
   methods: {
     updatePost(){
       const post = {url: this.post.url, title: this.post.title}
@@ -90,7 +90,7 @@ export default {
       this.$store.dispatch('DELETE_POST', this.post.id)
     },
     hasError(property){
-      return this.errors[property] ? 'has-error' : ''
+      return this.postErrors[property] ? 'has-error' : ''
     }
   }
 }

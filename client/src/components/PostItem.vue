@@ -1,7 +1,6 @@
 <template>
   <div class="post">
     <a href="#" class="upvote btn btn-default">⬆</a>
-    <!-- <a href="#" :class="`${upvotedClass} upvote btn btn-default `">⬆</a> -->
     <div class="post-content">
       <h3><a :href="post.url">{{post.title}}</a><span>{{post.url | domain}}</span></h3>
       <p>
@@ -19,6 +18,8 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'PostItem',
   props: ['post'],
@@ -33,22 +34,14 @@ export default {
     }
   },
   computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    },
-    upvotedClass(){
-      const userId   = this.currentUser && this.currentUser.id
-      const upvoters = this.post.upvoters
-
-      if (userId && !upvoters.includes(userId)) {
-        return "btn-primary upvotable";
-      } else {
-        return "disabled";
+    ...mapState([
+      'currentUser'
+    ]),
+    ...mapState({
+      ownPost ({ currentUser }) {
+        return this.post.user.id === (currentUser && currentUser.id)
       }
-    },
-    ownPost(){
-      return this.post.user.id === (this.currentUser && this.currentUser.id)
-    }
+    })
   }
 }
 </script>

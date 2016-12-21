@@ -35,6 +35,7 @@
 <script>
 import PostItem from './PostItem'
 import CommentItem from './CommentItem'
+import { mapState } from 'vuex'
 
 export default {
   name: 'PostPage',
@@ -48,15 +49,13 @@ export default {
     }
   },
   computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    },
-    post(){
-      return this.$store.state.post
-    },
-    comments(){
-      return this.$store.state.post.comments
-    }
+    ...mapState([
+      'currentUser',
+      'post'
+    ]),
+    ...mapState({
+      'comments': state => state.post.comments
+    })
   },
   methods: {
     submitComment(){

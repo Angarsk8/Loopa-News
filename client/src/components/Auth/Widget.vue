@@ -34,6 +34,7 @@
 <script>
 import Login  from './components/Login'
 import Signup from './components/Signup'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'AuthWidget',
@@ -46,19 +47,17 @@ export default {
       showLogin: true,
     }
   },
-  computed: {
-    currentUser(){
-      return this.$store.state.currentUser
-    }
-  },
+  computed: mapState([
+    'currentUser'
+  ]),
   methods: {
     toggleLogin(e){
       e.stopPropagation();
       this.showLogin = !this.showLogin;
     },
-    logout(){
-      this.$store.dispatch('SIGN_OUT')
-    }
+    ...mapActions({
+      logout: 'SIGN_OUT'
+    })
   }
 }
 </script>
