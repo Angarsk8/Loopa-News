@@ -11,7 +11,7 @@
       name="comment"
       class="comment-form form"
       v-if="currentUser"
-      @submit.prevent="submitComment()"
+      @submit.prevent="createComment()"
     >
       <div class="form-group">
         <div class="controls">
@@ -54,17 +54,20 @@ export default {
       'post'
     ]),
     ...mapState({
-      'comments': state => state.post.comments
-    })
-  },
-  methods: {
-    submitComment(){
-      const comment = {
+      'comments': state => state.post && state.post.comments
+    }),
+    comment(){
+      return {
+        post_id: this.post.id,
         author: this.currentUser.username,
         body: this.commentBody
       }
-      const data = {id: this.post.id, comment: { comment }}
-      this.$store.dispatch('CREATE_COMMENT', data)
+    }
+  },
+  methods: {
+    createComment(){
+      this.comment
+      this.$store.dispatch('createComment', this.comment)
         .then(() => {
           this.commentBody = ''
         })

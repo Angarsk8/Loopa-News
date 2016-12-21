@@ -9,10 +9,17 @@ import {
 }  from '../../utils'
 
 const state = {
-  post: null,
+  postErrors: {},
   posts: null,
-  postErrors: {}
+  post: null
 }
+
+// const getters = {
+//   post: state => state.post,
+//   posts: state => state.posts,
+//   postErrors: state => state.postErrors,
+//   comments: state => state.post && state.post.comments
+// }
 
 const actions = {
   getPosts ({ commit }) {
@@ -55,8 +62,8 @@ const actions = {
       })
   },
 
-  updatePost ({ commit }, { id, post }) {
-    return httpUpdate(`${apiURL}/posts/${id}`, post)
+  updatePost ({ commit }, post) {
+    return httpUpdate(`${apiURL}/posts/${post.id}`, { post })
       .then(({ post }) => {
         router.push(`/post/${post.id}`)
       })
@@ -68,27 +75,34 @@ const actions = {
       })
   },
 
-  createComment ({ commit, dispatch }, { id, comment }) {
-    return httpPost(`${apiURL}/posts/${id}/comments`, comment)
+  createComment ({ commit, dispatch }, comment) {
+    return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
       .then((_) => {
-        dispatch(types.GET_POST, id)
+        dispatch('getPost', comment.post_id)
       })
       .catch((error) => {
         console.log(error)
       })
   },
+
+  clearPostErrors({ commit }){
+    commit(types.CLEAR_POST_ERRORS)
+  },
 }
 
 const mutations = {
-  [types.SET_POST] (state, post) {
-    state.post = post
+  [types.SET_POSTS] (state, payload) {
+    state.posts = payload
   },
-  [types.SET_POSTS] (state, posts) {
-    state.posts = posts
+
+  [types.SET_POST] (state, payload) {
+    state.post = payload
   },
-  [types.SET_POST_ERRORS] (state, errors) {
-    state.postErrors = errors
+
+  [types.SET_POST_ERRORS] (state, payload) {
+    state.postErrors = payload
   },
+
   [types.CLEAR_POST_ERRORS] (state) {
     state.postErrors = {}
   }

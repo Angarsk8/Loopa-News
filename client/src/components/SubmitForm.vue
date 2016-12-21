@@ -56,7 +56,7 @@ export default {
     }
   },
   mounted(){
-    this.$store.commit('CLEAR_POST_ERRORS')
+    this.$store.dispatch('clearPostErrors')
   },
   computed: mapState([
     'currentUser',
@@ -65,7 +65,7 @@ export default {
   methods: {
     create() {
       const post = {post: this.post}
-      this.$store.dispatch('CREATE_POST', post)
+      this.$store.dispatch('createPost', post)
     },
     hasError(property){
       return this.postErrors[property] ? 'has-error' : ''

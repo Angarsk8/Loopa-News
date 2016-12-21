@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="signup()">
+  <form class="form" @submit.prevent="signUp(credentials)">
     <div :class="`form-group ${hasError('username')}`">
       <label class="sr-only" for="username">Username</label>
       <input
@@ -53,7 +53,7 @@
   </form>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Signup",
@@ -67,16 +67,15 @@ export default {
     }
   },
   mounted(){
-    this.$store.commit('CLEAR_REGISTRATIONS_ERRORS')
+    this.$store.dispatch('clearRegistrationErrors')
   },
   computed: mapState([
     'registrationErrors'
   ]),
   methods: {
-    signup() {
-      const credentials = {user: this.credentials}
-      this.$store.dispatch('SIGN_UP', credentials)
-    },
+    ...mapActions([
+      'signUp'
+    ]),
     hasError(property){
       return this.registrationErrors[property] ? 'has-error' : ''
     }

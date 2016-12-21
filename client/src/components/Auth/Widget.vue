@@ -6,7 +6,7 @@
         <span class="caret"></span>
       </a>
       <ul id="login-dp" class="dropdown-menu" v-if="currentUser">
-        <button class="btn btn-block btn-primary" @click="logout()">
+        <button class="btn btn-block btn-primary" @click="signOut()">
           Sign out
         </button>
       </ul>
@@ -55,9 +55,9 @@ export default {
       e.stopPropagation();
       this.showLogin = !this.showLogin;
     },
-    ...mapActions({
-      logout: 'SIGN_OUT'
-    })
+    ...mapActions([
+      'signOut'
+    ])
   }
 }
 </script>

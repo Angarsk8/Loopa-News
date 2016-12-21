@@ -4,7 +4,7 @@
   <form
     class="main form page"
     v-else-if="ownPost"
-    @submit.prevent="updatePost()"
+    @submit.prevent="updatePost(editedPost)"
   >
     <div :class="`form-group ${hasError('url')}`">
       <label class="control-label" for="url">URL</label>
@@ -45,7 +45,7 @@
     <button
       type="button"
       class="btn btn-danger delete"
-      @click="deletePost()"
+      @click="deletePost(post.id)"
     >Delete post</button>
   </form>
   <access-denied
@@ -56,7 +56,7 @@
 <script>
 import AccessDenied from './AccessDenied'
 import NotFound from './NotFound'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "EditForm",
@@ -65,7 +65,7 @@ export default {
     'not-found': NotFound,
   },
   mounted(){
-    this.$store.commit('CLEAR_POST_ERRORS')
+    this.$store.dispatch('clearPostErrors')
   },
   computed: {
     ...mapState([
@@ -77,18 +77,21 @@ export default {
       ownPost ({ post, currentUser }) {
         return post.user.id === currentUser.id
       }
-    })
+    }),
+    editedPost(){
+      return {
+        id: this.post.id,
+        url: this.post.url,
+        title: this.post.title
+      }
+    }
   },
 
   methods: {
-    updatePost(){
-      const post = {url: this.post.url, title: this.post.title}
-      const data = {id: this.post.id, post: { post }}
-      this.$store.dispatch('UPDATE_POST', data)
-    },
-    deletePost(){
-      this.$store.dispatch('DELETE_POST', this.post.id)
-    },
+    ...mapActions([
+      'deletePost',
+      'updatePost',
+    ]),
     hasError(property){
       return this.postErrors[property] ? 'has-error' : ''
     }

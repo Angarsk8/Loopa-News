@@ -12,14 +12,14 @@ export const requireAuth = (to, _from, next) => {
 }
 
 export const fetchPost = (to, _from, next) => {
-  store.dispatch('GET_POST', to.params.id)
+  store.dispatch('getPost', to.params.id)
     .then(() => {
       next()
     })
 }
 
 export const fetchPosts = (_to, _from, next) => {
-  store.dispatch('GET_POSTS')
+  store.dispatch('getPosts')
     .then(() => {
       next()
     })

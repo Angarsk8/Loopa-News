@@ -7,6 +7,7 @@ defmodule Microscope.CommentController do
   alias Microscope.{Repo, Post, Comment}
 
   def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
+    IO.inspect comment_params 
     changeset = Post
       |> Repo.get!(post_id)
       |> Repo.preload([:user, :comments])

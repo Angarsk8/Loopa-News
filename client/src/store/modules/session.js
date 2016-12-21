@@ -4,7 +4,7 @@ import {
   httpGet,
   httpPost,
   httpDelete
-} from '../utils'
+} from '../../utils'
 
 const state = {
   currentUser: null,
@@ -12,9 +12,15 @@ const state = {
   registrationErrors: {}
 }
 
+const getters = {
+  currentUser: state => state.currentUser,
+  sessionError: state => state.sessionError,
+  registrationErrors: state => state.registrationErrors
+}
+
 const actions = {
   signIn ({ commit }, credentials) {
-    return httpPost(`${apiURL}/sessions`, credentials)
+    return httpPost(`${apiURL}/sessions`, {session: credentials})
       .then(({ jwt, user: { username, id } }) => {
         localStorage.setItem('id_token', jwt)
         commit(types.SET_CURRENT_USER, { username, id, jwt })
@@ -40,7 +46,7 @@ const actions = {
   },
 
   signUp ({ commit }, credentials) {
-    return httpPost(`${apiURL}/registrations`, credentials)
+    return httpPost(`${apiURL}/registrations`, {user: credentials})
       .then(({ jwt, user: { username, id } }) => {
         localStorage.setItem('id_token', jwt)
         commit(types.SET_CURRENT_USER, { username, id, jwt })
@@ -63,27 +69,40 @@ const actions = {
       .catch((error) => {
         console.log(error)
       })
-  }
+  },
+
+  clearSessionError({ commit }){
+    commit(types.CLEAR_SESSION_ERROR)
+  },
+
+  clearRegistrationErrors({ commit }){
+    commit(types.CLEAR_REGISTRATIONS_ERRORS)
+  },
 }
 
 const mutations = {
-  [types.SET_CURRENT_USER] (state, currentUser) {
-    state.currentUser = { ...state.currentUser, ...currentUser }
+  [types.SET_CURRENT_USER] (state, user) {
+    state.currentUser = { ...state.currentUser, ...user }
   },
+
+  [types.USER_SIGNED_OUT] (state) {
+    state.currentUser = null
+  },
+
   [types.SET_SESSION_ERROR] (state, error) {
     state.sessionError = error
   },
+
   [types.CLEAR_SESSION_ERROR] (state) {
     state.sessionError = null
   },
+
   [types.SET_REGISTRATIONS_ERRORS] (state, errors) {
     state.registrationErrors = errors
   },
+
   [types.CLEAR_REGISTRATIONS_ERRORS] (state) {
     state.registrationErrors = {}
-  },
-  [types.USER_SIGNED_OUT] (state) {
-    state.currentUser = null
   },
 }
 

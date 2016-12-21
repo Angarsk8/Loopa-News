@@ -3,7 +3,7 @@
     class="form"
     role="form"
     accept-charset="UTF-8"
-    @submit.prevent="login()"
+    @submit.prevent="signIn(credentials)"
   >
     <div class="custom-alert-danger" v-if="sessionError">{{sessionError}}</div>
     <div class="form-group">
@@ -34,7 +34,7 @@
   </form>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: "Login",
@@ -47,17 +47,14 @@ export default {
     }
   },
   mounted(){
-    this.$store.commit('CLEAR_SESSION_ERROR')
+    this.$store.dispatch('clearSessionError')
   },
   computed: mapState([
     'sessionError'
   ]),
-  methods: {
-    login(){
-      const credentials = {session: this.credentials}
-      this.$store.dispatch('SIGN_IN', credentials)
-    }
-  }
+  methods: mapActions([
+    'signIn'
+  ])
 }
 </script>
 <style>
