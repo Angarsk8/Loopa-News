@@ -16,13 +16,13 @@
     </div>
     <div class="collapse navbar-collapse" id="navigation">
       <ul class="nav navbar-nav">
-        <li class="active">
+        <li :class="activeRouteClass('home','newPosts')">
           <router-link to="/new">New</router-link>
         </li>
-        <li>
+        <li :class="activeRouteClass('postSubmit')" v-if="currentUser">
           <router-link to="/submit">Submit Post</router-link>
         </li>
-        <notifications-panel></notifications-panel>
+        <notifications-panel v-if="currentUser"></notifications-panel>
       </ul>
       <login-widget></login-widget>
     </div>
@@ -37,6 +37,17 @@ export default {
   components: {
     'notifications-panel': Notification,
     'login-widget': AuthWidget
+  },
+  computed: {
+    currentUser(){
+      return this.$store.state.currentUser
+    }
+  },
+  methods: {
+    activeRouteClass(...routes){
+      const active = routes.some(route => this.$route.name == route)
+      return active && "active"
+    }
   }
 }
 </script>

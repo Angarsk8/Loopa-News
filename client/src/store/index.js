@@ -1,32 +1,43 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { httpGet, httpPost, httpDelete }  from '../utils'
-import { SESSION_URL, REGISTRATION_URL }  from '../utils'
+import router from '../router'
+import { Socket } from 'phoenix-elixir'
+import { httpGet, httpPost, httpDelete, httpUpdate }  from '../utils'
+import { SESSION_URL, REGISTRATION_URL, CURRENT_USER_URL }  from '../utils'
 
 Vue.use(Vuex)
 
 const initialState = {
-  currentUser: {
-    username: '',
-    jwt: ''
-  },
-  sessionError: '',
-  registrationErrors: {
-    username: '',
-    password: '',
-    password_confirmation: ''
-  },
-  showWidgetClass: 'dropdown'
+  currentUser: null,
+  sessionError: null,
+  registrationErrors: {},
+  postErrors: {},
+  socket: null,
+  channel: null,
+  posts: null,
+  post: null
+}
+
+export function setCurrentUser(commit, user) {
+  commit('SET_CURRENT_USER', user)
+  const socket = new Socket('ws://localhost:4000/socket', {
+    params: { token: localStorage.getItem('id_token') },
+  })
+  socket.connect();
+  const channel = socket.channel(`users:${user.id}`)
+  channel.join().receive('ok', () => {
+    commit('SOCKET_CONNECTED', { socket, channel })
+  })
 }
 
 const store = new Vuex.Store({
   state: { ...initialState },
   actions: {
-    SIGN_IN: ({ commit }, credentials) => {
+    SIGN_IN ({ commit }, credentials) {
       return httpPost(SESSION_URL, credentials)
-        .then(({jwt, user}) => {
+        .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
-          commit('SET_CURRENT_USER', {username: user.username, jwt: jwt})
+          setCurrentUser(commit, { username, id, jwt })
           commit('CLEAR_SESSION_ERROR')
         })
         .catch((error) => {
@@ -36,8 +47,8 @@ const store = new Vuex.Store({
           })
         })
     },
-    SIGN_OUT: ({ commit }, session) => {
-      return httpDelete(SESSION_URL, session)
+    SIGN_OUT ({ commit }) {
+      return httpDelete(SESSION_URL)
         .then(_ => {
           localStorage.removeItem('id_token')
           commit('USER_SIGNED_OUT')
@@ -46,11 +57,11 @@ const store = new Vuex.Store({
           console.log(error)
         })
     },
-    SIGN_UP: ({ commit }, credentials) => {
+    SIGN_UP ({ commit }, credentials) {
       return httpPost(REGISTRATION_URL, credentials)
-        .then(({jwt, user}) => {
+        .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
-          commit('SET_CURRENT_USER', {username: user.username, jwt: jwt})
+          setCurrentUser(commit, { username, id, jwt })
           commit('CLEAR_REGISTRATIONS_ERRORS')
         })
         .catch((error) => {
@@ -59,12 +70,70 @@ const store = new Vuex.Store({
             commit('SET_REGISTRATIONS_ERRORS', errorJSON.errors)
           })
         })
-    }
+    },
+    GET_CURRENT_USER ({ commit }) {
+      return httpGet(CURRENT_USER_URL)
+        .then(({ user: { username, id } }) => {
+          const jwt = localStorage.getItem('id_token');
+          setCurrentUser(commit, { username, id, jwt })
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    GET_POSTS ({ commit }) {
+      return httpGet('http://localhost:4000/api/posts')
+        .then(({ posts }) => {
+          commit('SET_POSTS', posts)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
+    GET_POST ({ commit }, id) {
+      return httpGet(`http://localhost:4000/api/posts/${id}`)
+        .then(({ post }) => {
+          commit('SET_POST', post)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    },
+    CREATE_POST ({ commit }, post) {
+      return httpPost("http://localhost:4000/api/posts", post)
+        .then(({ post }) => {
+          router.push(`/post/${post.id}`)
+        })
+        .catch((error) => {
+          error.response.json()
+          .then((errorJSON) => {
+            commit('SET_POST_ERRORS', errorJSON.errors)
+          })
+        })
+    },
+    DELETE_POST ({ commit }, id) {
+      return httpDelete(`http://localhost:4000/api/posts/${id}`)
+        .then(_ => {
+          router.push('/')
+        })
+    },
+    UPDATE_POST ({ commit }, { id, post }) {
+      return httpUpdate(`http://localhost:4000/api/posts/${id}`, post)
+        .then(({ post }) => {
+          router.push(`/post/${post.id}`)
+        })
+        .catch((error) => {
+          error.response.json()
+          .then((errorJSON) => {
+            commit('SET_POST_ERRORS', errorJSON.errors)
+          })
+        })
+    },
   },
 
   mutations: {
     SET_CURRENT_USER (state, payload) {
-      state.currentUser = {...state.currentUser, ...payload}
+      state.currentUser = { ...state.currentUser, ...payload }
     },
     SET_SESSION_ERROR (state, payload) {
       state.sessionError = payload
@@ -80,6 +149,22 @@ const store = new Vuex.Store({
     },
     USER_SIGNED_OUT (state) {
       state.currentUser = initialState.currentUser
+    },
+    SOCKET_CONNECTED (state, payload) {
+      state.socket  =  payload.socket
+      state.channel =  payload.channel
+    },
+    SET_POSTS (state, payload) {
+      state.posts = payload
+    },
+    SET_POST (state, payload) {
+      state.post = payload
+    },
+    SET_POST_ERRORS (state, payload) {
+      state.postErrors = payload
+    },
+    CLEAR_POST_ERRORS (state) {
+      state.postErrors = initialState.postErrors
     }
   },
 
@@ -105,5 +190,7 @@ const store = new Vuex.Store({
     // }
   }
 })
+
+store.dispatch('GET_CURRENT_USER')
 
 export default store

@@ -63,6 +63,18 @@ export function httpDelete(url) {
   .then(parseJSON)
 }
 
+export function httpUpdate(url, data) {
+  const body = JSON.stringify(data)
+
+  return fetch(url, {
+    method: 'put',
+    headers: buildHeaders(),
+    body: body,
+  })
+  .then(checkStatus)
+  .then(parseJSON)
+}
+
 export function setDocumentTitle(title) {
   document.title = `${title} | Microscope`
 }

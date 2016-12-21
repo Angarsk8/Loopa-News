@@ -1,6 +1,8 @@
 defmodule Microscope.RegistrationView do
   use Microscope.Web, :view
 
+  import Microscope.Views.Helpers, only: [render_detail: 1]
+
   def render("error.json", %{changeset: changeset}) do
     errors =
       Enum.reduce(changeset.errors, %{}, fn {field, detail}, acc ->
@@ -10,15 +12,5 @@ defmodule Microscope.RegistrationView do
     %{
       errors: errors
     }
-  end
-
-  defp render_detail({message, values}) do
-    Enum.reduce(values, message, fn {k, v}, acc ->
-      String.replace(acc, "%{#{k}}", to_string(v))
-    end)
-  end
-
-  defp render_detail(message) do
-    message
   end
 end

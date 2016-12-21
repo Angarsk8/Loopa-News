@@ -7,7 +7,7 @@
         :comment="comment"
       ></comment-item>
     </ul>
-    <form name="comment" class="comment-form form">
+    <form name="comment" class="comment-form form" v-if="currentUser">
       <div class="form-group">
         <div class="controls">
           <label for="body">Comment on this post</label>
@@ -22,7 +22,7 @@
       </div>
       <button type="submit" class="btn btn-primary">Add Comment</button>
     </form>
-    <p>Please log in to leave a comment</p>
+    <p v-else>Please log in to leave a comment</p>
   </div>
 </template>
 <script>
@@ -37,14 +37,14 @@ export default {
   },
   data: () => {
     return {
-      post: {
-        url: "#",
-        title: "Test",
-        domain: "loopa",
-        author: "agarcia038",
-        commentsCount: "3",
-        votes: 1
-      },
+      // post: {
+      //   url: "#",
+      //   title: "Test",
+      //   domain: "loopa",
+      //   author: "agarcia038",
+      //   commentsCount: "3",
+      //   votes: 1
+      // },
       comments: [
         {
           author: "Agarcia038",
@@ -62,6 +62,14 @@ export default {
           body: 'Just another test  comment!'
         }
       ]
+    }
+  },
+  computed: {
+    currentUser(){
+      return this.$store.state.currentUser
+    },
+    post(){
+      return this.$store.state.post
     }
   }
 }

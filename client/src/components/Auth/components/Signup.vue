@@ -10,7 +10,7 @@
         v-model="credentials.username"
         required
       />
-      <p class="help-block" v-if="errors.username">{{ errors.username }}</p>
+      <p class="help-block" v-if="'username' in errors">{{ errors.username }}</p>
     </div>
     <div :class="`form-group ${hasError('password')}`">
       <label class="sr-only" for="password">Password</label>
@@ -22,7 +22,7 @@
         v-model="credentials.password"
         required
       />
-      <p class="help-block" v-if="errors.password">{{ errors.password }}</p>
+      <p class="help-block" v-if="'password' in errors">{{ errors.password }}</p>
     </div>
     </div>
     <div :class="`form-group ${hasError('password_confirmation')}`">
@@ -37,7 +37,7 @@
       />
       <p
         class="help-block"
-        v-if="errors.password_confirmation"
+        v-if="'password_confirmation' in errors"
       >{{ errors.password_confirmation }}</p>
       </div>
     </div>
@@ -68,7 +68,8 @@ export default {
   },
   methods: {
     signup() {
-      this.$store.dispatch('SIGN_UP', {user: this.credentials})
+      const credentials = {user: this.credentials}
+      this.$store.dispatch('SIGN_UP', credentials)
     },
     hasError(property){
       return this.errors[property] ? 'has-error' : ''

@@ -16,5 +16,7 @@ defmodule Microscope.Router do
     delete "/sessions", SessionController, :delete
 
     get "/current_user", CurrentUserController, :show
+
+    resources "/posts", PostController, except: [:edit, :new]
   end
 end

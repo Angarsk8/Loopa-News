@@ -49,7 +49,8 @@ export default {
   },
   methods: {
     login(){
-      this.$store.dispatch('SIGN_IN', {session: this.credentials})
+      const credentials = {session: this.credentials}
+      this.$store.dispatch('SIGN_IN', credentials)
     }
   }
 }
