@@ -11,32 +11,6 @@ export default {
   components: {
     'post-item': PostItem
   },
-  // data: () => {
-  //   return {
-  //     posts: [
-  //       {
-  //         url: "#",
-  //         title: "Test blog",
-  //         domain: "loopa",
-  //         author: "agarcia038",
-  //         commentsCount: "3",
-  //         votes: 1,
-  //         userId: 1,
-  //         upvoters: [1]
-  //       },
-  //       {
-  //         url: "#",
-  //         title: "Test",
-  //         domain: "loopa",
-  //         author: "agarcia038",
-  //         commentsCount: "3",
-  //         votes: 1,
-  //         userId: 2,
-  //         upvoters: []
-  //       },
-  //     ]
-  //   }
-  // },
   computed: {
     posts(){
       return this.$store.state.posts

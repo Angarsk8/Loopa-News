@@ -1,7 +1,11 @@
 <template>
   <access-denied message="Please log in" v-if="!currentUser"></access-denied>
   <not-found message="Please log in" v-else-if="!post"></not-found>
-  <form class="main form page" v-else-if="ownPost" @submit.prevent="updatePost()">
+  <form
+    class="main form page"
+    v-else-if="ownPost"
+    @submit.prevent="updatePost()"
+  >
     <div :class="`form-group ${hasError('url')}`">
       <label class="control-label" for="url">URL</label>
       <div class="controls">
@@ -13,7 +17,10 @@
           v-model="post.url"
           required
         />
-        <p class="help-block" v-if="'url' in errors">{{ errors.url }}</p>
+        <p
+          class="help-block"
+          v-if="'url' in errors"
+        >{{ errors.url }}</p>
       </div>
     </div>
     <div :class="`form-group ${hasError('title')}`">
@@ -27,7 +34,10 @@
           v-model="post.title"
           required
         />
-        <p class="help-block" v-if="'title' in errors">{{ errors.title }}</p>
+        <p
+          class="help-block"
+          v-if="'title' in errors"
+        >{{ errors.title }}</p>
       </div>
     </div>
     <input type="submit" value="Submit" class="btn btn-primary" />
@@ -38,7 +48,10 @@
       @click="deletePost()"
     >Delete post</button>
   </form>
-  <access-denied message="This post doesn't belong to you" v-else></access-denied>
+  <access-denied
+    message="This post doesn't belong to you"
+    v-else
+  ></access-denied>
 </template>
 <script>
 import AccessDenied from './AccessDenied'

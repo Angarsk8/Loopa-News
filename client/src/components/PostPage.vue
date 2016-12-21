@@ -7,7 +7,12 @@
         :comment="comment"
       ></comment-item>
     </ul>
-    <form name="comment" class="comment-form form" v-if="currentUser">
+    <form
+      name="comment"
+      class="comment-form form"
+      v-if="currentUser"
+      @submit.prevent="submitComment()"
+    >
       <div class="form-group">
         <div class="controls">
           <label for="body">Comment on this post</label>
@@ -16,6 +21,8 @@
             id="body"
             class="form-control"
             rows="3"
+            v-model="commentBody"
+            required
           ></textarea>
           <span class="help-block"></span>
         </div>
@@ -35,33 +42,9 @@ export default {
     'post-item': PostItem,
     'comment-item': CommentItem
   },
-  data: () => {
+  data(){
     return {
-      // post: {
-      //   url: "#",
-      //   title: "Test",
-      //   domain: "loopa",
-      //   author: "agarcia038",
-      //   commentsCount: "3",
-      //   votes: 1
-      // },
-      comments: [
-        {
-          author: "Agarcia038",
-          submitted: 'Tue Dec 06 2016 06:09:45 GMT-0500 (COT)',
-          body: 'Awesome project!'
-        },
-        {
-          author: "Angarsk8",
-          submitted: 'Tue Dec 06 2016 06:09:45 GMT-0500 (COT)',
-          body: 'Vue + Phoenix is that sh..!'
-        },
-        {
-          author: "Test User",
-          submitted: 'Tue Dec 06 2016 06:09:45 GMT-0500 (COT)',
-          body: 'Just another test  comment!'
-        }
-      ]
+      commentBody: ''
     }
   },
   computed: {
@@ -70,6 +53,22 @@ export default {
     },
     post(){
       return this.$store.state.post
+    },
+    comments(){
+      return this.$store.state.post.comments
+    }
+  },
+  methods: {
+    submitComment(){
+      const comment = {
+        author: this.currentUser.username,
+        body: this.commentBody
+      }
+      const data = {id: this.post.id, comment: { comment }}
+      this.$store.dispatch('CREATE_COMMENT', data)
+        .then(() => {
+          this.commentBody = ''
+        })
     }
   }
 }

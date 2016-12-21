@@ -9,7 +9,7 @@ defmodule Microscope.PostController do
   def index(conn, _params) do
     posts = Post
       |> Repo.all
-      |> Repo.preload(:user)
+      |> Repo.preload([:user, :comments])
 
     conn
     |> put_status(:ok)
@@ -25,7 +25,7 @@ defmodule Microscope.PostController do
       post ->
         conn
         |> put_status(:ok)
-        |> render("show.json", post: post |> Repo.preload(:user))
+        |> render("show.json", post: post |> Repo.preload([:user, :comments]))
     end
   end
 
@@ -34,7 +34,7 @@ defmodule Microscope.PostController do
 
     changeset = current_user
       |> build_assoc(:posts)
-      |> Repo.preload(:user)
+      |> Repo.preload([:user, :comments])
       |> Post.changeset(post_params)
 
     case Repo.insert(changeset) do
@@ -55,7 +55,7 @@ defmodule Microscope.PostController do
     changeset = current_user
       |> assoc(:posts)
       |> Repo.get!(id)
-      |> Repo.preload(:user)
+      |> Repo.preload([:user, :comments])
       |> Post.changeset(post_params)
 
     case Repo.update(changeset) do
@@ -77,25 +77,7 @@ defmodule Microscope.PostController do
     |> Repo.delete!
 
     conn
+    |> put_status(:ok)
     |> render("delete.json")
   end
-
-  # def create(conn, %{"board" => board_params}) do
-  #   current_user = Guardian.Plug.current_resource(conn)
-  #
-  #   changeset = current_user
-  #     |> build_assoc(:owned_boards)
-  #     |> Board.changeset(board_params)
-  #
-  #   case Repo.insert(changeset) do
-  #     {:ok, board} ->
-  #       conn
-  #       |> put_status(:created)
-  #       |> render("show.json", board: board )
-  #     {:error, changeset} ->
-  #       conn
-  #       |> put_status(:unprocessable_entity)
-  #       |> render("error.json", changeset: changeset)
-  #   end
-  # end
 end

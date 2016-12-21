@@ -1,5 +1,10 @@
 <template>
-  <form class="form" role="form" accept-charset="UTF-8" @submit.prevent="login()">
+  <form
+    class="form"
+    role="form"
+    accept-charset="UTF-8"
+    @submit.prevent="login()"
+  >
     <div class="custom-alert-danger" v-if="error">{{error}}</div>
     <div class="form-group">
       <label class="sr-only" for="username">Username</label>

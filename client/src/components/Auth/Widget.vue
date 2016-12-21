@@ -1,11 +1,9 @@
 <template>
   <ul class="nav navbar-nav navbar-right">
     <li class="dropdown">
-      <a
-        href="#"
-        class="dropdown-toggle"
-        data-toggle="dropdown"
-      >{{ currentUser ? currentUser.username : 'Login / Signup'}}<span class="caret"></span>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        {{ currentUser ? currentUser.username : 'Login / Signup'}}
+        <span class="caret"></span>
       </a>
       <ul id="login-dp" class="dropdown-menu" v-if="currentUser">
         <button class="btn btn-block btn-primary" @click="logout()">

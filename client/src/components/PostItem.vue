@@ -5,12 +5,10 @@
     <div class="post-content">
       <h3><a :href="post.url">{{post.title}}</a><span>{{post.url | domain}}</span></h3>
       <p>
-        <!-- {{post.votes | pluralize }}, -->
         {{2 | pluralize }},
         submitted by {{post.user.username}},
-        <router-link to="/post/123">
-          <!-- {{post.commentsCount}} comments -->
-          {{3}} comments
+        <router-link :to="`/post/${post.id}`">
+          {{post.comments.length}} comments
         </router-link>
         <router-link :to="`/post/${post.id}/edit`" v-if="ownPost"> Edit</router-link>
       </p>

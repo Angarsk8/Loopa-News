@@ -5,7 +5,6 @@ defmodule Microscope.UserSocket do
 
   ## Channels
   channel "users:*", Microscope.UserChannel
-  # channel "posts:*", Microscope.PostChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

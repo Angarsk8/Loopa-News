@@ -6,8 +6,6 @@ const { SCHEME, HOSTNAME } =
   ? {SCHEME: 'https', HOSTNAME: window.location.hostname}
   : {SCHEME: 'http' , HOSTNAME: 'localhost:4000'}
 
-const API_URL = `${SCHEME}://${HOSTNAME}/api`
-
 const defaultHeaders = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',
@@ -17,6 +15,8 @@ function buildHeaders() {
   const authToken = localStorage.getItem('id_token')
   return { ...defaultHeaders, Authorization: authToken }
 }
+
+export const API_URL = `${SCHEME}://${HOSTNAME}/api`
 
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -78,7 +78,3 @@ export function httpUpdate(url, data) {
 export function setDocumentTitle(title) {
   document.title = `${title} | Microscope`
 }
-
-export const REGISTRATION_URL = `${API_URL}/registrations/`
-export const SESSION_URL      = `${API_URL}/sessions/`
-export const CURRENT_USER_URL = `${API_URL}/current_user/`

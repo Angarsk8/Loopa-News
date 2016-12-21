@@ -10,7 +10,10 @@
         v-model="credentials.username"
         required
       />
-      <p class="help-block" v-if="'username' in errors">{{ errors.username }}</p>
+      <p
+        class="help-block"
+        v-if="'username' in errors"
+      >{{ errors.username }}</p>
     </div>
     <div :class="`form-group ${hasError('password')}`">
       <label class="sr-only" for="password">Password</label>
@@ -22,7 +25,10 @@
         v-model="credentials.password"
         required
       />
-      <p class="help-block" v-if="'password' in errors">{{ errors.password }}</p>
+      <p
+        class="help-block"
+        v-if="'password' in errors"
+      >{{ errors.password }}</p>
     </div>
     </div>
     <div :class="`form-group ${hasError('password_confirmation')}`">

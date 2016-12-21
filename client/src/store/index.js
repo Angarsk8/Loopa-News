@@ -2,8 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import router from '../router'
 import { Socket } from 'phoenix-elixir'
-import { httpGet, httpPost, httpDelete, httpUpdate }  from '../utils'
-import { SESSION_URL, REGISTRATION_URL, CURRENT_USER_URL }  from '../utils'
+
+import {
+  httpGet,
+  httpPost,
+  httpDelete,
+  httpUpdate,
+  API_URL
+}  from '../utils'
 
 Vue.use(Vuex)
 
@@ -34,7 +40,7 @@ const store = new Vuex.Store({
   state: { ...initialState },
   actions: {
     SIGN_IN ({ commit }, credentials) {
-      return httpPost(SESSION_URL, credentials)
+      return httpPost(`${API_URL}/sessions`, credentials)
         .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
           setCurrentUser(commit, { username, id, jwt })
@@ -48,8 +54,8 @@ const store = new Vuex.Store({
         })
     },
     SIGN_OUT ({ commit }) {
-      return httpDelete(SESSION_URL)
-        .then(_ => {
+      return httpDelete(`${API_URL}/sessions`)
+        .then((_) => {
           localStorage.removeItem('id_token')
           commit('USER_SIGNED_OUT')
         })
@@ -58,7 +64,7 @@ const store = new Vuex.Store({
         })
     },
     SIGN_UP ({ commit }, credentials) {
-      return httpPost(REGISTRATION_URL, credentials)
+      return httpPost(`${API_URL}/registrations`, credentials)
         .then(({ jwt, user: { username, id } }) => {
           localStorage.setItem('id_token', jwt)
           setCurrentUser(commit, { username, id, jwt })
@@ -72,7 +78,7 @@ const store = new Vuex.Store({
         })
     },
     GET_CURRENT_USER ({ commit }) {
-      return httpGet(CURRENT_USER_URL)
+      return httpGet(`${API_URL}/current_user`)
         .then(({ user: { username, id } }) => {
           const jwt = localStorage.getItem('id_token');
           setCurrentUser(commit, { username, id, jwt })
@@ -82,7 +88,7 @@ const store = new Vuex.Store({
         })
     },
     GET_POSTS ({ commit }) {
-      return httpGet('http://localhost:4000/api/posts')
+      return httpGet(`${API_URL}/posts`)
         .then(({ posts }) => {
           commit('SET_POSTS', posts)
         })
@@ -91,7 +97,7 @@ const store = new Vuex.Store({
         })
     },
     GET_POST ({ commit }, id) {
-      return httpGet(`http://localhost:4000/api/posts/${id}`)
+      return httpGet(`${API_URL}/posts/${id}`)
         .then(({ post }) => {
           commit('SET_POST', post)
         })
@@ -100,7 +106,7 @@ const store = new Vuex.Store({
         })
     },
     CREATE_POST ({ commit }, post) {
-      return httpPost("http://localhost:4000/api/posts", post)
+      return httpPost(`${API_URL}/posts`, post)
         .then(({ post }) => {
           router.push(`/post/${post.id}`)
         })
@@ -112,13 +118,13 @@ const store = new Vuex.Store({
         })
     },
     DELETE_POST ({ commit }, id) {
-      return httpDelete(`http://localhost:4000/api/posts/${id}`)
-        .then(_ => {
+      return httpDelete(`${API_URL}/posts/${id}`)
+        .then((_) => {
           router.push('/')
         })
     },
     UPDATE_POST ({ commit }, { id, post }) {
-      return httpUpdate(`http://localhost:4000/api/posts/${id}`, post)
+      return httpUpdate(`${API_URL}/posts/${id}`, post)
         .then(({ post }) => {
           router.push(`/post/${post.id}`)
         })
@@ -127,6 +133,15 @@ const store = new Vuex.Store({
           .then((errorJSON) => {
             commit('SET_POST_ERRORS', errorJSON.errors)
           })
+        })
+    },
+    CREATE_COMMENT ({ commit, dispatch }, { id, comment }) {
+      return httpPost(`${API_URL}/posts/${id}/comments`, comment)
+        .then((_) => {
+          dispatch('GET_POST', id)
+        })
+        .catch((error) => {
+          console.log(error)
         })
     },
   },
