@@ -9,7 +9,7 @@ import {
 const state = {
   currentUser: null,
   sessionError: null,
-  registrationErrors: {}
+  registrationErrors: {},
 }
 
 const getters = {
@@ -19,12 +19,13 @@ const getters = {
 }
 
 const actions = {
-  signIn ({ commit }, credentials) {
-    return httpPost(`${apiURL}/sessions`, {session: credentials})
-      .then(({ jwt, user: { username, id } }) => {
+  signIn({ commit, dispatch }, session) {
+    return httpPost(`${apiURL}/sessions`, { session })
+      .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
-        commit(types.SET_CURRENT_USER, { username, id, jwt })
+        commit(types.SET_CURRENT_USER, { ...user, jwt })
         commit(types.CLEAR_SESSION_ERROR)
+        dispatch('toggleAuthWidget')
       })
       .catch((error) => {
         error.response.json()
@@ -34,23 +35,21 @@ const actions = {
       })
   },
 
-  signOut ({ commit }) {
+  signOut({ commit }) {
     return httpDelete(`${apiURL}/sessions`)
       .then((_) => {
         localStorage.removeItem('id_token')
         commit(types.USER_SIGNED_OUT)
       })
-      .catch((error) => {
-        console.log(error)
-      })
   },
 
-  signUp ({ commit }, credentials) {
-    return httpPost(`${apiURL}/registrations`, {user: credentials})
-      .then(({ jwt, user: { username, id } }) => {
+  signUp({ commit, dispatch }, user) {
+    return httpPost(`${apiURL}/registrations`, { user })
+      .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
-        commit(types.SET_CURRENT_USER, { username, id, jwt })
+        commit(types.SET_CURRENT_USER, { ...user, jwt })
         commit(types.CLEAR_REGISTRATIONS_ERRORS)
+        dispatch('toggleAuthWidget')
       })
       .catch((error) => {
         error.response.json()
@@ -60,54 +59,52 @@ const actions = {
       })
   },
 
-  currentUser ({ commit }) {
+  currentUser({ commit }) {
     return httpGet(`${apiURL}/current_user`)
-      .then(({ user: { username, id } }) => {
-        const jwt = localStorage.getItem('id_token');
-        commit(types.SET_CURRENT_USER, { username, id, jwt })
-      })
-      .catch((error) => {
-        console.log(error)
+      .then(({ user }) => {
+        const jwt = localStorage.getItem('id_token')
+        commit(types.SET_CURRENT_USER, { ...user, jwt })
       })
   },
 
-  clearSessionError({ commit }){
+  clearSessionError({ commit }) {
     commit(types.CLEAR_SESSION_ERROR)
   },
 
-  clearRegistrationErrors({ commit }){
+  clearRegistrationErrors({ commit }) {
     commit(types.CLEAR_REGISTRATIONS_ERRORS)
   },
 }
 
 const mutations = {
-  [types.SET_CURRENT_USER] (state, user) {
+  [types.SET_CURRENT_USER](state, user) {
     state.currentUser = { ...state.currentUser, ...user }
   },
 
-  [types.USER_SIGNED_OUT] (state) {
+  [types.USER_SIGNED_OUT](state) {
     state.currentUser = null
   },
 
-  [types.SET_SESSION_ERROR] (state, error) {
+  [types.SET_SESSION_ERROR](state, error) {
     state.sessionError = error
   },
 
-  [types.CLEAR_SESSION_ERROR] (state) {
+  [types.CLEAR_SESSION_ERROR](state) {
     state.sessionError = null
   },
 
-  [types.SET_REGISTRATIONS_ERRORS] (state, errors) {
+  [types.SET_REGISTRATIONS_ERRORS](state, errors) {
     state.registrationErrors = errors
   },
 
-  [types.CLEAR_REGISTRATIONS_ERRORS] (state) {
+  [types.CLEAR_REGISTRATIONS_ERRORS](state) {
     state.registrationErrors = {}
   },
 }
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

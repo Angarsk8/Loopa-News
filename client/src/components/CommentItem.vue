@@ -7,9 +7,17 @@
     <p>{{comment.body}}</p>
   </li>
 </template>
+
 <script>
 export default {
   name: 'CommentItem',
   props: ['comment']
 }
 </script>
+
+<style scoped>
+  p {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+</style>

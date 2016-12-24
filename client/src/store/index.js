@@ -1,40 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import router from '../router'
+import getters from './getters'
+import actions from './actions'
+import mutations from './mutations'
 import posts from './modules/posts'
 import session from './modules/session'
-import * as types from './mutation-types'
-import {
-  apiURL,
-  httpGet,
-  httpPost,
-  httpDelete,
-  httpUpdate
-}  from '../utils'
 
 Vue.use(Vuex)
 
+const debug = process.env.NODE_ENV !== 'production'
+
 const state = {
-  ...session.state,
-  ...posts.state
-}
-
-const actions = {
-  ...session.actions,
-  ...posts.actions,
-}
-
-const mutations = {
-  ...session.mutations,
-  ...posts.mutations,
+  notifications: [],
+  isLoading: false,
+  isAuthWidgetOpen: false,
+  isNotificationPanelOpen: false
 }
 
 const store = new Vuex.Store({
   state,
+  getters,
   actions,
-  mutations
+  mutations,
+  modules: {
+    session,
+    posts
+  },
+  strict: debug
 })
-
-store.dispatch('currentUser')
 
 export default store

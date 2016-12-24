@@ -1,19 +1,36 @@
 <template>
-  <div class="posts page">
-    <post-item v-for="post in posts" v-bind:post="post"></post-item>
+  <div>
+    <custom-loading v-if="isLoading"></custom-loading>
+    <div class="posts page" v-else>
+      <post-item v-for="post in posts" v-bind:post="post"></post-item>
+    </div>
   </div>
 </template>
+
 <script>
+import CustomLoading from './CustomLoading'
 import PostItem from './PostItem'
-import { mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
+
   components: {
-    'post-item': PostItem
+    CustomLoading,
+    PostItem
   },
-  computed: mapState([
-    'posts'
+
+  created(){
+    this.$store.dispatch('showLoading')
+    this.$store.dispatch('getPosts')
+      .then(() => {
+        this.$store.dispatch('hideLoading')
+      })
+  },
+
+  computed: mapGetters([
+    'posts',
+    'isLoading'
   ])
 }
 </script>

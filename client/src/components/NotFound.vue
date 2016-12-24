@@ -4,6 +4,7 @@
     <p>Sorry, we couldn't find a page at this address.</p>
   </div>
 </template>
+
 <script>
 export default {
   name: 'NotFound',

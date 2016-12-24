@@ -4,15 +4,15 @@ defmodule Microscope.CommentController do
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:create]
 
-  alias Microscope.{Repo, Post, Comment}
+  alias Microscope.{Repo, User, Post, Comment, Notification}
 
   def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
-    IO.inspect comment_params 
-    changeset = Post
-      |> Repo.get!(post_id)
-      |> Repo.preload([:user, :comments])
+    author = Guardian.Plug.current_resource(conn).username
+    post = Repo.get!(Post, post_id)
+
+    changeset = post
       |> build_assoc(:comments)
-      |> Comment.changeset(comment_params)
+      |> Comment.changeset(%{comment_params | "author" => author})
 
     case Repo.insert(changeset) do
       {:ok, comment} ->

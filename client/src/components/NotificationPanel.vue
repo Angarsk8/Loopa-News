@@ -1,0 +1,64 @@
+<template>
+  <li :class="`dropdown ${showClass}`">
+    <a
+      href="#"
+      class="dropdown-toggle my-toggle"
+      @click.prevent="toggleNotificationPanel"
+    >
+      Notifications
+      <span
+        v-if="notifications.length"
+        class="badge badge-inverse"
+      >
+        {{notifications.length}}
+      </span>
+      <b class="caret"></b>
+    </a>
+    <ul class="notification dropdown-menu">
+      <li v-if="notifications.length">
+        <a
+          v-for="notification in notifications"
+          @click.prevent="deleteNotification({ notification, $route })"
+        >
+          <strong>{{notification.username}}</strong> commented on your post
+        </a>
+      </li>
+      <li v-else><span>No Notifications</span></li>
+    </ul>
+  </li>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  name: "NotificationPanel",
+
+  created(){
+    this.$store.dispatch('getNotifications')
+  },
+
+  computed: {
+    ...mapGetters([
+      'notifications',
+      'isNotificationPanelOpen'
+    ]),
+    showClass(){
+      return this.isNotificationPanelOpen ? "open" : ""
+    }
+  },
+
+  methods: {
+    ...mapActions([
+      'toggleNotificationPanel',
+      'deleteNotification'
+    ])
+  }
+}
+</script>
+
+<style scoped>
+  a {
+    cursor: pointer;
+  }
+</style>

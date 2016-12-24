@@ -1,7 +1,7 @@
 <template>
   <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+    <li :class="`dropdown ${showClass}`">
+      <a href="#" class="dropdown-toggle" @click.prevent="toggleAuthWidget">
         {{ currentUser ? currentUser.username : 'Login / Signup'}}
         <span class="caret"></span>
       </a>
@@ -14,15 +14,15 @@
         <li>
           <div class="row">
             <div class="col-md-12">
-              <login-form v-if="showLogin"></login-form>
+              <login-form v-if="showLoginView"></login-form>
               <signup-form v-else></signup-form>
-              <div v-if="showLogin" class="bottom text-center">
+              <div v-if="showLoginView" class="bottom text-center">
                 <span class="bottom-text">Not registered?</span>
-                <a @click="toggleLogin">Create account</a>
+                <a @click="toggleLoginView()">Create account</a>
               </div>
               <div v-else class="bottom text-center">
                 <span class="bottom-text">Already registered?</span>
-                <a @click="toggleLogin">Sign in</a>
+                <a @click="toggleLoginView()">Sign in</a>
               </div>
             </div>
           </div>
@@ -31,36 +31,48 @@
     </li>
   </ul>
 </template>
+
 <script>
 import Login  from './components/Login'
 import Signup from './components/Signup'
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'AuthWidget',
+
   components: {
     'login-form': Login,
     'signup-form': Signup,
   },
-  data: () => {
+
+  data() {
     return {
-      showLogin: true,
+      showLoginView: true,
     }
   },
-  computed: mapState([
-    'currentUser'
-  ]),
+
+  computed: {
+    ...mapGetters([
+      'currentUser',
+      'isAuthWidgetOpen'
+    ]),
+    showClass(){
+      return this.isAuthWidgetOpen ? "open" : ""
+    }
+  },
+
   methods: {
-    toggleLogin(e){
-      e.stopPropagation();
-      this.showLogin = !this.showLogin;
-    },
     ...mapActions([
-      'signOut'
-    ])
+      'signOut',
+      'toggleAuthWidget'
+    ]),
+    toggleLoginView() {
+      this.showLoginView = !this.showLoginView;
+    }
   }
 }
 </script>
+
 <style>
 #login-dp{
   min-width: 300px;

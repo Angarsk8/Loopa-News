@@ -6,16 +6,41 @@
     </div>
   </div>
 </template>
+
 <script>
 import Header from './components/Header'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
+
   components: {
     'custom-header': Header
+  },
+
+  computed: mapGetters([
+    'isAuthWidgetOpen',
+    'isNotificationPanelOpen'
+  ]),
+
+  created(){
+    const dispatch = this.$store.dispatch
+
+    if(localStorage.getItem('id_token')){
+      dispatch('currentUser')
+    }
+    document.addEventListener('click', () => {
+      if(this.isAuthWidgetOpen){
+        dispatch('toggleAuthWidget')
+      }
+      if(this.isNotificationPanelOpen){
+        dispatch('toggleNotificationPanel')
+      }
+    })
   }
 }
 </script>
+
 <style>
 .grid-block,
 .main,
@@ -48,9 +73,6 @@ body {
   margin-bottom: 10px;
 }
 
-
-/* line 32, ../sass/style.scss */
-
 .navbar .navbar-inner {
   border-radius: 0px 0px 3px 3px;
 }
@@ -60,8 +82,6 @@ body {
 }
 
 .post {
-  /* For modern browsers */
-  /* For IE 6/7 (trigger hasLayout) */
   *zoom: 1;
   position: relative;
   opacity: 1;
@@ -120,7 +140,11 @@ body {
 }
 
 .post .post-content p {
-  margin: 0;
+  margin: 5px 0 0 0;
+}
+
+.post .author {
+  font-weight: 500;
 }
 
 .post .discuss {

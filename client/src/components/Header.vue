@@ -22,28 +22,32 @@
         <li :class="activeRouteClass('postSubmit')" v-if="currentUser">
           <router-link to="/submit">Submit Post</router-link>
         </li>
-        <notifications-panel v-if="currentUser"></notifications-panel>
+        <notification-panel v-if="currentUser"></notification-panel>
       </ul>
-      <login-widget></login-widget>
+      <auth-widget></auth-widget>
     </div>
   </nav>
 </template>
+
 <script>
-import Notification from './Notification'
-import AuthWidget   from './Auth/Widget'
-import { mapState } from 'vuex'
+import NotificationPanel from './NotificationPanel'
+import AuthWidget   from './Auth/AuthWidget'
+import { mapGetters } from 'vuex'
 
 export default {
   name: "Header",
+
   components: {
-    'notifications-panel': Notification,
-    'login-widget': AuthWidget
+    NotificationPanel,
+    AuthWidget
   },
-  computed: mapState([
+
+  computed: mapGetters([
     'currentUser'
   ]),
+
   methods: {
-    activeRouteClass(...routes){
+    activeRouteClass(...routes) {
       const active = routes.some(route => this.$route.name == route)
       return active && "active"
     }

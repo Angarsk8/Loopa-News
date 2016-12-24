@@ -1,15 +1,26 @@
 defmodule Microscope.PostController do
   use Microscope.Web, :controller
 
+  @preload [:user, :comments, :votes]
+
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:create, :update, :delete]
 
   alias Microscope.{Repo, Post}
 
-  def index(conn, _params) do
-    posts = Post
+  def index(conn, %{"limit" => limit}) do
+    posts = Post.preload
+      |> Post.order_and_limit(limit)
       |> Repo.all
-      |> Repo.preload([:user, :comments])
+
+    conn
+    |> put_status(:ok)
+    |> render("index.json", posts: posts)
+  end
+  def index(conn, _params) do
+    posts = Post.preload
+      |> Post.order_asc_by_insertion
+      |> Repo.all
 
     conn
     |> put_status(:ok)
@@ -17,7 +28,7 @@ defmodule Microscope.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    case Repo.get(Post, id) do
+    case Repo.get(Post.preload, id) do
       nil ->
         conn
         |> put_status(:not_found)
@@ -25,7 +36,7 @@ defmodule Microscope.PostController do
       post ->
         conn
         |> put_status(:ok)
-        |> render("show.json", post: post |> Repo.preload([:user, :comments]))
+        |> render("show.json", post: post)
     end
   end
 
@@ -34,7 +45,7 @@ defmodule Microscope.PostController do
 
     changeset = current_user
       |> build_assoc(:posts)
-      |> Repo.preload([:user, :comments])
+      |> Repo.preload(@preload)
       |> Post.changeset(post_params)
 
     case Repo.insert(changeset) do
@@ -50,12 +61,10 @@ defmodule Microscope.PostController do
   end
 
   def update(conn, %{"id" => id, "post" => post_params}) do
-    current_user = Guardian.Plug.current_resource(conn)
+    user_id = Guardian.Plug.current_resource(conn).id
 
-    changeset = current_user
-      |> assoc(:posts)
-      |> Repo.get!(id)
-      |> Repo.preload([:user, :comments])
+    changeset = Post.preload
+      |> Repo.get_by!(id: id, user_id: user_id)
       |> Post.changeset(post_params)
 
     case Repo.update(changeset) do
@@ -71,9 +80,10 @@ defmodule Microscope.PostController do
   end
 
   def delete(conn, %{"id" => id}) do
-    Guardian.Plug.current_resource(conn)
-    |> assoc(:posts)
-    |> Repo.get!(id)
+    user_id = Guardian.Plug.current_resource(conn).id
+
+    post = Post
+    |> Repo.get_by!(id: id, user_id: user_id)
     |> Repo.delete!
 
     conn

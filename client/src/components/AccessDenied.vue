@@ -4,6 +4,7 @@
     <p>You can't get here! {{message}}.</p>
   </div>
 </template>
+
 <script>
   export default {
     name: 'AccessDenied',

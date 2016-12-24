@@ -1,5 +1,9 @@
 <template>
-  <form class="main form page" v-if="currentUser" @submit.prevent="create()">
+  <form
+    class="main form page"
+    v-if="currentUser"
+    @submit.prevent="createPost(post)"
+  >
     <div :class="`form-group ${hasError('url')}`">
       <label class="control-label" for="url">URL</label>
       <div class="controls">
@@ -36,38 +40,40 @@
     </div>
     <input type="submit" value="Submit" class="btn btn-primary" />
   </form>
-  <access-denied v-else></access-denied>
+  <access-denied message="Please log in" v-else></access-denied>
 </template>
+
 <script>
 import AccessDenied from './AccessDenied'
-import { mapState } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "SubmitForm",
+
   components: {
     'access-denied': AccessDenied
   },
-  data(){
+
+  data() {
     return {
-      post: {
-        url: '',
-        title: ''
-      }
+      post: {url: '', title: ''}
     }
   },
-  mounted(){
+
+  mounted() {
     this.$store.dispatch('clearPostErrors')
   },
-  computed: mapState([
+
+  computed: mapGetters([
     'currentUser',
     'postErrors'
   ]),
+
   methods: {
-    create() {
-      const post = {post: this.post}
-      this.$store.dispatch('createPost', post)
-    },
-    hasError(property){
+    ...mapActions([
+      'createPost'
+    ]),
+    hasError(property) {
       return this.postErrors[property] ? 'has-error' : ''
     }
   }

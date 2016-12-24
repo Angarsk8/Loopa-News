@@ -2,11 +2,19 @@ defmodule Microscope.ErrorView do
   use Microscope.Web, :view
 
   def render("404.json", _assigns) do
-    %{errors: %{detail: "Page not found"}}
+    %{
+      errors: %{
+        detail: "Page not found"
+      }
+    }
   end
 
   def render("500.json", _assigns) do
-    %{errors: %{detail: "Internal server error"}}
+    %{
+      errors: %{
+        detail: "Internal server error"
+      }
+    }
   end
 
   def template_not_found(_template, assigns) do

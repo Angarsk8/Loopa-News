@@ -1,5 +1,5 @@
 <template>
-  <form class="form" @submit.prevent="signUp(credentials)">
+  <form class="form" @submit.prevent="signUp(session)">
     <div :class="`form-group ${hasError('username')}`">
       <label class="sr-only" for="username">Username</label>
       <input
@@ -7,7 +7,7 @@
         class="form-control"
         id="username"
         placeholder="Username"
-        v-model="credentials.username"
+        v-model="session.username"
         required
       />
       <p
@@ -22,7 +22,7 @@
         class="form-control"
         id="password"
         placeholder="Password"
-        v-model="credentials.password"
+        v-model="session.password"
         required
       />
       <p
@@ -38,7 +38,7 @@
         class="form-control"
         id="confirm-password"
         placeholder="Confirm password"
-        v-model="credentials.password_confirmation"
+        v-model="session.password_confirmation"
         required
       />
       <p
@@ -52,31 +52,36 @@
     </div>
   </form>
 </template>
+
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "Signup",
+
   data() {
     return {
-      credentials: {
+      session: {
         username: '',
         password: '',
         password_confirmation: ''
       }
     }
   },
-  mounted(){
+
+  mounted() {
     this.$store.dispatch('clearRegistrationErrors')
   },
-  computed: mapState([
+
+  computed: mapGetters([
     'registrationErrors'
   ]),
+
   methods: {
     ...mapActions([
       'signUp'
     ]),
-    hasError(property){
+    hasError(property) {
       return this.registrationErrors[property] ? 'has-error' : ''
     }
   }

@@ -9,14 +9,20 @@ defmodule Microscope.SessionView do
   end
 
   def render("error.json", _) do
-    %{message: "Invalid email or password"}
+    %{
+      message: "Invalid email or password"
+    }
   end
 
   def render("delete.json", _) do
-    %{ok: true}
+    %{
+      ok: true
+    }
   end
 
   def render("forbidden.json", %{error: error}) do
-    %{message: error}
+    %{
+      message: error
+    }
   end
 end

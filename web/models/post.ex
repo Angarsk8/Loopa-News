@@ -1,13 +1,15 @@
 defmodule Microscope.Post do
   use Microscope.Web, :model
 
-  @derive {Poison.Encoder, only: [:id, :url, :title, :user_id, :user, :comments]}
+  @preload [:user, :comments, :votes]
+  @derive {Poison.Encoder, only: [:id, :url, :title, :user_id | @preload]}
 
   schema "posts" do
     field :url, :string
     field :title, :string
     belongs_to :user, Microscope.User
     has_many :comments, Microscope.Comment, on_delete: :delete_all
+    has_many :votes, Microscope.Vote, on_delete: :delete_all
 
     timestamps()
   end
@@ -22,5 +24,21 @@ defmodule Microscope.Post do
     |> validate_format(:url, @url_format, message: "Invalid URL format")
     |> validate_length(:title, min: 5)
     |> unique_constraint(:url, message: "URL already submitted")
+  end
+
+  def preload do
+    from p in __MODULE__, preload: ^@preload
+  end
+
+  def order_and_limit(query, limit) do
+    query
+    |> order_asc_by_insertion
+    |> limit(^limit)
+  end
+
+  def order_asc_by_insertion(query) do
+    from p in query,
+      order_by: [desc: :inserted_at],
+      select: p
   end
 end

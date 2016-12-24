@@ -3,7 +3,7 @@
     class="form"
     role="form"
     accept-charset="UTF-8"
-    @submit.prevent="signIn(credentials)"
+    @submit.prevent="signIn(user)"
   >
     <div class="custom-alert-danger" v-if="sessionError">{{sessionError}}</div>
     <div class="form-group">
@@ -13,7 +13,7 @@
         class="form-control"
         id="username"
         placeholder="Username"
-        v-model="credentials.username"
+        v-model="user.username"
         required
       />
     </div>
@@ -24,7 +24,7 @@
         class="form-control"
         id="password"
         placeholder="Password"
-        v-model="credentials.password"
+        v-model="user.password"
         required
       />
     </div>
@@ -33,25 +33,30 @@
     </div>
   </form>
 </template>
+
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: "Login",
+
   data() {
     return {
-      credentials: {
+      user: {
         username: '',
         password: ''
       }
     }
   },
-  mounted(){
+
+  mounted() {
     this.$store.dispatch('clearSessionError')
   },
-  computed: mapState([
+
+  computed: mapGetters([
     'sessionError'
   ]),
+
   methods: mapActions([
     'signIn'
   ])

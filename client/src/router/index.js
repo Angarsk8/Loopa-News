@@ -4,27 +4,21 @@ import SubmitForm from '../components/SubmitForm'
 import EditForm from '../components/EditForm'
 import NotFound from '../components/NotFound'
 import PostPage from '../components/PostPage'
-import {
-  requireAuth,
-  fetchPosts,
-  fetchPost,
-} from './guards'
+import store from '../store'
 
-export default new VueRouter({
+const router = new VueRouter({
   mode: 'history',
   base: __dirname,
   routes: [
     {
       name: 'home',
       path: '/',
-      component: Home,
-      beforeEnter: fetchPosts
+      component: Home
     },
     {
       name: 'newPosts',
       path: '/new/:postLimit?',
-      component: Home,
-      beforeEnter: fetchPosts
+      component: Home
     },
     {
       name: 'postSubmit',
@@ -34,14 +28,12 @@ export default new VueRouter({
     {
       name: 'postPage',
       path: '/post/:id',
-      component: PostPage,
-      beforeEnter: fetchPost
+      component: PostPage
     },
     {
       name: 'postEdit',
       path: '/post/:id/edit',
-      component: EditForm,
-      beforeEnter: fetchPost
+      component: EditForm
     },
     {
       path: '*',
@@ -49,3 +41,13 @@ export default new VueRouter({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if(store.state.session.currentUser) {
+    store.dispatch('getNotifications').then(() => { next() })
+  }else {
+    next()
+  }
+})
+
+export default router;

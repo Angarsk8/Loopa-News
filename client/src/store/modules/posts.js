@@ -14,36 +14,32 @@ const state = {
   post: null
 }
 
-// const getters = {
-//   post: state => state.post,
-//   posts: state => state.posts,
-//   postErrors: state => state.postErrors,
-//   comments: state => state.post && state.post.comments
-// }
+const getters = {
+  post: state => state.post,
+  posts: state => state.posts,
+  postErrors: state => state.postErrors,
+  comments: state => state.post.comments,
+  votes: state => state.post.votes,
+  upvoters: state => state.post.votes.map(vote => vote.author),
+}
 
 const actions = {
-  getPosts ({ commit }) {
+  getPosts({ commit, dispatch }) {
     return httpGet(`${apiURL}/posts`)
       .then(({ posts }) => {
         commit(types.SET_POSTS, posts)
       })
-      .catch((error) => {
-        console.log(error)
-      })
   },
 
-  getPost ({ commit }, id) {
+  getPost({ commit, dispatch }, id) {
     return httpGet(`${apiURL}/posts/${id}`)
       .then(({ post }) => {
         commit(types.SET_POST, post)
       })
-      .catch((error) => {
-        console.log(error);
-      })
   },
 
-  createPost ({ commit }, post) {
-    return httpPost(`${apiURL}/posts`, post)
+  createPost({ commit }, post) {
+    return httpPost(`${apiURL}/posts`, { post })
       .then(({ post }) => {
         router.push(`/post/${post.id}`)
       })
@@ -55,14 +51,14 @@ const actions = {
       })
   },
 
-  deletePost ({ commit }, id) {
+  deletePost({ commit }, id) {
     return httpDelete(`${apiURL}/posts/${id}`)
       .then((_) => {
         router.push('/')
       })
   },
 
-  updatePost ({ commit }, post) {
+  updatePost({ commit }, post) {
     return httpUpdate(`${apiURL}/posts/${post.id}`, { post })
       .then(({ post }) => {
         router.push(`/post/${post.id}`)
@@ -75,13 +71,21 @@ const actions = {
       })
   },
 
-  createComment ({ commit, dispatch }, comment) {
+  upvotePost({ commit, dispatch }, { vote, route }) {
+    return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
+      .then((_) => {
+        if(route.name === 'postPage'){
+          dispatch('getPost', vote.post_id)
+        }else{
+          dispatch('getPosts')
+        }
+      })
+  },
+
+  createComment({ commit, dispatch }, comment) {
     return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
       .then((_) => {
         dispatch('getPost', comment.post_id)
-      })
-      .catch((error) => {
-        console.log(error)
       })
   },
 
@@ -91,25 +95,26 @@ const actions = {
 }
 
 const mutations = {
-  [types.SET_POSTS] (state, payload) {
+  [types.SET_POSTS](state, payload) {
     state.posts = payload
   },
 
-  [types.SET_POST] (state, payload) {
+  [types.SET_POST](state, payload) {
     state.post = payload
   },
 
-  [types.SET_POST_ERRORS] (state, payload) {
+  [types.SET_POST_ERRORS](state, payload) {
     state.postErrors = payload
   },
 
-  [types.CLEAR_POST_ERRORS] (state) {
+  [types.CLEAR_POST_ERRORS](state) {
     state.postErrors = {}
   }
 }
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

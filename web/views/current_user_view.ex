@@ -8,7 +8,9 @@ defmodule Microscope.CurrentUserView do
   end
 
   def render("forbidden.json", %{error: error}) do
-    %{message: error}
+    %{
+      message: error
+    }
   end
 
   def render("error.json", _) do

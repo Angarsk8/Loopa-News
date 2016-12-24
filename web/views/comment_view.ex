@@ -19,4 +19,10 @@ defmodule Microscope.CommentView do
       errors: errors
     }
   end
+
+  def render("forbidden.json", %{error: error}) do
+    %{
+      message: error
+    }
+  end
 end

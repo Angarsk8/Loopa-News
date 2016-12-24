@@ -8,6 +8,7 @@ defmodule Microscope.User do
     field :password , :string, virtual: true
     field :encrypted_password, :string
     has_many :posts, Microscope.Post
+    has_many :notifications, Microscope.Notification
 
     timestamps()
   end
