@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import store from './store'
+import { joinPostsChannel } from './channel'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -15,3 +16,5 @@ const app = new Vue({
   template: '<App/>',
   components: { App }
 })
+
+joinPostsChannel()

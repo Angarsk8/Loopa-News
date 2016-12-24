@@ -6,7 +6,7 @@ defmodule Microscope.PostController do
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:create, :update, :delete]
 
-  alias Microscope.{Repo, Post}
+  alias Microscope.{Repo, Post, PostChannel}
 
   def index(conn, %{"limit" => limit}) do
     posts = Post.preload
@@ -50,6 +50,7 @@ defmodule Microscope.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
+        PostChannel.broadcast_all(post.id)
         conn
         |> put_status(:created)
         |> render("show.json", post: post)
@@ -69,6 +70,7 @@ defmodule Microscope.PostController do
 
     case Repo.update(changeset) do
       {:ok, post} ->
+        PostChannel.broadcast_all(post.id)
         conn
         |> put_status(:ok)
         |> render("show.json", post: post)
@@ -82,9 +84,11 @@ defmodule Microscope.PostController do
   def delete(conn, %{"id" => id}) do
     user_id = Guardian.Plug.current_resource(conn).id
 
-    post = Post
+    Post
     |> Repo.get_by!(id: id, user_id: user_id)
     |> Repo.delete!
+
+    PostChannel.broadcast_all(id)
 
     conn
     |> put_status(:ok)

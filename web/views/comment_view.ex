@@ -3,6 +3,12 @@ defmodule Microscope.CommentView do
 
   import Microscope.Views.Helpers, only: [render_detail: 1]
 
+  def render("index.json", %{comments: comments}) do
+    %{
+      comments: comments
+    }
+  end
+
   def render("show.json", %{comment: comment}) do
     %{
       comment: comment

@@ -90,8 +90,10 @@ export default {
   methods: {
     createComment() {
       this.$store.dispatch('createComment', this.comment)
-      this.$store.dispatch('createNotification', this.notification)
-      this.commentBody = ''
+        .then(() => {
+          this.$store.dispatch('createNotification', this.notification)
+          this.commentBody = ''
+        })
     }
   }
 }

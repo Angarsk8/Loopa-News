@@ -13,12 +13,10 @@ defmodule Microscope.User do
     timestamps()
   end
 
-  @fields [:username, :password]
-
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @fields)
-    |> validate_required(@fields)
+    |> cast(params, [:username, :password])
+    |> validate_required([:username, :password])
     |> validate_length(:username, min: 5)
     |> validate_length(:password, min: 5)
     |> validate_confirmation(:password, message: "Password does not match")

@@ -29,12 +29,12 @@ export default {
     if(localStorage.getItem('id_token')){
       dispatch('currentUser')
     }
-    document.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
       if(this.isAuthWidgetOpen){
-        dispatch('toggleAuthWidget')
+        dispatch('toggleAuthWidget', e)
       }
       if(this.isNotificationPanelOpen){
-        dispatch('toggleNotificationPanel')
+        dispatch('toggleNotificationPanel', e)
       }
     })
   }

@@ -1,5 +1,5 @@
 <template>
-  <li :class="`dropdown ${showClass}`">
+  <li :class="`dropdown ${showClass}`" @click.stop>
     <a
       href="#"
       class="dropdown-toggle my-toggle"
@@ -17,8 +17,9 @@
     <ul class="notification dropdown-menu">
       <li v-if="notifications.length">
         <a
+          href="#"
           v-for="notification in notifications"
-          @click.prevent="deleteNotification({ notification, $route })"
+          @click.prevent="deleteNotification(notification)"
         >
           <strong>{{notification.username}}</strong> commented on your post
         </a>
@@ -56,9 +57,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  a {
-    cursor: pointer;
-  }
-</style>

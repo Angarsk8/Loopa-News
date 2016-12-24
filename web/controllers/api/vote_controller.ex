@@ -4,7 +4,7 @@ defmodule Microscope.VoteController do
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:create]
 
-  alias Microscope.{Repo, Post, Vote}
+  alias Microscope.{Repo, Post, Vote, PostChannel}
 
   def create(conn, %{"vote" => vote_params,"post_id" => post_id}) do
     author = Guardian.Plug.current_resource(conn).username
@@ -16,6 +16,8 @@ defmodule Microscope.VoteController do
           |> build_assoc(:votes)
           |> Vote.changeset(%{vote_params | "author" => author})
           |> Repo.insert!
+
+        PostChannel.broadcast_all(post_id)
 
         conn
         |> put_status(:created)

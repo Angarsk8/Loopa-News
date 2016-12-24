@@ -4,7 +4,7 @@ defmodule Microscope.NotificationController do
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:index, :create, :delete]
 
-  alias Microscope.{Repo, Post, Notification}
+  alias Microscope.{Repo, Post, Notification, UserChannel}
 
   def index(conn, _params) do
     current_user = Guardian.Plug.current_resource(conn)
@@ -37,6 +37,7 @@ defmodule Microscope.NotificationController do
 
       case Repo.insert(changeset) do
         {:ok, notification} ->
+          UserChannel.notify(notification.user_id)
           conn
           |> put_status(:ok)
           |> render("show.json", notification: notification)
@@ -49,10 +50,12 @@ defmodule Microscope.NotificationController do
   end
 
   def delete(conn, %{"id" => id}) do
-    Guardian.Plug.current_resource(conn)
-    |> assoc(:notifications)
-    |> Repo.get!(id)
-    |> Repo.delete!
+    notification = Guardian.Plug.current_resource(conn)
+      |> assoc(:notifications)
+      |> Repo.get!(id)
+      |> Repo.delete!
+
+    UserChannel.notify(notification.user_id)
 
     conn
     |> put_status(:ok)

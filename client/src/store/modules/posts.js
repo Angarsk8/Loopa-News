@@ -18,9 +18,14 @@ const getters = {
   post: state => state.post,
   posts: state => state.posts,
   postErrors: state => state.postErrors,
-  comments: state => state.post.comments,
+  comments: state => {
+    return [...state.post.comments]
+      .sort((a, b) => {
+        return new Date(a.inserted_at) - new Date(b.inserted_at);
+      })
+  },
   votes: state => state.post.votes,
-  upvoters: state => state.post.votes.map(vote => vote.author),
+  upvoters: state => state.post.votes.map(vote => vote.author)
 }
 
 const actions = {
@@ -71,22 +76,12 @@ const actions = {
       })
   },
 
-  upvotePost({ commit, dispatch }, { vote, route }) {
+  upvotePost({ commit, dispatch }, vote) {
     return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
-      .then((_) => {
-        if(route.name === 'postPage'){
-          dispatch('getPost', vote.post_id)
-        }else{
-          dispatch('getPosts')
-        }
-      })
   },
 
   createComment({ commit, dispatch }, comment) {
     return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
-      .then((_) => {
-        dispatch('getPost', comment.post_id)
-      })
   },
 
   clearPostErrors({ commit }){

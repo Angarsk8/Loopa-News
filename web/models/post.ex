@@ -1,8 +1,7 @@
 defmodule Microscope.Post do
   use Microscope.Web, :model
 
-  @preload [:user, :comments, :votes]
-  @derive {Poison.Encoder, only: [:id, :url, :title, :user_id | @preload]}
+  @derive {Poison.Encoder, only: [:id, :url, :title, :user_id ,:user, :comments, :votes]}
 
   schema "posts" do
     field :url, :string
@@ -14,20 +13,20 @@ defmodule Microscope.Post do
     timestamps()
   end
 
-  @fields [:url, :title]
   @url_format ~r/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, @fields)
-    |> validate_required(@fields)
+    |> cast(params, [:url, :title])
+    |> validate_required([:url, :title])
     |> validate_format(:url, @url_format, message: "Invalid URL format")
     |> validate_length(:title, min: 5)
     |> unique_constraint(:url, message: "URL already submitted")
   end
 
   def preload do
-    from p in __MODULE__, preload: ^@preload
+    from p in __MODULE__,
+      preload: [:user, :votes, :comments]
   end
 
   def order_and_limit(query, limit) do

@@ -45,14 +45,8 @@ const actions = {
     const { id, post_id }  = notification
     return httpDelete(`${apiURL}/notifications/${id}`)
       .then(() => {
-        if($route.name === 'postPage' && $route.params.id == post_id) {
-          dispatch('getNotifications')
-        } else {
-          router.push(`/post/${post_id}`)
-        }
-      })
-      .then(() => {
         dispatch('toggleNotificationPanel')
+        router.push(`/post/${post_id}`)
       })
   }
 }

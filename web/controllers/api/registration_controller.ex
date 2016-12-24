@@ -1,7 +1,7 @@
 defmodule Microscope.RegistrationController  do
   use Microscope.Web, :controller
 
-  alias Microscope.{Repo, User, SessionView, RegistrationView}
+  alias Microscope.{Repo, User, SessionView}
 
   plug :scrub_params, "user" when action in [:create]
 
@@ -19,7 +19,7 @@ defmodule Microscope.RegistrationController  do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(RegistrationView, "error.json", changeset: changeset)
+        |> render("error.json", changeset: changeset)
     end
   end
 end

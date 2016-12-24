@@ -75,6 +75,7 @@ export default {
   },
 
   created(){
+    this.$store.dispatch('clearPostErrors')
     this.$store.dispatch('showLoading')
     this.$store.dispatch('getPost', this.$route.params.id)
       .then(() => {

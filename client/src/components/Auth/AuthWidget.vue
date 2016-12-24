@@ -1,5 +1,5 @@
 <template>
-  <ul class="nav navbar-nav navbar-right">
+  <ul class="nav navbar-nav navbar-right" @click.stop>
     <li :class="`dropdown ${showClass}`">
       <a href="#" class="dropdown-toggle" @click.prevent="toggleAuthWidget">
         {{ currentUser ? currentUser.username : 'Login / Signup'}}
@@ -14,16 +14,18 @@
         <li>
           <div class="row">
             <div class="col-md-12">
-              <login-form v-if="showLoginView"></login-form>
-              <signup-form v-else></signup-form>
-              <div v-if="showLoginView" class="bottom text-center">
-                <span class="bottom-text">Not registered?</span>
-                <a @click="toggleLoginView()">Create account</a>
-              </div>
-              <div v-else class="bottom text-center">
-                <span class="bottom-text">Already registered?</span>
-                <a @click="toggleLoginView()">Sign in</a>
-              </div>
+              <login-form v-if="showLoginView">
+                <div class="bottom text-center">
+                  <span class="bottom-text">Not registered?</span>
+                  <a href="#" @click="toggleLoginView()">Create account</a>
+                </div>
+              </login-form>
+              <signup-form v-else>
+                <div class="bottom text-center">
+                  <span class="bottom-text">Already registered?</span>
+                  <a href="#" @click="toggleLoginView()">Sign in</a>
+                </div>
+              </signup-form>
             </div>
           </div>
         </li>
@@ -77,10 +79,6 @@ export default {
 #login-dp{
   min-width: 300px;
   padding: 15px;
-}
-#login-dp a{
-  cursor: pointer;
-  text-decoration: none;
 }
 #login-dp .help-block{
   font-size:12px

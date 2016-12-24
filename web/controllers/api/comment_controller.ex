@@ -4,7 +4,18 @@ defmodule Microscope.CommentController do
   plug Guardian.Plug.EnsureAuthenticated,
     [handler: Microscope.SessionController] when action in [:create]
 
-  alias Microscope.{Repo, User, Post, Comment, Notification}
+  alias Microscope.{Repo, Post, Comment, PostChannel}
+
+  def index(conn, %{"post_id" => post_id}) do
+    comments = %Post{id: post_id}
+      |> assoc(:comments)
+      |> order_by(desc: :inserted_at)
+      |> Repo.all
+
+    conn
+    |> put_status(:ok)
+    |> render("index.json", comments: comments)
+  end
 
   def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
     author = Guardian.Plug.current_resource(conn).username
@@ -16,6 +27,7 @@ defmodule Microscope.CommentController do
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
+        PostChannel.broadcast_all(post_id)
         conn
         |> put_status(:created)
         |> render("show.json", comment: comment)

@@ -1,3 +1,4 @@
+import { joinUserChannel } from '../../channel'
 import * as types from '../mutation-types'
 import {
   apiURL,
@@ -9,13 +10,13 @@ import {
 const state = {
   currentUser: null,
   sessionError: null,
-  registrationErrors: {},
+  registrationErrors: {}
 }
 
 const getters = {
   currentUser: state => state.currentUser,
   sessionError: state => state.sessionError,
-  registrationErrors: state => state.registrationErrors
+  registrationErrors: state => state.registrationErrors,
 }
 
 const actions = {
@@ -23,6 +24,7 @@ const actions = {
     return httpPost(`${apiURL}/sessions`, { session })
       .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
+        joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
         commit(types.CLEAR_SESSION_ERROR)
         dispatch('toggleAuthWidget')
@@ -47,6 +49,7 @@ const actions = {
     return httpPost(`${apiURL}/registrations`, { user })
       .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
+        joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
         commit(types.CLEAR_REGISTRATIONS_ERRORS)
         dispatch('toggleAuthWidget')
@@ -59,10 +62,11 @@ const actions = {
       })
   },
 
-  currentUser({ commit }) {
+  currentUser({ commit, dispatch }) {
     return httpGet(`${apiURL}/current_user`)
       .then(({ user }) => {
         const jwt = localStorage.getItem('id_token')
+        joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
       })
   },
@@ -83,6 +87,11 @@ const mutations = {
 
   [types.USER_SIGNED_OUT](state) {
     state.currentUser = null
+  },
+
+  [types.SOCKET_CONNECTED](state, { socket, channel }) {
+    state.socket  = socket
+    state.channel = channel
   },
 
   [types.SET_SESSION_ERROR](state, error) {

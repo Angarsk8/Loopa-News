@@ -2,7 +2,7 @@
   <div class="post">
     <a
       :class="`${upvotedClass} upvote btn btn-default `"
-      @click.prevent="upvotePost({ vote, $route })"
+      @click.prevent="upvotePost(vote)"
     >⬆</a>
     <div class="post-content">
       <h3><a :href="post.url">{{post.title}}</a><span>{{post.url | domain}}</span></h3>
@@ -64,7 +64,7 @@ export default {
       } else {
         return "disabled";
       }
-    },
+    }
   },
 
   methods: mapActions([
