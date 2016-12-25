@@ -9,7 +9,7 @@ defmodule Microscope.CommentController do
   def index(conn, %{"post_id" => post_id}) do
     comments = %Post{id: post_id}
       |> assoc(:comments)
-      |> order_by(desc: :inserted_at)
+      |> order_by(asc: :inserted_at)
       |> Repo.all
 
     conn

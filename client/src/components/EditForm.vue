@@ -77,7 +77,7 @@ export default {
   created(){
     this.$store.dispatch('clearPostErrors')
     this.$store.dispatch('showLoading')
-    this.$store.dispatch('getPost', this.$route.params.id)
+    this.$store.dispatch('getPost', this.$route.params.postId)
       .then(() => {
         this.$store.dispatch('hideLoading')
       })

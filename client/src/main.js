@@ -4,10 +4,13 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import store from './store'
+import { sync } from 'vuex-router-sync'
 import { joinPostsChannel } from './channel'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
+
+sync(store, router)
 
 const app = new Vue({
   el: '#app',

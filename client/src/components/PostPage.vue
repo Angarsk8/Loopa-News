@@ -2,6 +2,8 @@
   <div>
     <custom-loading v-if="isLoading"></custom-loading>
     <div class="post-page page" v-else>
+    <custom-loading></custom-loading>
+    <div class="post-page page">
       <post-item :post="post"></post-item>
       <ul class="comments">
         <comment-item
@@ -53,7 +55,7 @@ export default {
 
   created(){
     this.$store.dispatch('showLoading')
-    this.$store.dispatch('getPost', this.$route.params.id)
+    this.$store.dispatch('getPost', this.$route.params.postId)
       .then(() => {
         this.$store.dispatch('hideLoading')
       })

@@ -11,19 +11,15 @@ import {
 const state = {
   postErrors: {},
   posts: null,
-  post: null
+  post: null,
+  comments: null
 }
 
 const getters = {
   post: state => state.post,
   posts: state => state.posts,
   postErrors: state => state.postErrors,
-  comments: state => {
-    return [...state.post.comments]
-      .sort((a, b) => {
-        return new Date(a.inserted_at) - new Date(b.inserted_at);
-      })
-  },
+  comments: state => state.comments,
   votes: state => state.post.votes,
   upvoters: state => state.post.votes.map(vote => vote.author)
 }
@@ -40,6 +36,9 @@ const actions = {
     return httpGet(`${apiURL}/posts/${id}`)
       .then(({ post }) => {
         commit(types.SET_POST, post)
+      })
+      .then(() => {
+        dispatch('getComments', id)
       })
   },
 
@@ -80,6 +79,13 @@ const actions = {
     return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
   },
 
+  getComments({ commit, dispatch }, id) {
+    return httpGet(`${apiURL}/posts/${id}/comments`)
+      .then(({ comments }) => {
+        commit(types.SET_COMMENTS, comments)
+      })
+  },
+
   createComment({ commit, dispatch }, comment) {
     return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
   },
@@ -90,16 +96,20 @@ const actions = {
 }
 
 const mutations = {
-  [types.SET_POSTS](state, payload) {
-    state.posts = payload
+  [types.SET_POSTS](state, posts) {
+    state.posts = posts
   },
 
-  [types.SET_POST](state, payload) {
-    state.post = payload
+  [types.SET_POST](state, post) {
+    state.post = post
   },
 
-  [types.SET_POST_ERRORS](state, payload) {
-    state.postErrors = payload
+  [types.SET_COMMENTS](state, comments) {
+    state.comments = comments
+  },
+
+  [types.SET_POST_ERRORS](state, errors) {
+    state.postErrors = errors
   },
 
   [types.CLEAR_POST_ERRORS](state) {

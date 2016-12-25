@@ -41,7 +41,7 @@ const actions = {
     return httpPost(`${apiURL}/notifications`, { notification })
   },
 
-  deleteNotification({ commit, dispatch }, { notification, $route }){
+  deleteNotification({ commit, dispatch }, notification){
     const { id, post_id }  = notification
     return httpDelete(`${apiURL}/notifications/${id}`)
       .then(() => {

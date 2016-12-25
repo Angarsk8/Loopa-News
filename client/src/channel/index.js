@@ -28,7 +28,10 @@ export const joinPostsChannel = () => {
 
   postsChannel.on('posts:refresh', ({ id }) => {
     store.dispatch('getPosts')
-    store.dispatch('getPost', id)
+
+    if(store.state.route.params.postId === id) {
+      store.dispatch('getPost', id)
+    }
   })
 
   return postsChannel

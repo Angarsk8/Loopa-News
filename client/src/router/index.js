@@ -26,12 +26,12 @@ const router = new VueRouter({
     },
     {
       name: 'postPage',
-      path: '/post/:id',
+      path: '/post/:postId',
       component: PostPage
     },
     {
       name: 'postEdit',
-      path: '/post/:id/edit',
+      path: '/post/:postId/edit',
       component: EditForm
     },
     {
