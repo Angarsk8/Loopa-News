@@ -48,6 +48,11 @@ const actions = {
         dispatch('toggleNotificationPanel')
         router.push(`/post/${post_id}`)
       })
+  },
+
+  addAppError({ commit }, error) {
+    commit(types.ADD_ERROR, error)
+    setTimeout(() => { commit(types.REMOVE_ERROR) }, 4000)
   }
 }
 

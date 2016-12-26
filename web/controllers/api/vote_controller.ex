@@ -7,17 +7,17 @@ defmodule Microscope.VoteController do
   alias Microscope.{Repo, Post, Vote, PostChannel}
 
   def create(conn, %{"vote" => vote_params,"post_id" => post_id}) do
-    author = Guardian.Plug.current_resource(conn).username
+    current_user = Guardian.Plug.current_resource(conn)
 
-    case Repo.get_by(Vote, post_id: post_id, author: author) do
+    case Repo.get_by(Vote, post_id: post_id, author: current_user.username) do
       nil ->
         vote = Post
           |> Repo.get!(post_id)
           |> build_assoc(:votes)
-          |> Vote.changeset(%{vote_params | "author" => author})
+          |> Vote.changeset(%{vote_params | "author" => current_user.username})
           |> Repo.insert!
 
-        PostChannel.broadcast_all(post_id)
+        PostChannel.broadcast_all(current_user.id, post_id)
 
         conn
         |> put_status(:created)

@@ -17,13 +17,13 @@
               <login-form v-if="showLoginView">
                 <div class="bottom text-center">
                   <span class="bottom-text">Not registered?</span>
-                  <a href="#" @click="toggleLoginView()">Create account</a>
+                  <a href="#" @click.prevent="toggleLoginView()">Create account</a>
                 </div>
               </login-form>
               <signup-form v-else>
                 <div class="bottom text-center">
                   <span class="bottom-text">Already registered?</span>
-                  <a href="#" @click="toggleLoginView()">Sign in</a>
+                  <a href="#" @click.prevent="toggleLoginView()">Sign in</a>
                 </div>
               </signup-form>
             </div>

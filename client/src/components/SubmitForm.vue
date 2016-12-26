@@ -56,7 +56,10 @@ export default {
 
   data() {
     return {
-      post: {url: '', title: ''}
+      post: {
+        url: '', 
+        title: ''
+      }
     }
   },
 

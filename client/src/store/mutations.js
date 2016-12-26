@@ -19,6 +19,14 @@ const mutations = {
 
   [types.TOGGLE_NOTIFICATION_PANEL](state) {
     state.isNotificationPanelOpen = !state.isNotificationPanelOpen
+  },
+
+  [types.ADD_ERROR](state,error) {
+    state.appError = error
+  },
+
+  [types.REMOVE_ERROR](state) {
+    state.appError = null
   }
 }
 

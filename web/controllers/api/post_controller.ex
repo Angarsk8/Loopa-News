@@ -50,7 +50,7 @@ defmodule Microscope.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        PostChannel.broadcast_all(post.id)
+        PostChannel.broadcast_all(current_user.id, post.id)
         conn
         |> put_status(:created)
         |> render("show.json", post: post)
@@ -70,7 +70,7 @@ defmodule Microscope.PostController do
 
     case Repo.update(changeset) do
       {:ok, post} ->
-        PostChannel.broadcast_all(post.id)
+        PostChannel.broadcast_all(user_id, id)
         conn
         |> put_status(:ok)
         |> render("show.json", post: post)
@@ -88,7 +88,7 @@ defmodule Microscope.PostController do
     |> Repo.get_by!(id: id, user_id: user_id)
     |> Repo.delete!
 
-    PostChannel.broadcast_all(id)
+    PostChannel.broadcast_all(user_id, id, :delete)
 
     conn
     |> put_status(:ok)

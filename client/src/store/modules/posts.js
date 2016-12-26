@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import router from '../../router'
+import store from '../../store'
 import {
   apiURL,
   httpGet,
@@ -40,6 +41,13 @@ const actions = {
       .then(() => {
         dispatch('getComments', id)
       })
+      .catch((error) => {
+        error.response.json()
+        .then((errorJSON) => {
+          store.dispatch('addAppError', errorJSON.message)
+          commit(types.REMOVE_POST)
+        })
+      })
   },
 
   createPost({ commit }, post) {
@@ -77,6 +85,13 @@ const actions = {
 
   upvotePost({ commit, dispatch }, vote) {
     return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
+      .then((_) => {
+         if(store.state.route.name === 'postPage'){
+           dispatch('getPost', vote.post_id)
+         } else {
+           dispatch('getPosts')
+         }
+       })
   },
 
   getComments({ commit, dispatch }, id) {
@@ -88,6 +103,9 @@ const actions = {
 
   createComment({ commit, dispatch }, comment) {
     return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
+      .then(() => {
+        dispatch('getComments', comment.post_id)
+      })
   },
 
   clearPostErrors({ commit }){
@@ -102,6 +120,10 @@ const mutations = {
 
   [types.SET_POST](state, post) {
     state.post = post
+  },
+
+  [types.REMOVE_POST](state) {
+    state.post = null
   },
 
   [types.SET_COMMENTS](state, comments) {

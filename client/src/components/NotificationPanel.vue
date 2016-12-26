@@ -49,11 +49,9 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions([
-      'toggleNotificationPanel',
-      'deleteNotification'
-    ])
-  }
+  methods: mapActions([
+    'toggleNotificationPanel',
+    'deleteNotification'
+  ])
 }
 </script>

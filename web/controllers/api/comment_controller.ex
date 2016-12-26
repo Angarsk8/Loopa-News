@@ -18,16 +18,16 @@ defmodule Microscope.CommentController do
   end
 
   def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
-    author = Guardian.Plug.current_resource(conn).username
+    current_user = Guardian.Plug.current_resource(conn)
     post = Repo.get!(Post, post_id)
 
     changeset = post
       |> build_assoc(:comments)
-      |> Comment.changeset(%{comment_params | "author" => author})
+      |> Comment.changeset(%{comment_params | "author" => current_user.username})
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
-        PostChannel.broadcast_all(post_id)
+        PostChannel.broadcast_all(current_user.id, post_id)
         conn
         |> put_status(:created)
         |> render("show.json", comment: comment)

@@ -30,8 +30,8 @@ export default {
   props: ['post'],
 
   filters: {
-    pluralize(n, thing = 'Vote') {
-      return n === 1 ? `1 ${thing}` : `${n} ${thing}s`;
+    pluralize(n, label = 'Vote') {
+      return n === 1 ? `1 ${label}` : `${n} ${label}s`;
     },
     domain(url) {
       const a = document.createElement('a');

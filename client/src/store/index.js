@@ -14,7 +14,8 @@ const state = {
   notifications: [],
   isLoading: false,
   isAuthWidgetOpen: false,
-  isNotificationPanelOpen: false
+  isNotificationPanelOpen: false,
+  appError: null
 }
 
 const store = new Vuex.Store({

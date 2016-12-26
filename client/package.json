@@ -46,6 +46,7 @@
     "vuex": "^2.1.1",
     "vuex-devtools": "^0.1.0",
     "vuex-router-sync": "^4.0.2",
+    "vuex-toast": "^0.1.0",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.8.3",
     "webpack-hot-middleware": "^2.12.2",

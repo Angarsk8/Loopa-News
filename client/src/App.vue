@@ -1,6 +1,12 @@
 <template>
   <div id="app" class="container-fluid">
     <custom-header/></custom-header/>
+    <div class="error" v-if="appError">
+      <div class="alert alert-danger" role="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{appError}}
+      </div>
+    </div>
     <div id="main">
       <router-view></router-view>
     </div>
@@ -15,12 +21,13 @@ export default {
   name: 'App',
 
   components: {
-    'custom-header': Header
+    'custom-header': Header,
   },
 
   computed: mapGetters([
     'isAuthWidgetOpen',
-    'isNotificationPanelOpen'
+    'isNotificationPanelOpen',
+    'appError'
   ]),
 
   created(){
@@ -75,10 +82,6 @@ body {
 
 .navbar .navbar-inner {
   border-radius: 0px 0px 3px 3px;
-}
-
-#spinner {
-  height: 300px;
 }
 
 .post {
@@ -244,7 +247,7 @@ body {
   }
 }
 
-.errors {
+.error {
   position: fixed;
   z-index: 10000;
   padding: 10px;
