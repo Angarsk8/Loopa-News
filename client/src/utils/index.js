@@ -1,10 +1,16 @@
 import fetch        from 'isomorphic-fetch'
 import { polyfill } from 'es6-promise'
 
-const { SCHEME, HOSTNAME } =
-  process.env.NODE_ENV == 'production'
-  ? {SCHEME: 'https', HOSTNAME: window.location.hostname}
-  : {SCHEME: 'http' , HOSTNAME: 'localhost:4000'}
+const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
+  process.env.NODE_ENV === 'production'
+  ? { SOCKET_SCHEME: 'wss'
+    , SCHEME: 'https'
+    , HOSTNAME: window.location.hostname }
+  : { SOCKET_SCHEME: 'ws'
+    , SCHEME: 'http'
+    , HOSTNAME: 'localhost:4000' }
+
+
 
 const defaultHeaders = {
   'Accept': 'application/json',
@@ -17,6 +23,8 @@ function buildHeaders() {
 }
 
 export const apiURL = `${SCHEME}://${HOSTNAME}/api`
+
+export const socketURL = `${SOCKET_SCHEME}://${HOSTNAME}/socket`
 
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {

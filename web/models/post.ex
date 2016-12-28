@@ -1,7 +1,7 @@
 defmodule Microscope.Post do
   use Microscope.Web, :model
 
-  @derive {Poison.Encoder, only: [:id, :url, :title, :user_id ,:user, :comments, :votes]}
+  @derive {Poison.Encoder, only: [:id, :inserted_at, :url, :title, :user_id ,:user, :comments, :votes]}
 
   schema "posts" do
     field :url, :string

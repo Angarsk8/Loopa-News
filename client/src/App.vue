@@ -52,13 +52,17 @@ export default {
 .grid-block,
 .main,
 .post,
-.comments li,
-.comment-form {
+.comments > li {
   background: #fff;
   border-radius: 3px;
   padding: 10px;
   margin-bottom: 10px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.comment-form {
+  background: transparent;
+  padding: 10px;
 }
 
 body {
@@ -161,6 +165,12 @@ body {
   margin: 0;
 }
 
+.comments li img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
 .comments li h4 {
   font-size: 16px;
   margin: 0;
@@ -175,9 +185,13 @@ body {
   font-size: 12px;
 }
 
-.comments li p:last-child {
+.comments li pre p:last-child {
   margin-bottom: 0;
 }
+
+/*.comments li .comment-body * {
+  margin-bottom: 0 !important;
+}*/
 
 .dropdown-menu span {
   display: block;
@@ -217,36 +231,6 @@ body {
   font-weight: 100;
 }
 
-@-webkit-keyframes fadeOut {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@keyframes fadeOut {
-  0% {
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .error {
   position: fixed;
   z-index: 10000;
@@ -267,5 +251,15 @@ body {
   clear: both;
   margin-bottom: 5px;
   pointer-events: auto;
+}
+
+.slide-fade-enter-active {
+  transition: all .8s ease;
+}
+
+
+.slide-fade-enter, .slide-fade-leave-active {
+  transform: translateX(10px);
+  opacity: 0;
 }
 </style>

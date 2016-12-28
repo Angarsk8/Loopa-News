@@ -2,7 +2,7 @@ defmodule Microscope.CommentController do
   use Microscope.Web, :controller
 
   plug Guardian.Plug.EnsureAuthenticated,
-    [handler: Microscope.SessionController] when action in [:create]
+    [handler: Microscope.SessionController] when action in [:create, :delete]
 
   alias Microscope.{Repo, Post, Comment, PostChannel}
 
@@ -36,5 +36,39 @@ defmodule Microscope.CommentController do
         |> put_status(:unprocessable_entity)
         |> render("error.json", changeset: changeset)
     end
+  end
+
+  def update(conn, %{"id" => id, "post_id" => post_id, "comment" => comment_params}) do
+    current_user = Guardian.Plug.current_resource(conn)
+
+    changeset = Comment
+      |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
+      |> Comment.changeset(comment_params)
+
+    case Repo.update(changeset) do
+      {:ok, comment} ->
+        PostChannel.broadcast_all(current_user.id, post_id)
+        conn
+        |> put_status(:ok)
+        |> render("show.json", comment: comment)
+      {:error, changeset} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> render("error.json", changeset: changeset)
+    end
+  end
+
+  def delete(conn, %{"id" => id, "post_id" => post_id}) do
+    current_user =  Guardian.Plug.current_resource(conn)
+
+    Comment
+    |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
+    |> Repo.delete!
+
+    PostChannel.broadcast_all(current_user.id, post_id)
+
+    conn
+    |> put_status(:ok)
+    |> render("delete.json")
   end
 end

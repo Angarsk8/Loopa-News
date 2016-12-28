@@ -1,19 +1,19 @@
 import { Socket } from 'phoenix-elixir'
 import router from '../router'
 import store from '../store'
-import { ADD_TOAST_MESSAGE } from 'vuex-toast'
+import { socketURL } from '../utils'
 
-export const socket = new Socket('ws://localhost:4000/socket')
+export const socket = new Socket(socketURL)
 
 export const joinUserChannel = ({ id, jwt }) => {
   const userChannel = socket.channel(`users:${id}`, { token: jwt })
 
   userChannel.join()
     .receive('ok', _ => {
-      console.log("User joined succesfully")
+      console.log('User joined succesfully')
     })
 
-  userChannel.on("user:notifications", ({ ok }) => {
+  userChannel.on('user:notifications', ({ ok }) => {
     store.dispatch('getNotifications')
   })
 
@@ -25,19 +25,29 @@ export const joinPostsChannel = () => {
 
   postsChannel.join()
     .receive('ok', _ => {
-      console.log("joined succesfully to posts:lobby")
+      console.log('joined succesfully to posts:lobby')
     })
 
   postsChannel.on('posts:refresh', ({ user_id, post_id, type }) => {
-    if(store.state.session.currentUser.id !== user_id){
-      store.dispatch('getPosts')
-      if(store.state.route.params.postId === post_id) {
-        if(type === 'delete') {
-          store.dispatch('addAppError', "The post you were looking at was deleted")
-          router.push('/')
-        } else{
-          store.dispatch('getPost', post_id)
+
+    const {
+      session: { currentUser },
+      route:   { params }
+    } = store.state
+
+    store.dispatch('getPosts')
+
+    if(params.postId === post_id) {
+      if(type === 'delete') {
+        if((currentUser && currentUser.id) !== user_id) {
+          store.dispatch('addAppError', 'The post you were looking at was deleted')
         }
+        router.push('/')
+      } else{
+        store.dispatch('getPost', post_id)
+          .then(() => {
+            store.dispatch('getComments', post_id)
+          })
       }
     }
   })

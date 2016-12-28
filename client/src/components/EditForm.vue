@@ -7,7 +7,7 @@
       <form
         class="main form page"
         v-else-if="ownPost"
-        @submit.prevent="updatePost(editedPost)"
+        @submit.prevent="updatePost()"
       >
         <div :class="`form-group ${hasError('url')}`">
           <label class="control-label" for="url">URL</label>
@@ -43,12 +43,12 @@
             >{{ postErrors.title }}</p>
           </div>
         </div>
-        <input type="submit" value="Submit" class="btn btn-primary" />
+        <input type="submit" value="Update" class="btn btn-primary" />
         <hr/>
         <button
           type="button"
           class="btn btn-danger delete"
-          @click="deletePost(post.id)"
+          @click="deletePost()"
         >Delete post</button>
       </form>
       <access-denied
@@ -63,10 +63,10 @@
 import CustomLoading from './CustomLoading'
 import AccessDenied from './AccessDenied'
 import NotFound from './NotFound'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "EditForm",
+  name: 'EditForm',
 
   components: {
     CustomLoading,
@@ -74,7 +74,9 @@ export default {
     NotFound
   },
 
-  created(){
+  created() {
+    this.$store.dispatch('clearPost')
+    this.$store.dispatch('clearComments')
     this.$store.dispatch('clearPostErrors')
     this.$store.dispatch('showLoading')
     this.$store.dispatch('getPost', this.$route.params.postId)
@@ -103,10 +105,18 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'deletePost',
-      'updatePost',
-    ]),
+    updatePost() {
+      this.$store.dispatch('updatePost', this.editedPost)
+        .then(({ post }) => {
+          this.$router.push(`/post/${post.id}`)
+        })
+    },
+    deletePost() {
+      this.$store.dispatch('deletePost', this.post.id)
+        .then(() => {
+          this.$router.push('/')
+        })
+    },
     hasError(property) {
       return this.postErrors[property] ? 'has-error' : ''
     }

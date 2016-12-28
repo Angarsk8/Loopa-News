@@ -39,7 +39,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: "Login",
+  name: 'Login',
 
   data() {
     return {
@@ -50,7 +50,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.$store.dispatch('clearSessionError')
   },
 
@@ -64,18 +64,18 @@ export default {
 }
 </script>
 <style>
-  .custom-alert-danger{
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
-    clear: both;
-    margin-bottom: 5px;
-    pointer-events: auto;
-    padding: 15px;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    text-align: center;
-    width: auto;
-    float: none;
-  }
+.custom-alert-danger{
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  clear: both;
+  margin-bottom: 5px;
+  pointer-events: auto;
+  padding: 15px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  text-align: center;
+  width: auto;
+  float: none;
+}
 </style>

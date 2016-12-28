@@ -2,7 +2,7 @@ defmodule Microscope.VoteController do
   use Microscope.Web, :controller
 
   plug Guardian.Plug.EnsureAuthenticated,
-    [handler: Microscope.SessionController] when action in [:create]
+    [handler: Microscope.SessionController] when action in [:create, :delete]
 
   alias Microscope.{Repo, Post, Vote, PostChannel}
 
@@ -28,5 +28,19 @@ defmodule Microscope.VoteController do
         |> put_status(:unprocessable_entity)
         |> render("error.json")
     end
+  end
+
+  def delete(conn, %{"post_id" => post_id, "id" => id}) do
+    current_user = Guardian.Plug.current_resource(conn)
+
+    Vote
+    |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
+    |> Repo.delete!
+
+    PostChannel.broadcast_all(current_user.id, post_id)
+
+    conn
+    |> put_status(:ok)
+    |> render("delete.json")
   end
 end

@@ -26,6 +26,12 @@ defmodule Microscope.CommentView do
     }
   end
 
+  def render("delete.json", _) do
+    %{
+      ok: true
+    }
+  end
+
   def render("forbidden.json", %{error: error}) do
     %{
       message: error

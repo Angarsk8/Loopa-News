@@ -1,5 +1,4 @@
 import * as types from './mutation-types'
-import router from '../router'
 import {
   apiURL,
   httpGet,
@@ -41,13 +40,8 @@ const actions = {
     return httpPost(`${apiURL}/notifications`, { notification })
   },
 
-  deleteNotification({ commit, dispatch }, notification){
-    const { id, post_id }  = notification
+  deleteNotification({ commit, dispatch }, id){
     return httpDelete(`${apiURL}/notifications/${id}`)
-      .then(() => {
-        dispatch('toggleNotificationPanel')
-        router.push(`/post/${post_id}`)
-      })
   },
 
   addAppError({ commit }, error) {

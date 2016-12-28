@@ -12,7 +12,7 @@ export default {
     BeatLoader
   },
 
-  data(){
+  data() {
     return {
       color: '#777',
     }

@@ -31,11 +31,11 @@
 
 <script>
 import NotificationPanel from './NotificationPanel'
-import AuthWidget   from './Auth/AuthWidget'
+import AuthWidget from './Auth/AuthWidget'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: "Header",
+  name: 'Header',
 
   components: {
     NotificationPanel,
@@ -49,7 +49,7 @@ export default {
   methods: {
     activeRouteClass(...routes) {
       const active = routes.some(route => this.$route.name == route)
-      return active && "active"
+      return active && 'active'
     }
   }
 }

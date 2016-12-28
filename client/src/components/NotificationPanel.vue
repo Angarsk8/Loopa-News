@@ -33,9 +33,9 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: "NotificationPanel",
+  name: 'NotificationPanel',
 
-  created(){
+  created() {
     this.$store.dispatch('getNotifications')
   },
 
@@ -44,14 +44,22 @@ export default {
       'notifications',
       'isNotificationPanelOpen'
     ]),
-    showClass(){
-      return this.isNotificationPanelOpen ? "open" : ""
+    showClass() {
+      return this.isNotificationPanelOpen ? 'open' : ''
     }
   },
 
-  methods: mapActions([
-    'toggleNotificationPanel',
-    'deleteNotification'
-  ])
+  methods: {
+    ...mapActions([
+      'toggleNotificationPanel',
+    ]),
+    deleteNotification({ id, post_id }) {
+      this.$store.dispatch('deleteNotification', id)
+        .then(() => {
+          this.$store.dispatch('toggleNotificationPanel')
+          this.$router.push(`/post/${post_id}`)
+        })
+    }
+  }
 }
 </script>

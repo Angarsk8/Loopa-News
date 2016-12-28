@@ -58,7 +58,7 @@
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: "Signup",
+  name: 'Signup',
 
   data() {
     return {
@@ -70,7 +70,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.$store.dispatch('clearRegistrationErrors')
   },
 

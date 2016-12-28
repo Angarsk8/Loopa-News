@@ -1,7 +1,7 @@
 defmodule Microscope.Vote do
   use Microscope.Web, :model
 
-  @derive {Poison.Encoder, only: [:author, :post_id]}
+  @derive {Poison.Encoder, only: [:id, :author, :post_id]}
 
   schema "votes" do
     field :author, :string

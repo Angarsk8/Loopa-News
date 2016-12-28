@@ -20,7 +20,7 @@ export default {
     PostItem
   },
 
-  created(){
+  created() {
     this.$store.dispatch('showLoading')
     this.$store.dispatch('getPosts')
       .then(() => {

@@ -17,21 +17,23 @@
           v-if="currentUser"
           @submit.prevent="createComment()"
         >
+          <div class="text-muted markdown-support">
+            <span class="badge markdown-badge">M<span class="glyphicon glyphicon-arrow-down"></span></span> Styling with Markdown is supported</span>
+          </div>
           <div class="form-group">
             <div class="controls">
-              <label for="body">Comment on this post</label>
               <textarea
                 name="body"
                 id="body"
                 class="form-control"
+                placeholder="Leave a comment"
                 rows="3"
                 v-model="commentBody"
                 required
               ></textarea>
-              <span class="help-block"></span>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Add Comment</button>
+          <button type="submit" class="btn btn-primary">Comment</button>
         </form>
         <p v-else>Please log in to leave a comment</p>
       </div>
@@ -56,7 +58,9 @@ export default {
     NotFound
   },
 
-  created(){
+  created() {
+    this.$store.dispatch('clearPost')
+    this.$store.dispatch('clearComments')
     this.$store.dispatch('showLoading')
     this.$store.dispatch('getPost', this.routeParams.postId)
       .then(() => {
@@ -104,3 +108,18 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .markdown-support {
+    margin-top: 5px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  .markdown-support .markdown-badge {
+    border-radius: 2px;
+    margin-right: 3px;
+    font-size: 8px;
+  }
+</style>

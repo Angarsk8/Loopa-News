@@ -8,15 +8,6 @@ defmodule Microscope.PostController do
 
   alias Microscope.{Repo, Post, PostChannel}
 
-  def index(conn, %{"limit" => limit}) do
-    posts = Post.preload
-      |> Post.order_and_limit(limit)
-      |> Repo.all
-
-    conn
-    |> put_status(:ok)
-    |> render("index.json", posts: posts)
-  end
   def index(conn, _params) do
     posts = Post.preload
       |> Post.order_asc_by_insertion

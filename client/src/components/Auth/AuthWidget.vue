@@ -59,7 +59,7 @@ export default {
       'isAuthWidgetOpen'
     ]),
     showClass(){
-      return this.isAuthWidgetOpen ? "open" : ""
+      return this.isAuthWidgetOpen ? 'open' : ''
     }
   },
 
@@ -80,20 +80,23 @@ export default {
   min-width: 300px;
   padding: 15px;
 }
+
 #login-dp .help-block{
   font-size:12px
 }
+
 #login-dp .bottom{
   border-top:1px solid #ddd;
   padding:10px;
 }
+
 #login-dp .bottom .bottom-text{
   padding: 0;
-  display: inline;
   display: inline;
   font-weight: 300;
   color: #979797;
 }
+
 #login-dp .form-group {
   margin-bottom: 10px;
 }

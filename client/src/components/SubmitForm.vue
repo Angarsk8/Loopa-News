@@ -2,7 +2,7 @@
   <form
     class="main form page"
     v-if="currentUser"
-    @submit.prevent="createPost(post)"
+    @submit.prevent="createPost()"
   >
     <div :class="`form-group ${hasError('url')}`">
       <label class="control-label" for="url">URL</label>
@@ -45,10 +45,10 @@
 
 <script>
 import AccessDenied from './AccessDenied'
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "SubmitForm",
+  name: 'SubmitForm',
 
   components: {
     'access-denied': AccessDenied
@@ -57,13 +57,13 @@ export default {
   data() {
     return {
       post: {
-        url: '', 
+        url: '',
         title: ''
       }
     }
   },
 
-  mounted() {
+  created() {
     this.$store.dispatch('clearPostErrors')
   },
 
@@ -73,9 +73,12 @@ export default {
   ]),
 
   methods: {
-    ...mapActions([
-      'createPost'
-    ]),
+    createPost() {
+      this.$store.dispatch('createPost', this.post)
+        .then(({ post }) => {
+          this.$router.push(`/post/${post.id}`)
+        })
+    },
     hasError(property) {
       return this.postErrors[property] ? 'has-error' : ''
     }

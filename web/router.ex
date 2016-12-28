@@ -19,8 +19,8 @@ defmodule Microscope.Router do
 
 
     resources "/posts", PostController, except: [:edit, :new] do
-      resources "/comments", CommentController, only: [:index, :create]
-      resources "/votes", VoteController, only: [:create]
+      resources "/comments", CommentController, except: [:show, :new, :edit]
+      resources "/votes", VoteController, only: [:create, :delete]
     end
 
     resources "/notifications", NotificationController, only: [:index, :create, :delete]
