@@ -16,4 +16,10 @@ defmodule Microscope.Notification do
     |> cast(params, [:username, :post_id])
     |> validate_required([:username, :post_id])
   end
+
+  def all_notifications_in_post(query, user_id, post_id) do
+    from n in query,
+      where: n.user_id == ^user_id and
+             n.post_id == ^post_id
+  end
 end

@@ -1,11 +1,8 @@
 <template>
-  <div id="app" class="container-fluid">
-    <custom-header/></custom-header/>
-    <div class="error" v-if="appError">
-      <div class="alert alert-danger" role="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        {{appError}}
-      </div>
+  <div id="app" class="container">
+    <app-header></app-header>
+    <div class="errors">
+      <app-alert v-for="alert in appAlerts" :alert="alert"></app-alert>
     </div>
     <div id="main">
       <router-view></router-view>
@@ -15,36 +12,20 @@
 
 <script>
 import Header from './components/Header'
+import Alert from './components/Alert'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
 
   components: {
-    'custom-header': Header,
+    'app-header': Header,
+    'app-alert': Alert
   },
 
   computed: mapGetters([
-    'isAuthWidgetOpen',
-    'isNotificationPanelOpen',
-    'appError'
-  ]),
-
-  created(){
-    const dispatch = this.$store.dispatch
-
-    if(localStorage.getItem('id_token')){
-      dispatch('currentUser')
-    }
-    document.addEventListener('click', (e) => {
-      if(this.isAuthWidgetOpen){
-        dispatch('toggleAuthWidget', e)
-      }
-      if(this.isNotificationPanelOpen){
-        dispatch('toggleNotificationPanel', e)
-      }
-    })
-  }
+    'appAlerts'
+  ])
 }
 </script>
 
@@ -189,10 +170,6 @@ body {
   margin-bottom: 0;
 }
 
-/*.comments li .comment-body * {
-  margin-bottom: 0 !important;
-}*/
-
 .dropdown-menu span {
   display: block;
   padding: 3px 20px;
@@ -231,7 +208,7 @@ body {
   font-weight: 100;
 }
 
-.error {
+.errors {
   position: fixed;
   z-index: 10000;
   padding: 10px;
@@ -242,24 +219,21 @@ body {
   pointer-events: none;
 }
 
-.alert {
-  animation: fadeOut 2700ms ease-in 0s 1 forwards;
-  -webkit-animation: fadeOut 2700ms ease-in 0s 1 forwards;
-  -moz-animation: fadeOut 2700ms ease-in 0s 1 forwards;
-  width: 250px;
-  float: right;
-  clear: both;
-  margin-bottom: 5px;
-  pointer-events: auto;
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all .7s ease;
 }
-
-.slide-fade-enter-active {
-  transition: all .8s ease;
-}
-
 
 .slide-fade-enter, .slide-fade-leave-active {
-  transform: translateX(10px);
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: all .7s ease;
+}
+
+.fade-enter {
+  transform: translateX(-10px);
   opacity: 0;
 }
 </style>

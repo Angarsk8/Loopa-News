@@ -18,16 +18,16 @@ defmodule Microscope.CommentController do
   end
 
   def create(conn, %{"comment" => comment_params, "post_id" => post_id}) do
-    current_user = Guardian.Plug.current_resource(conn)
+    author = Guardian.Plug.current_resource(conn).username
     post = Repo.get!(Post, post_id)
 
     changeset = post
       |> build_assoc(:comments)
-      |> Comment.changeset(%{comment_params | "author" => current_user.username})
+      |> Comment.changeset(%{comment_params | "author" => author})
 
     case Repo.insert(changeset) do
       {:ok, comment} ->
-        PostChannel.broadcast_all(current_user.id, post_id)
+        PostChannel.broadcast_all(:add_comment, comment)
         conn
         |> put_status(:created)
         |> render("show.json", comment: comment)
@@ -39,15 +39,15 @@ defmodule Microscope.CommentController do
   end
 
   def update(conn, %{"id" => id, "post_id" => post_id, "comment" => comment_params}) do
-    current_user = Guardian.Plug.current_resource(conn)
+    author = Guardian.Plug.current_resource(conn).username
 
     changeset = Comment
-      |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
+      |> Repo.get_by!(id: id, post_id: post_id, author: author)
       |> Comment.changeset(comment_params)
 
     case Repo.update(changeset) do
       {:ok, comment} ->
-        PostChannel.broadcast_all(current_user.id, post_id)
+        PostChannel.broadcast_all(:update_comment, comment)
         conn
         |> put_status(:ok)
         |> render("show.json", comment: comment)
@@ -59,13 +59,18 @@ defmodule Microscope.CommentController do
   end
 
   def delete(conn, %{"id" => id, "post_id" => post_id}) do
-    current_user =  Guardian.Plug.current_resource(conn)
+    author =  Guardian.Plug.current_resource(conn).username
 
-    Comment
-    |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
-    |> Repo.delete!
+    comment = Comment
+      |> Repo.get_by!([
+        id: id,
+        post_id: post_id,
+        author: author
+      ])
 
-    PostChannel.broadcast_all(current_user.id, post_id)
+    Repo.delete!(comment)
+
+    PostChannel.broadcast_all(:delete_comment, comment)
 
     conn
     |> put_status(:ok)

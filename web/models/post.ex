@@ -37,7 +37,7 @@ defmodule Microscope.Post do
 
   def order_asc_by_insertion(query) do
     from p in query,
-      order_by: [desc: :inserted_at],
+      order_by: [asc: :inserted_at],
       select: p
   end
 end

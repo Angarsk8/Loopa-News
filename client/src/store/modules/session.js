@@ -16,7 +16,7 @@ const state = {
 const getters = {
   currentUser: state => state.currentUser,
   sessionError: state => state.sessionError,
-  registrationErrors: state => state.registrationErrors,
+  registrationErrors: state => state.registrationErrors
 }
 
 const actions = {

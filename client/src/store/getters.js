@@ -4,7 +4,7 @@ const getters = {
   isAuthWidgetOpen: state => state.isAuthWidgetOpen,
   isNotificationPanelOpen: state => state.isNotificationPanelOpen,
   routeParams: state => state.route.params,
-  appError: state => state.appError
+  appAlerts: state => state.appAlerts
 }
 
 export default getters

@@ -13,6 +13,17 @@ const mutations = {
     state.notifications = notifications
   },
 
+  [types.ADD_NOTIFICATION](state, notification) {
+    state.notifications = [...state.notifications, notification]
+  },
+
+  [types.DELETE_NOTIFICATION](state, notification) {
+    const notifications = state.notifications
+      .filter(_notification => _notification.id !== notification.id)
+
+    state.notifications = [...notifications]
+  },
+
   [types.TOGGLE_AUTH_WIDGET](state) {
     state.isAuthWidgetOpen = !state.isAuthWidgetOpen
   },
@@ -21,12 +32,12 @@ const mutations = {
     state.isNotificationPanelOpen = !state.isNotificationPanelOpen
   },
 
-  [types.ADD_ERROR](state,error) {
-    state.appError = error
+  [types.ADD_ALERT](state, alert) {
+    state.appAlerts = [...state.appAlerts, alert]
   },
 
-  [types.REMOVE_ERROR](state) {
-    state.appError = null
+  [types.REMOVE_ALERT](state, id) {
+    state.appAlerts = state.appAlerts.filter(_alert => _alert.id !== id)
   }
 }
 

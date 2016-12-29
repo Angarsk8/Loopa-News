@@ -1,7 +1,7 @@
 defmodule Microscope.UserChannel do
   use Microscope.Web, :channel
 
-  alias Microscope.{Endpoint, GuardianSerializer}
+  alias Microscope.{Endpoint, GuardianSerializer, Notification}
 
   def join("users:" <> user_id, %{"token" => token}, socket) do
     case Guardian.decode_and_verify(token) do
@@ -17,7 +17,7 @@ defmodule Microscope.UserChannel do
     end
   end
 
-  def notify(id)  do
-    Endpoint.broadcast_from!(self, "users:#{id}", "user:notifications", %{ok: true})
+  def notify(event, notification = %Notification{user_id: id}) do
+    Endpoint.broadcast_from!(self, "users:#{id}", "user:#{event}", notification)
   end
 end

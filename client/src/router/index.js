@@ -4,7 +4,6 @@ import SubmitForm from '../components/SubmitForm'
 import EditForm from '../components/EditForm'
 import NotFound from '../components/NotFound'
 import PostPage from '../components/PostPage'
-import store from '../store'
 
 const router = new VueRouter({
   mode: 'history',

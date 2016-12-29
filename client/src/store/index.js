@@ -15,7 +15,7 @@ const state = {
   isLoading: false,
   isAuthWidgetOpen: false,
   isNotificationPanelOpen: false,
-  appError: null
+  appAlerts: []
 }
 
 const store = new Vuex.Store({
@@ -29,5 +29,11 @@ const store = new Vuex.Store({
   },
   strict: debug
 })
+
+store.dispatch('showLoading')
+store.dispatch('getPosts')
+  .then(() => {
+    store.dispatch('hideLoading')
+  })
 
 export default store

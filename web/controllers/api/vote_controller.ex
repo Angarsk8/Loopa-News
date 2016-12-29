@@ -7,17 +7,17 @@ defmodule Microscope.VoteController do
   alias Microscope.{Repo, Post, Vote, PostChannel}
 
   def create(conn, %{"vote" => vote_params,"post_id" => post_id}) do
-    current_user = Guardian.Plug.current_resource(conn)
+    author = Guardian.Plug.current_resource(conn).username
 
-    case Repo.get_by(Vote, post_id: post_id, author: current_user.username) do
+    case Repo.get_by(Vote, post_id: post_id, author: author) do
       nil ->
         vote = Post
           |> Repo.get!(post_id)
           |> build_assoc(:votes)
-          |> Vote.changeset(%{vote_params | "author" => current_user.username})
+          |> Vote.changeset(%{vote_params | "author" => author})
           |> Repo.insert!
 
-        PostChannel.broadcast_all(current_user.id, post_id)
+        PostChannel.broadcast_all(:upvote_post, vote)
 
         conn
         |> put_status(:created)
@@ -31,13 +31,18 @@ defmodule Microscope.VoteController do
   end
 
   def delete(conn, %{"post_id" => post_id, "id" => id}) do
-    current_user = Guardian.Plug.current_resource(conn)
+    author = Guardian.Plug.current_resource(conn).username
 
-    Vote
-    |> Repo.get_by!(id: id, post_id: post_id, author: current_user.username)
-    |> Repo.delete!
+    vote = Vote
+      |> Repo.get_by!([
+        id: id,
+        post_id: post_id,
+        author: author
+      ])
 
-    PostChannel.broadcast_all(current_user.id, post_id)
+    Repo.delete!(vote)
+
+    PostChannel.broadcast_all(:downvote_post, vote)
 
     conn
     |> put_status(:ok)

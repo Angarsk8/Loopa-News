@@ -75,23 +75,21 @@ export default {
   },
 
   created() {
-    this.$store.dispatch('clearPost')
-    this.$store.dispatch('clearComments')
     this.$store.dispatch('clearPostErrors')
-    this.$store.dispatch('showLoading')
-    this.$store.dispatch('getPost', this.$route.params.postId)
-      .then(() => {
-        this.$store.dispatch('hideLoading')
-      })
   },
 
   computed: {
     ...mapGetters([
+      'routeParams',
       'currentUser',
       'postErrors',
-      'post',
+      'posts',
       'isLoading'
     ]),
+    post() {
+      return JSON.parse(JSON.stringify(this.posts))
+        .find(post => post.id == this.routeParams.postId)
+    },
     ownPost() {
       return this.post.user.id === this.currentUser.id
     },

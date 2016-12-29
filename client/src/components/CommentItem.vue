@@ -1,10 +1,13 @@
 <template>
-  <transition name="slide-fade">
-    <li class="comment-item">
+  <li class="comment-item">
+    <div class="">
       <h4>
         <span class="author">{{comment.author}}</span>
         <span class="date"> commented {{comment.inserted_at | timeAgo}} ago</span>
-        <span class="date text-warning" v-if="isEdited"> | edited</span>
+        <span class="date text-warning hidden-xs" v-if="isEdited">
+          | edited
+          {{comment.updated_at | timeAgo}} ago
+        </span>
         <template v-if="ownComment">
           <span
             title="delete"
@@ -18,34 +21,34 @@
           ></span>
         </template>
       </h4>
-      <hr />
-      <form
-        name="comment"
-        class="comment-form form"
-        v-if="ownComment && editable"
-      >
-        <div class="form-group">
-          <div class="controls">
-            <textarea
-              name="body"
-              id="body"
-              class="form-control"
-              placeholder="with markdown support"
-              :rows="commentBodyLines"
-              v-model="editedComment.body"
-              required
-            ></textarea>
-          </div>
+    </div>
+    <hr />
+    <form
+      name="comment"
+      class="comment-form form"
+      v-if="ownComment && editable"
+    >
+      <div class="form-group">
+        <div class="controls">
+          <textarea
+            name="body"
+            id="body"
+            class="form-control"
+            placeholder="with markdown support"
+            :rows="commentBodyLines"
+            v-model="editedComment.body"
+            required
+          ></textarea>
         </div>
-        <button
-          type="submit"
-          class="btn btn-success"
-          @click.prevent = "updateComment()"
-        >Update</button>
-      </form>
-      <div class="comment-body" v-html="compiledMarkdown" v-else></div>
-    </li>
-  </transition>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-success"
+        @click.prevent = "updateComment()"
+      >Update</button>
+    </form>
+    <div class="comment-body" v-html="compiledMarkdown" v-else></div>
+  </li>
 </template>
 
 <script>

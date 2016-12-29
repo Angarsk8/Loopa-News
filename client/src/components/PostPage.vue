@@ -1,42 +1,42 @@
 <template>
-  <div>
-    <custom-loading v-if="isLoading"></custom-loading>
+  <custom-loading v-if="isLoading"></custom-loading>
+  <div class="post-page page" v-else>
+    <not-found v-if="!post"></not-found>
     <div class="post-page page" v-else>
-      <not-found v-if="!post"></not-found>
-      <div class="post-page page" v-else>
-        <post-item :post="post"></post-item>
-        <ul class="comments">
-          <comment-item
-            v-for="comment in comments"
-            :comment="comment"
-          ></comment-item>
-        </ul>
-        <form
-          name="comment"
-          class="comment-form form"
-          v-if="currentUser"
-          @submit.prevent="createComment()"
-        >
-          <div class="text-muted markdown-support">
-            <span class="badge markdown-badge">M<span class="glyphicon glyphicon-arrow-down"></span></span> Styling with Markdown is supported</span>
+      <post-item :post="post" :transition="'slide-fade-right'"></post-item>
+      <ul class="comments">
+        <comment-item
+          v-for="comment in comments"
+          :comment="comment"
+        ></comment-item>
+      </ul>
+      <form
+        name="comment"
+        class="comment-form form"
+        v-if="currentUser"
+        @submit.prevent="createComment()"
+      >
+        <div class="text-muted markdown-support">
+          <span class="badge markdown-badge">
+            M<span class="glyphicon glyphicon-arrow-down"></span>
+          </span> Styling with Markdown is supported</span>
+        </div>
+        <div class="form-group">
+          <div class="controls">
+            <textarea
+              name="body"
+              id="body"
+              class="form-control"
+              placeholder="Leave a comment"
+              rows="3"
+              v-model="commentBody"
+              required
+            ></textarea>
           </div>
-          <div class="form-group">
-            <div class="controls">
-              <textarea
-                name="body"
-                id="body"
-                class="form-control"
-                placeholder="Leave a comment"
-                rows="3"
-                v-model="commentBody"
-                required
-              ></textarea>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Comment</button>
-        </form>
-        <p v-else>Please log in to leave a comment</p>
-      </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Comment</button>
+      </form>
+      <p v-else>Please log in to leave a comment</p>
     </div>
   </div>
 </template>
@@ -58,16 +58,6 @@ export default {
     NotFound
   },
 
-  created() {
-    this.$store.dispatch('clearPost')
-    this.$store.dispatch('clearComments')
-    this.$store.dispatch('showLoading')
-    this.$store.dispatch('getPost', this.routeParams.postId)
-      .then(() => {
-        this.$store.dispatch('hideLoading')
-      })
-  },
-
   data() {
     return {
       commentBody: ''
@@ -78,10 +68,19 @@ export default {
     ...mapGetters([
       'routeParams',
       'currentUser',
-      'post',
-      'comments',
+      'posts',
       'isLoading'
     ]),
+    post() {
+      return JSON.parse(JSON.stringify(this.posts))
+        .find(post => post.id == this.routeParams.postId)
+    },
+    comments() {
+      return this.post.comments
+        .sort((a, b) => {
+          return new Date(a.inserted_at) - new Date(b.inserted_at);
+        })
+    },
     comment() {
       return {
         post_id: this.post.id,

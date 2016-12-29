@@ -44,9 +44,15 @@ const actions = {
     return httpDelete(`${apiURL}/notifications/${id}`)
   },
 
-  addAppError({ commit }, error) {
-    commit(types.ADD_ERROR, error)
-    setTimeout(() => { commit(types.REMOVE_ERROR) }, 4000)
+  addAlert({ commit }, alert) {
+    commit(types.ADD_ALERT, alert)
+    setTimeout(() => {
+      commit(types.REMOVE_ALERT, alert.id)
+    }, 5000)
+  },
+
+  removeAlert({ commit }, id) {
+    commit(types.REMOVE_ALERT, id)
   }
 }
 

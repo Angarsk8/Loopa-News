@@ -45,6 +45,7 @@
 
 <script>
 import AccessDenied from './AccessDenied'
+import { setDocumentTitle } from '../utils'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -65,6 +66,7 @@ export default {
 
   created() {
     this.$store.dispatch('clearPostErrors')
+    setDocumentTitle('Hola')
   },
 
   computed: mapGetters([

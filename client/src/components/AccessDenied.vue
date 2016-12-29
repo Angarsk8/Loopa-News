@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  export default {
-    name: 'AccessDenied',
-    props: ['message']
-  }
+export default {
+  name: 'AccessDenied',
+  props: ['message']
+}
 </script>

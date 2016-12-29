@@ -6,7 +6,7 @@ import router from './router'
 import store from './store'
 import filters from './filters'
 import { sync } from 'vuex-router-sync'
-import { joinPostsChannel } from './channel'
+import init from './init'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -25,4 +25,4 @@ const app = new Vue({
   components: { App }
 })
 
-joinPostsChannel()
+init()

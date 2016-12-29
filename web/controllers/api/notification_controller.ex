@@ -37,7 +37,7 @@ defmodule Microscope.NotificationController do
 
       case Repo.insert(changeset) do
         {:ok, notification} ->
-          UserChannel.notify(notification.user_id)
+          UserChannel.notify(:add_notification, notification)
           conn
           |> put_status(:ok)
           |> render("show.json", notification: notification)
@@ -50,12 +50,15 @@ defmodule Microscope.NotificationController do
   end
 
   def delete(conn, %{"id" => id}) do
-    notification = Guardian.Plug.current_resource(conn)
-      |> assoc(:notifications)
-      |> Repo.get!(id)
-      |> Repo.delete!
+    user_id = Guardian.Plug.current_resource(conn).id
+    notification = Repo.get(Notification, id)
+    post_id = notification.post_id
 
-    UserChannel.notify(notification.user_id)
+    Notification
+    |> Notification.all_notifications_in_post(user_id, post_id)
+    |> Repo.delete_all
+
+    UserChannel.notify(:delete_notification, notification)
 
     conn
     |> put_status(:ok)

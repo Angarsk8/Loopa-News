@@ -4,6 +4,13 @@
     <div class="posts page" v-else>
       <post-item v-for="post in posts" v-bind:post="post"></post-item>
     </div>
+      <!-- <div class="row" v-else>
+        <div class="col-md-10 col-md-offset-1">
+          <div class="posts page">
+            <post-item v-for="post in posts" v-bind:post="post"></post-item>
+          </div>
+        </div>
+      </div> -->
   </div>
 </template>
 
@@ -18,14 +25,6 @@ export default {
   components: {
     CustomLoading,
     PostItem
-  },
-
-  created() {
-    this.$store.dispatch('showLoading')
-    this.$store.dispatch('getPosts')
-      .then(() => {
-        this.$store.dispatch('hideLoading')
-      })
   },
 
   computed: mapGetters([

@@ -41,7 +41,7 @@ defmodule Microscope.PostController do
 
     case Repo.insert(changeset) do
       {:ok, post} ->
-        PostChannel.broadcast_all(current_user.id, post.id)
+        PostChannel.broadcast_all(:add_post, post)
         conn
         |> put_status(:created)
         |> render("show.json", post: post)
@@ -61,7 +61,7 @@ defmodule Microscope.PostController do
 
     case Repo.update(changeset) do
       {:ok, post} ->
-        PostChannel.broadcast_all(user_id, id)
+        PostChannel.broadcast_all(:update_post, post)
         conn
         |> put_status(:ok)
         |> render("show.json", post: post)
@@ -75,11 +75,15 @@ defmodule Microscope.PostController do
   def delete(conn, %{"id" => id}) do
     user_id = Guardian.Plug.current_resource(conn).id
 
-    Post
-    |> Repo.get_by!(id: id, user_id: user_id)
-    |> Repo.delete!
+    post = Post.preload
+      |> Repo.get_by!([
+        id: id,
+        user_id: user_id
+      ])
 
-    PostChannel.broadcast_all(user_id, id, :delete)
+    Repo.delete!(post)
+
+    PostChannel.broadcast_all(:delete_post, post)
 
     conn
     |> put_status(:ok)

@@ -1,4 +1,4 @@
-import fetch        from 'isomorphic-fetch'
+import fetch from 'isomorphic-fetch'
 import { polyfill } from 'es6-promise'
 
 const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
@@ -9,8 +9,6 @@ const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
   : { SOCKET_SCHEME: 'ws'
     , SCHEME: 'http'
     , HOSTNAME: 'localhost:4000' }
-
-
 
 const defaultHeaders = {
   'Accept': 'application/json',

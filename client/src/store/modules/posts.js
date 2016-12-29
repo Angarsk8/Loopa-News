@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import store from '../../store'
+import uniqueId from 'uniqid'
 import {
   apiURL,
   httpGet,
@@ -10,23 +11,12 @@ import {
 
 const state = {
   postErrors: {},
-  posts: null,
-  post: null,
-  comments: null
+  posts: null
 }
 
 const getters = {
-  post: state => state.post,
-  posts: state => state.posts,
   postErrors: state => state.postErrors,
-  comments: state => {
-    return [...state.post.comments]
-      .sort((a, b) => {
-        return new Date(a.inserted_at) - new Date(b.inserted_at);
-      })
-  },
-  votes: state => state.post.votes,
-  upvoters: state => state.post.votes.map(vote => vote.author)
+  posts: state => state.posts
 }
 
 const actions = {
@@ -34,20 +24,6 @@ const actions = {
     return httpGet(`${apiURL}/posts`)
       .then(({ posts }) => {
         commit(types.SET_POSTS, posts)
-      })
-  },
-
-  getPost({ commit, dispatch }, id) {
-    return httpGet(`${apiURL}/posts/${id}`)
-      .then(({ post }) => {
-        commit(types.SET_POST, post)
-      })
-      .catch((error) => {
-        error.response.json()
-        .then((errorJSON) => {
-          store.dispatch('addAppError', errorJSON.message)
-          commit(types.CLEAR_POST)
-        })
       })
   },
 
@@ -75,29 +51,22 @@ const actions = {
       })
   },
 
-  clearPost({ commit }) {
-    commit(types.CLEAR_POST)
-  },
-
   upvotePost({ commit }, vote) {
     return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
       .catch((error) => {
         error.response.json()
         .then((errorJSON) => {
-          store.dispatch('addAppError', errorJSON.message)
+          store.dispatch('addAlert', {
+            id: uniqueId('alert_'),
+            type: 'danger',
+            message: errorJSON.message
+          })
         })
       })
   },
 
   downvotePost({ commit }, { post_id, voteId }) {
     return httpDelete(`${apiURL}/posts/${post_id}/votes/${voteId}`)
-  },
-
-  getComments({ commit }, id) {
-    return httpGet(`${apiURL}/posts/${id}/comments`)
-      .then(({ comments }) => {
-        commit(types.SET_COMMENTS, comments)
-      })
   },
 
   createComment({ commit }, comment) {
@@ -113,10 +82,6 @@ const actions = {
     return httpDelete(`${apiURL}/posts/${post_id}/comments/${id}`)
   },
 
-  clearComments({ commit }) {
-    commit(types.CLEAR_COMMENTS)
-  },
-
   clearPostErrors({ commit }){
     commit(types.CLEAR_POST_ERRORS)
   },
@@ -127,20 +92,49 @@ const mutations = {
     state.posts = posts
   },
 
-  [types.SET_POST](state, post) {
-    state.post = post
+  [types.ADD_POST](state, post) {
+    state.posts = [...state.posts, post]
   },
 
-  [types.CLEAR_POST](state) {
-    state.post = null
+  [types.UPDATE_POST](state, post) {
+    state.posts = state.posts
+      .map(_post => _post.id === post.id ? post : _post)
   },
 
-  [types.SET_COMMENTS](state, comments) {
-    state.comments = comments
+  [types.DELETE_POST](state, post) {
+    const posts = state.posts.filter(_post => _post.id !== post.id)
+    state.posts = [...posts]
   },
 
-  [types.CLEAR_COMMENTS](state) {
-    state.comments = null
+  [types.ADD_COMMENT](state, comment) {
+    const post = state.posts.find(post => post.id === comment.post_id)
+    post.comments = [...post.comments, comment]
+  },
+
+  [types.UPDATE_COMMENT](state, comment) {
+    const post = state.posts.find(post => post.id === comment.post_id)
+    post.comments = post.comments
+      .map(_comment => _comment.id === comment.id ? comment : _comment)
+  },
+
+  [types.DELETE_COMMENT](state, comment) {
+    const post = state.posts.find(post => post.id === comment.post_id)
+    const comments = post.comments.filter(_comment => _comment.id !== comment.id)
+
+    post.comments = [...comments]
+  },
+
+  [types.UPVOTE_POST](state, vote) {
+    const post = state.posts.find(post => post.id === vote.post_id)
+
+    post.votes = [...post.votes, vote]
+  },
+
+  [types.DOWNVOTE_POST](state, _vote) {
+    const post = state.posts.find(post => post.id === _vote.post_id)
+    const votes = post.votes.filter(vote => vote.id !== _vote.id)
+
+    post.votes = [...votes]
   },
 
   [types.SET_POST_ERRORS](state, errors) {

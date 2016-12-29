@@ -5,7 +5,9 @@
     accept-charset="UTF-8"
     @submit.prevent="signIn(user)"
   >
-    <div class="custom-alert-danger" v-if="sessionError">{{sessionError}}</div>
+    <div class="custom-alert-danger" v-if="sessionError">
+      {{sessionError}}
+    </div>
     <div class="form-group">
       <label class="sr-only" for="username">Username</label>
       <input
@@ -29,7 +31,9 @@
       />
     </div>
     <div class="form-group">
-      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      <button type="submit" class="btn btn-primary btn-block">
+        Sign in
+      </button>
     </div>
     <slot></slot>
   </form>
