@@ -1,7 +1,8 @@
 defmodule Microscope.Session do
   alias Microscope.{Repo, User}
 
-  def authenticate(%{"username" => username, "password" => password}) do
+  def authenticate(val = %{"username" => username, "password" => password}) do
+    IO.inspect val
     user = Repo.get_by(User, username: String.downcase(username))
 
     case check_password(user, password) do

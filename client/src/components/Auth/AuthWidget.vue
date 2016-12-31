@@ -6,26 +6,15 @@
         <span class="caret"></span>
       </a>
       <ul id="login-dp" class="dropdown-menu" v-if="currentUser">
-        <button class="btn btn-block btn-primary" @click="signOut()">
-          Sign out
-        </button>
+        <change-form v-if="isAuthView('change')"></change-form>
+        <logout-view v-else></logout-view>
       </ul>
       <ul id="login-dp" class="dropdown-menu" v-else>
         <li>
           <div class="row">
             <div class="col-md-12">
-              <login-form v-if="showLoginView">
-                <div class="bottom text-center">
-                  <span class="bottom-text">Not registered?</span>
-                  <a href="#" @click.prevent="toggleLoginView()">Create account</a>
-                </div>
-              </login-form>
-              <signup-form v-else>
-                <div class="bottom text-center">
-                  <span class="bottom-text">Already registered?</span>
-                  <a href="#" @click.prevent="toggleLoginView()">Sign in</a>
-                </div>
-              </signup-form>
+              <login-form v-if="isAuthView('login')"></login-form>
+              <signup-form v-else-if="isAuthView('signup')"></signup-form>
             </div>
           </div>
         </li>
@@ -37,6 +26,8 @@
 <script>
 import Login  from './components/Login'
 import Signup from './components/Signup'
+import Change from './components/Change'
+import Logout from './components/Logout'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -45,18 +36,15 @@ export default {
   components: {
     'login-form': Login,
     'signup-form': Signup,
-  },
-
-  data() {
-    return {
-      showLoginView: true,
-    }
+    'change-form': Change,
+    'logout-view': Logout
   },
 
   computed: {
     ...mapGetters([
       'currentUser',
-      'isAuthWidgetOpen'
+      'isAuthWidgetOpen',
+      'authView'
     ]),
     showClass(){
       return this.isAuthWidgetOpen ? 'open' : ''
@@ -65,11 +53,10 @@ export default {
 
   methods: {
     ...mapActions([
-      'signOut',
-      'toggleAuthWidget'
+      'toggleAuthWidget',
     ]),
-    toggleLoginView() {
-      this.showLoginView = !this.showLoginView;
+    isAuthView(name) {
+      return this.authView === name
     }
   }
 }

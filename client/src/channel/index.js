@@ -12,7 +12,11 @@ export const joinUserChannel = ({ id, jwt }) => {
 
   userChannel.join()
     .receive('ok', _ => {
-      console.log('User joined succesfully')
+      store.dispatch('addAlert', {
+        id: uniqueId('alert_'),
+        type: 'success',
+        message: 'User joined succesfully!'
+      })
     })
 
   userChannel.on('user:add_notification', notification => {
@@ -85,5 +89,3 @@ export const joinPostsChannel = () => {
 
   return postsChannel
 }
-
-// socket.connect()

@@ -5,7 +5,7 @@
       :class="`alert alert-${alert.type}`"
       @click="removeAlert(alert.id)"
     >
-      <button type="button" class="close">&times;</button>
+      <span class="close">&times;</span>
       <a
         href="#"
         @click.prevent="deleteNotification(alert.notification)"

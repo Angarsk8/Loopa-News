@@ -23,18 +23,8 @@
     <div class="post-content">
       <h3>
         <a :href="post.url">{{post.title}}</a>
-        <span>{{post.url | domain}}</span>
+        <span class="hidden-xs">{{post.url | domain}}</span>
       </h3>
-      <!-- <template v-if="ownPost">
-        <span
-          title="delete"
-          class="comment-icon delete glyphicon glyphicon-trash pull-right"
-        ></span>
-        <span
-          title="edit"
-          class="comment-icon edit glyphicon glyphicon-pencil pull-right"
-        ></span>
-      </template> -->
       <hr/>
       <p>
         {{post.votes.length | pluralize('vote') }},
@@ -43,19 +33,11 @@
         <router-link :to="`/post/${post.id}`">
           {{post.comments.length}} comments
         </router-link>
-        <router-link
+        <template v-if="ownPost">
+          | <router-link
           :to="`/post/${post.id}/edit`"
           v-if="ownPost"
-        > Edit</router-link>
-        <template v-if="ownPost">
-          <span
-            title="delete"
-            class="comment-icon delete glyphicon glyphicon-trash"
-          ></span>
-          <span
-            title="edit"
-            class="comment-icon edit glyphicon glyphicon-pencil"
-          ></span>
+          > Edit</router-link>
         </template>
       </p>
     </div>
@@ -117,21 +99,3 @@ export default {
   ])
 }
 </script>
-
-<style scoped>
-.post .upvote {
-  margin-right: 12px;
-}
-
-.post .post-content {
-  float: none;
-}
-
-.post .post-content h3 {
-  display: inline;
-}
-
-.post .post-content p {
-  margin: 5px 0 0 3px;
-}
-</style>

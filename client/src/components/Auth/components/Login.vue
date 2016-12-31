@@ -5,9 +5,11 @@
     accept-charset="UTF-8"
     @submit.prevent="signIn(user)"
   >
-    <div class="custom-alert-danger" v-if="sessionError">
-      {{sessionError}}
-    </div>
+    <transition name="fade">
+      <div class="custom-alert-danger" v-if="sessionError">
+        {{sessionError}}
+      </div>
+    </transition>
     <div class="form-group">
       <label class="sr-only" for="username">Username</label>
       <input
@@ -35,7 +37,10 @@
         Sign in
       </button>
     </div>
-    <slot></slot>
+    <div class="bottom text-center">
+      <span class="bottom-text">Not registered?</span>
+      <a href="#" @click.prevent="setAuthView('signup')">Create account</a>
+    </div>
   </form>
 </template>
 
@@ -54,16 +59,13 @@ export default {
     }
   },
 
-  created() {
-    this.$store.dispatch('clearSessionError')
-  },
-
   computed: mapGetters([
     'sessionError'
   ]),
 
   methods: mapActions([
-    'signIn'
+    'signIn',
+    'setAuthView'
   ])
 }
 </script>

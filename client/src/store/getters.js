@@ -1,4 +1,5 @@
 const getters = {
+  authView: state => state.authView,
   isLoading: state => state.isLoading,
   notifications: state => state.notifications,
   isAuthWidgetOpen: state => state.isAuthWidgetOpen,

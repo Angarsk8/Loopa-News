@@ -1,5 +1,4 @@
 import * as types from '../mutation-types'
-import store from '../../store'
 import uniqueId from 'uniqid'
 import {
   apiURL,
@@ -20,7 +19,7 @@ const getters = {
 }
 
 const actions = {
-  getPosts({ commit, dispatch }) {
+  getPosts({ commit }) {
     return httpGet(`${apiURL}/posts`)
       .then(({ posts }) => {
         commit(types.SET_POSTS, posts)
@@ -37,7 +36,7 @@ const actions = {
       })
   },
 
-  deletePost({ commit }, id) {
+  deletePost(_, id) {
     return httpDelete(`${apiURL}/posts/${id}`)
   },
 
@@ -51,12 +50,12 @@ const actions = {
       })
   },
 
-  upvotePost({ commit }, vote) {
+  upvotePost({ dispatch }, vote) {
     return httpPost(`${apiURL}/posts/${vote.post_id}/votes`, { vote })
       .catch((error) => {
         error.response.json()
         .then((errorJSON) => {
-          store.dispatch('addAlert', {
+          dispatch('addAlert', {
             id: uniqueId('alert_'),
             type: 'danger',
             message: errorJSON.message
@@ -65,20 +64,20 @@ const actions = {
       })
   },
 
-  downvotePost({ commit }, { post_id, voteId }) {
+  downvotePost(_, { post_id, voteId }) {
     return httpDelete(`${apiURL}/posts/${post_id}/votes/${voteId}`)
   },
 
-  createComment({ commit }, comment) {
+  createComment(_, comment) {
     return httpPost(`${apiURL}/posts/${comment.post_id}/comments`, { comment })
   },
 
-  updateComment({ commit }, comment) {
+  updateComment(_, comment) {
     const { post_id, id } = comment
     return httpUpdate(`${apiURL}/posts/${post_id}/comments/${id}`, { comment })
   },
 
-  deleteComment({ commit }, { post_id, id }) {
+  deleteComment(_, { post_id, id }) {
     return httpDelete(`${apiURL}/posts/${post_id}/comments/${id}`)
   },
 

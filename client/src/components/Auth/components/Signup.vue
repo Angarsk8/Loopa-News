@@ -50,7 +50,10 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary btn-block">Sign up</button>
     </div>
-    <slot></slot>
+    <div class="bottom text-center">
+      <span class="bottom-text">Already registered?</span>
+      <a href="#" @click.prevent="setAuthView('login')">Sign in</a>
+    </div>
   </form>
 </template>
 
@@ -80,7 +83,8 @@ export default {
 
   methods: {
     ...mapActions([
-      'signUp'
+      'signUp',
+      'setAuthView'
     ]),
     hasError(property) {
       return this.registrationErrors[property] ? 'has-error' : ''

@@ -51,6 +51,11 @@ body {
   color: #666666;
 }
 
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 #main {
   position: relative;
 }
@@ -73,6 +78,7 @@ body {
   *zoom: 1;
   position: relative;
   opacity: 1;
+  min-height: 90px;
 }
 
 .post:before,
@@ -101,13 +107,13 @@ body {
 
 .post .upvote {
   display: block;
-  margin: 7px 12px 0 0;
+  margin: 15px 15px 0 0;
   float: left;
 }
 
-.post .post-content {
+/*.post .post-content {
   float: left;
-}
+}*/
 
 .post .post-content h3 {
   margin: 0;
@@ -170,6 +176,27 @@ body {
   margin-bottom: 0;
 }
 
+.comment-body {
+  margin: 0 0 0 5px;
+  font-size: 15px;
+}
+
+.comment-icon.delete:hover{
+  color: #a94442;
+  transform: scale(1.2);
+}
+
+.comment-icon.edit:hover{
+  color: #8a6d3b;
+  transform: scale(1.2);
+}
+
+.comment-icon:before {
+  margin: 0 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 .dropdown-menu span {
   display: block;
   padding: 3px 20px;
@@ -220,7 +247,7 @@ body {
 }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all .7s ease;
+  transition: all .8s ease;
 }
 
 .slide-fade-enter, .slide-fade-leave-active {
@@ -228,12 +255,11 @@ body {
   opacity: 0;
 }
 
-.fade-enter-active {
-  transition: all .7s ease;
+.fade-enter-active, .fade-leave-active {
+  transition: all .8s ease;
 }
 
-.fade-enter {
-  transform: translateX(-10px);
+.fade-enter, .fade-leave-active {
   opacity: 0;
 }
 </style>

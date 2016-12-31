@@ -17,7 +17,7 @@ defmodule Microscope.User do
     struct
     |> cast(params, [:username, :password])
     |> validate_required([:username, :password])
-    |> validate_length(:username, min: 5)
+    |> validate_length(:username, min: 5, max: 15)
     |> validate_length(:password, min: 5)
     |> validate_confirmation(:password, message: "Password does not match")
     |> unique_constraint(:username, message: "Username already taken")

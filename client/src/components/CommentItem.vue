@@ -38,6 +38,7 @@
             :rows="commentBodyLines"
             v-model="editedComment.body"
             required
+            autofocus
           ></textarea>
         </div>
       </div>
@@ -107,30 +108,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.comment-body {
-  margin: 0 0 0 5px;
-  font-size: 15px;
-}
-
-hr {
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.comment-icon.delete:hover{
-  color: #a94442;
-  transform: scale(1.2);
-}
-
-.comment-icon.edit:hover{
-  color: #8a6d3b;
-}
-
-.comment-icon:before {
-  margin: 0 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-</style>

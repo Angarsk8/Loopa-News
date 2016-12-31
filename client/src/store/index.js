@@ -11,6 +11,7 @@ Vue.use(Vuex)
 const debug = process.env.NODE_ENV !== 'production'
 
 const state = {
+  authView: 'login',
   notifications: [],
   isLoading: false,
   isAuthWidgetOpen: false,
@@ -29,11 +30,5 @@ const store = new Vuex.Store({
   },
   strict: debug
 })
-
-store.dispatch('showLoading')
-store.dispatch('getPosts')
-  .then(() => {
-    store.dispatch('hideLoading')
-  })
 
 export default store

@@ -24,6 +24,10 @@ const mutations = {
     state.notifications = [...notifications]
   },
 
+  [types.SET_AUTH_VIEW](state, name) {
+    state.authView = name
+  },
+
   [types.TOGGLE_AUTH_WIDGET](state) {
     state.isAuthWidgetOpen = !state.isAuthWidgetOpen
   },

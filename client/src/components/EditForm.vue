@@ -44,12 +44,11 @@
           </div>
         </div>
         <input type="submit" value="Update" class="btn btn-primary" />
-        <hr/>
         <button
           type="button"
           class="btn btn-danger delete"
           @click="deletePost()"
-        >Delete post</button>
+        >Delete</button>
       </form>
       <access-denied
         message="This post doesn't belong to you"
@@ -105,8 +104,10 @@ export default {
   methods: {
     updatePost() {
       this.$store.dispatch('updatePost', this.editedPost)
-        .then(({ post }) => {
-          this.$router.push(`/post/${post.id}`)
+        .then(resp => {
+          if(resp) {
+            this.$router.push(`/post/${resp.post.id}`)
+          }
         })
     },
     deletePost() {
@@ -121,3 +122,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.btn.delete {
+  margin-left: 5px;
+}
+</style>

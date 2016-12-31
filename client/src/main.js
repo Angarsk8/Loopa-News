@@ -11,11 +11,14 @@ import init from './init'
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
+
 sync(store, router)
 
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
+
+init()
 
 const app = new Vue({
   el: '#app',
@@ -24,5 +27,3 @@ const app = new Vue({
   template: '<App/>',
   components: { App }
 })
-
-init()

@@ -13,9 +13,11 @@ defmodule Microscope.Router do
     post "/registrations", RegistrationController, :create
 
     post "/sessions", SessionController, :create
+    put "/sessions", SessionController, :update
     delete "/sessions", SessionController, :delete
 
     get "/current_user", CurrentUserController, :show
+
 
 
     resources "/posts", PostController, except: [:edit, :new] do

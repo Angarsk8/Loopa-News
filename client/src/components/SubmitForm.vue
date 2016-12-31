@@ -66,7 +66,6 @@ export default {
 
   created() {
     this.$store.dispatch('clearPostErrors')
-    setDocumentTitle('Hola')
   },
 
   computed: mapGetters([
@@ -77,8 +76,10 @@ export default {
   methods: {
     createPost() {
       this.$store.dispatch('createPost', this.post)
-        .then(({ post }) => {
-          this.$router.push(`/post/${post.id}`)
+        .then(resp => {
+          if(resp) {
+            this.$router.push(`/post/${resp.post.id}`)
+          }
         })
     },
     hasError(property) {

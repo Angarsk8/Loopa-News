@@ -15,15 +15,19 @@ const actions = {
     commit(types.HIDE_LOADING)
   },
 
+  setAuthView({ commit }, name) {
+    commit(types.SET_AUTH_VIEW, name)
+  },
+
   toggleAuthWidget({ commit }, event) {
-    if(event){
+    if(event) {
       event.stopPropagation()
     }
     commit(types.TOGGLE_AUTH_WIDGET)
   },
 
   toggleNotificationPanel({ commit }, event) {
-    if(event){
+    if(event) {
       event.stopPropagation()
     }
     commit(types.TOGGLE_NOTIFICATION_PANEL)
@@ -36,11 +40,11 @@ const actions = {
       })
   },
 
-  createNotification({ commit }, notification){
+  createNotification(_, notification){
     return httpPost(`${apiURL}/notifications`, { notification })
   },
 
-  deleteNotification({ commit, dispatch }, id){
+  deleteNotification(_, id){
     return httpDelete(`${apiURL}/notifications/${id}`)
   },
 

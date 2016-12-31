@@ -1,22 +1,26 @@
 import { joinUserChannel } from '../../channel'
 import * as types from '../mutation-types'
+import uniqueId from 'uniqid'
 import {
   apiURL,
   httpGet,
   httpPost,
+  httpUpdate,
   httpDelete
 } from '../../utils'
 
 const state = {
   currentUser: null,
   sessionError: null,
-  registrationErrors: {}
+  registrationErrors: {},
+  changePasswordErrors: {}
 }
 
 const getters = {
   currentUser: state => state.currentUser,
   sessionError: state => state.sessionError,
-  registrationErrors: state => state.registrationErrors
+  registrationErrors: state => state.registrationErrors,
+  changePasswordErrors: state => state.changePasswordErrors
 }
 
 const actions = {
@@ -32,7 +36,27 @@ const actions = {
       .catch((error) => {
         error.response.json()
         .then((errorJSON) => {
-          commit(types.SET_SESSION_ERROR, errorJSON.message)
+          dispatch('setSessionError', errorJSON.message)
+        })
+      })
+  },
+
+  changePassword({ commit, dispatch }, session) {
+    return httpUpdate(`${apiURL}/sessions`, { session })
+      .then((resp) => {
+        dispatch('clearChangePasswordErrors')
+        dispatch('toggleAuthWidget')
+        dispatch('addAlert', {
+          id: uniqueId('alert_'),
+          type: 'success',
+          message: 'Password changed succesfully!'
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        error.response.json()
+        .then((errorJSON) => {
+          commit(types.SET_CHANGE_PASSWORD_ERRORS, errorJSON.errors)
         })
       })
   },
@@ -51,7 +75,7 @@ const actions = {
         localStorage.setItem('id_token', jwt)
         joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
-        commit(types.CLEAR_REGISTRATIONS_ERRORS)
+        dispatch('clearRegistrationErrors')
         dispatch('toggleAuthWidget')
       })
       .catch((error) => {
@@ -62,7 +86,7 @@ const actions = {
       })
   },
 
-  currentUser({ commit, dispatch }) {
+  currentUser({ commit }) {
     return httpGet(`${apiURL}/current_user`)
       .then(({ user }) => {
         const jwt = localStorage.getItem('id_token')
@@ -71,13 +95,24 @@ const actions = {
       })
   },
 
+  setSessionError({ commit }, error) {
+    commit(types.SET_SESSION_ERROR, error)
+    setTimeout(() => {
+      commit(types.CLEAR_SESSION_ERROR)
+    }, 3000)
+  },
+
   clearSessionError({ commit }) {
     commit(types.CLEAR_SESSION_ERROR)
   },
 
+  clearChangePasswordErrors({ commit }) {
+    commit(types.CLEAR_CHANGE_PASSWORD_ERRORS)
+  },
+
   clearRegistrationErrors({ commit }) {
     commit(types.CLEAR_REGISTRATIONS_ERRORS)
-  },
+  }
 }
 
 const mutations = {
@@ -87,11 +122,6 @@ const mutations = {
 
   [types.USER_SIGNED_OUT](state) {
     state.currentUser = null
-  },
-
-  [types.SOCKET_CONNECTED](state, { socket, channel }) {
-    state.socket  = socket
-    state.channel = channel
   },
 
   [types.SET_SESSION_ERROR](state, error) {
@@ -108,6 +138,14 @@ const mutations = {
 
   [types.CLEAR_REGISTRATIONS_ERRORS](state) {
     state.registrationErrors = {}
+  },
+
+  [types.SET_CHANGE_PASSWORD_ERRORS](state, errors) {
+    state.changePasswordErrors = errors
+  },
+
+  [types.CLEAR_CHANGE_PASSWORD_ERRORS](state) {
+    state.changePasswordErrors = {}
   },
 }
 
