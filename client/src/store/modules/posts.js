@@ -10,7 +10,7 @@ import {
 
 const state = {
   postErrors: {},
-  posts: null
+  posts: []
 }
 
 const getters = {
@@ -23,6 +23,20 @@ const actions = {
     return httpGet(`${apiURL}/posts`)
       .then(({ posts }) => {
         commit(types.SET_POSTS, posts)
+      })
+  },
+
+  getPost({ commit, dispatch }, id) {
+    return httpGet(`${apiURL}/posts/${id}`)
+      .catch((error) => {
+        error.response.json()
+        .then((errorJSON) => {
+          dispatch('addAlert', {
+            id: uniqueId('alert_'),
+            type: 'danger',
+            message: errorJSON.message
+          })
+        })
       })
   },
 

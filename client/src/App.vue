@@ -56,6 +56,10 @@ hr {
   margin-bottom: 10px;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 #main {
   position: relative;
 }
@@ -126,11 +130,17 @@ hr {
   margin-right: 5px;
 }
 
-.post .post-content h3 span {
+.post .post-content h3 .domain {
   font-weight: normal;
   font-size: 14px;
   display: inline-block;
   color: #aaaaaa;
+}
+
+.post .post-content h3 .edit {
+  font-weight: normal;
+  font-size: 12px;
+  display: inline-block;
 }
 
 .post .post-content p {

@@ -23,28 +23,27 @@
     <div class="post-content">
       <h3>
         <a :href="post.url">{{post.title}}</a>
-        <span class="hidden-xs">{{post.url | domain}}</span>
+        <span class="hidden-xs domain">{{post.url | domain}}</span>
+        <router-link
+          :to="`/post/${post.id}/edit`"
+          v-if="ownPost"
+          ><span class="edit">[edit]</edit></span>
+        </router-link>
       </h3>
       <hr/>
       <p>
         {{post.votes.length | pluralize('vote') }},
         by <span class="author">{{post.user.username}}</span>
         <span class="hidden-xs">{{ post.inserted_at | timeAgo}} ago</span>,
-        <router-link :to="`/post/${post.id}`">
+        <router-link :to="`/post/${post.id}`" class="hidden-xs">
           {{post.comments.length}} comments
         </router-link>
-        <template v-if="ownPost">
-          | <router-link
-          :to="`/post/${post.id}/edit`"
-          v-if="ownPost"
-          > Edit</router-link>
-        </template>
+        <router-link :to="`/post/${post.id}`" class="visible-xs-*-inline">
+          discuss
+        </router-link>
       </p>
     </div>
   </div>
-    <!-- <router-link :to="`/post/${post.id}`" class="discuss btn btn-default">
-      Discuss
-    </router-link> -->
 </template>
 
 <script>
