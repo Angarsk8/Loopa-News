@@ -1,7 +1,14 @@
 <template>
   <div class="access-denied page jumbotron">
-    <h2>Access Denied</h2>
-    <p>You can't get here! {{message}}.</p>
+    <div class="text-xs-center">
+      <h1>Access Denied</h1>
+      <p>
+        You can't get here! {{message}}
+      </p>
+      <router-link to="/" class="">
+        <span class="fa fa-home"></span> Take me home
+      </router-link>
+    </div>
   </div>
 </template>
 

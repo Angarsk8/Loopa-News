@@ -1,9 +1,9 @@
 <template>
   <div id="app" class="container">
-    <app-header></app-header>
-    <div class="errors">
+    <div class="alerts">
       <app-alert v-for="alert in appAlerts" :alert="alert"></app-alert>
     </div>
+    <app-header></app-header>
     <div id="main">
       <router-view></router-view>
     </div>
@@ -38,17 +38,11 @@ export default {
   border-radius: 3px;
   padding: 10px;
   margin-bottom: 10px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
 }
 
 .comment-form {
   background: transparent;
   padding: 10px;
-}
-
-body {
-  background: #eee;
-  color: #666666;
 }
 
 hr {
@@ -58,6 +52,14 @@ hr {
 
 a {
   text-decoration: none !important;
+}
+
+button {
+  outline: 0 !important;
+}
+
+#app {
+  margin-top: 10px;
 }
 
 #main {
@@ -111,18 +113,14 @@ a {
 
 .post .upvote {
   display: block;
-  margin: 15px 15px 0 0;
+  margin: 15px 20px 0 0;
   float: left;
 }
-
-/*.post .post-content {
-  float: left;
-}*/
 
 .post .post-content h3 {
   margin: 0;
   line-height: 1.4;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .post .post-content h3 a {
@@ -132,14 +130,14 @@ a {
 
 .post .post-content h3 .domain {
   font-weight: normal;
-  font-size: 14px;
+  font-size: 15px;
   display: inline-block;
   color: #aaaaaa;
 }
 
 .post .post-content h3 .edit {
   font-weight: normal;
-  font-size: 12px;
+  font-size: 15px;
   display: inline-block;
 }
 
@@ -169,7 +167,7 @@ a {
 }
 
 .comments li h4 {
-  font-size: 16px;
+  font-size: 18px;
   margin: 0;
 }
 
@@ -191,19 +189,35 @@ a {
   font-size: 15px;
 }
 
+.comment-body.edited-comment-body {
+  margin-top: 12px;
+}
+
+.comment-body pre {
+  margin: 10px 0 10px 0;
+  padding: 16px;
+  overflow: auto;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.comment-body > ul {
+  list-style-type: disc;
+}
+
 .comment-icon.delete:hover{
-  color: #a94442;
+  color: #c9302c;
   transform: scale(1.2);
 }
 
 .comment-icon.edit:hover{
-  color: #8a6d3b;
+  color: #f0ad4e;
   transform: scale(1.2);
 }
 
 .comment-icon:before {
-  margin: 0 8px;
-  font-size: 14px;
+  margin: 0 6px;
+  font-size: 17px;
   cursor: pointer;
 }
 
@@ -231,11 +245,6 @@ a {
   background: rgba(0, 0, 0, 0.1);
 }
 
-.posts .spinner-container {
-  position: relative;
-  height: 100px;
-}
-
 .jumbotron {
   text-align: center;
 }
@@ -245,7 +254,7 @@ a {
   font-weight: 100;
 }
 
-.errors {
+.alerts {
   position: fixed;
   z-index: 10000;
   padding: 10px;

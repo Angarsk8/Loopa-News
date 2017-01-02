@@ -11,7 +11,7 @@
         required
       />
       <p
-        class="help-block"
+        class="form-control-feedback"
         v-if="'current_password' in changePasswordErrors"
       >{{ changePasswordErrors.current_password }}</p>
     </div>
@@ -26,7 +26,7 @@
         required
       />
       <p
-        class="help-block"
+        class="form-control-feedback"
         v-if="'password' in changePasswordErrors"
       >{{ changePasswordErrors.password }}</p>
     </div>
@@ -42,7 +42,7 @@
         required
       />
       <p
-        class="help-block"
+        class="form-control-feedback"
         v-if="'password_confirmation' in changePasswordErrors"
       >{{ changePasswordErrors.password_confirmation }}</p>
       </div>
@@ -51,7 +51,7 @@
       <button type="submit" class="btn btn-primary btn-block">Change password</button>
       <button
         type="button"
-        class="btn btn-default btn-block"
+        class="btn btn-secondary btn-block"
         @click="setAuthView('logout')"
       >Cancel</button>
     </div>
@@ -88,7 +88,7 @@ export default {
       'setAuthView'
     ]),
     hasError(property) {
-      return this.changePasswordErrors[property] ? 'has-error' : ''
+      return this.changePasswordErrors[property] ? 'has-danger' : ''
     }
   }
 }

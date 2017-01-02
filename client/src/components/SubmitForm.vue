@@ -16,7 +16,7 @@
           required
         />
         <p
-          class="help-block"
+          class="form-control-feedback"
           v-if="'url' in postErrors"
         >{{ postErrors.url }}</p>
       </div>
@@ -33,7 +33,7 @@
           required
         />
         <p
-          class="help-block"
+          class="form-control-feedback"
           v-if="'title' in postErrors"
         >{{ postErrors.title }}</p>
       </div>
@@ -83,7 +83,7 @@ export default {
         })
     },
     hasError(property) {
-      return this.postErrors[property] ? 'has-error' : ''
+      return this.postErrors[property] ? 'has-danger' : ''
     }
   }
 }

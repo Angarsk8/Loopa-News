@@ -15,11 +15,6 @@ const router = new VueRouter({
       component: Home
     },
     {
-      name: 'newPosts',
-      path: '/new/:postLimit?',
-      component: Home
-    },
-    {
       name: 'postSubmit',
       path: '/submit',
       component: SubmitForm

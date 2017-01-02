@@ -16,10 +16,9 @@
         v-if="currentUser"
         @submit.prevent="createComment()"
       >
-        <div class="text-muted markdown-support">
-          <span class="badge markdown-badge">
-            M<span class="glyphicon glyphicon-arrow-down"></span>
-          </span> Styling with Markdown is supported</span>
+        <div class="markdown-support">
+          <span class="markdown-tag tag tag-default">M</span>
+         Styling with Markdown is supported</span>
         </div>
         <div class="form-group">
           <div class="controls">
@@ -114,11 +113,13 @@ export default {
     margin-bottom: 12px;
     font-size: 12px;
     margin-left: 5px;
+    color: #787d81;
   }
 
-  .markdown-support .markdown-badge {
+  .markdown-support .markdown-tag {
     border-radius: 2px;
-    margin-right: 3px;
+    margin-right: 2px;
     font-size: 8px;
+    background-color: #6d7275;
   }
 </style>

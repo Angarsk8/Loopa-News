@@ -1,30 +1,26 @@
 <template>
-  <nav class="navbar navbar-default" role="navigation">
-    <div class="navbar-header">
+  <nav class="navbar navbar-light">
     <button
-      type="button"
-      class="navbar-toggle collapsed"
-      data-toggle="collapse"
-      data-target="#navigation"
-    >
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
+      class="navbar-toggler hidden-md-up"
+      type="button" data-toggle="collapse"
+      data-target="#navbarResponsive"
+      aria-controls="navbarResponsive"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    ></button>
     <router-link class="navbar-brand" to="/">Microscope</router-link>
-    </div>
-    <div class="collapse navbar-collapse" id="navigation">
+    <div class="collapse navbar-toggleable-sm" id="navbarResponsive">
       <ul class="nav navbar-nav">
-        <li :class="activeRouteClass('home','newPosts')">
-          <router-link to="/new">New</router-link>
-        </li>
-        <li :class="activeRouteClass('postSubmit')" v-if="currentUser">
-          <router-link to="/submit">Submit Post</router-link>
+        <li :class="`new-nav-item nav-item ${activeRouteClass('postSubmit')}`">
+          <router-link
+            class="new btn btn-outline-success nav-link"
+            to="/submit"
+            v-if="currentUser"
+          >New</router-link>
         </li>
         <notification-panel v-if="currentUser"></notification-panel>
+        <auth-widget></auth-widget>
       </ul>
-      <auth-widget></auth-widget>
     </div>
   </nav>
 </template>
@@ -54,3 +50,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.new {
+  color: #5cb85c !important;
+}
+
+.new:hover, .new:focus {
+  color: #fff !important;
+}
+
+.new-nav-item.active .new{
+  color: #fff !important;
+  background-color: #5cb85c;
+  border-color: #5cb85c;
+}
+</style>

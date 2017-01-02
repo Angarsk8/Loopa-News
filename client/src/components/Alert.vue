@@ -19,12 +19,16 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'Alert',
 
   props: ['alert'],
+
+  computed: mapGetters([
+    'isNotificationPanelOpen'
+  ]),
 
   methods: {
     ...mapActions([
@@ -32,8 +36,10 @@ export default {
     ]),
     deleteNotification({ id, post_id }) {
       this.$store.dispatch('deleteNotification', id)
-        .then(() => {
-          this.$store.dispatch('toggleNotificationPanel')
+        .then((isNotificationPanelOpen) => {
+          if(this.isNotificationPanelOpen) {
+            this.$store.dispatch('toggleNotificationPanel')
+          }
           this.$router.push(`/post/${post_id}`)
         })
     }

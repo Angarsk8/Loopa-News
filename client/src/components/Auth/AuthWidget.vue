@@ -1,26 +1,27 @@
 <template>
-  <ul class="nav navbar-nav navbar-right" @click.stop>
-    <li :class="`dropdown ${showClass}`">
-      <a href="#" class="dropdown-toggle" @click.prevent="toggleAuthWidget">
-        {{ currentUser ? currentUser.username : 'Login / Signup'}}
-        <span class="caret"></span>
-      </a>
-      <ul id="login-dp" class="dropdown-menu" v-if="currentUser">
-        <change-form v-if="isAuthView('change')"></change-form>
-        <logout-view v-else></logout-view>
-      </ul>
-      <ul id="login-dp" class="dropdown-menu" v-else>
-        <li>
-          <div class="row">
-            <div class="col-md-12">
-              <login-form v-if="isAuthView('login')"></login-form>
-              <signup-form v-else-if="isAuthView('signup')"></signup-form>
-            </div>
+  <li :class="`nav-item dropdown float-md-right ${showClass}`" @click.stop>
+    <a
+      href="#"
+      class="nav-link dropdown-toggle"
+      @click.prevent="toggleAuthWidget"
+    >
+      {{ currentUser ? currentUser.username : 'Login / Signup'}}
+    </a>
+    <ul id="login-dp" class="dropdown-menu" v-if="currentUser">
+      <change-form v-if="isAuthView('change')"></change-form>
+      <logout-view v-else></logout-view>
+    </ul>
+    <ul id="login-dp" class="dropdown-menu" v-else>
+      <li>
+        <div class="row">
+          <div class="col-md-12">
+            <login-form v-if="isAuthView('login')"></login-form>
+            <signup-form v-else-if="isAuthView('signup')"></signup-form>
           </div>
-        </li>
-      </ul>
-    </li>
-  </ul>
+        </div>
+      </li>
+    </ul>
+  </li>
 </template>
 
 <script>
@@ -66,6 +67,7 @@ export default {
 #login-dp{
   min-width: 300px;
   padding: 15px;
+  left: -170px;
 }
 
 #login-dp .help-block{

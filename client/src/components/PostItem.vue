@@ -1,44 +1,45 @@
 <template>
   <div class="post">
     <a
-      class="upvote btn btn-default disabled"
+      class="upvote btn btn-secondary disabled"
       v-if="!currentUser"
     >
-      <span class="glyphicon glyphicon-arrow-up"></span>
+      <i class="fa fa-arrow-up" aria-hidden="true"></i>
     </a>
     <a
       class="upvote btn btn-primary upvotable"
       @click.prevent="upvotePost(vote)"
       v-else-if="upvotable"
     >
-      <span class="glyphicon glyphicon-arrow-up"></span>
+
+      <i class="fa fa-arrow-up" aria-hidden="true" style="color:white"></i>
     </a>
     <a
       class="upvote btn btn-danger upvotable"
       @click.prevent="downvotePost({post_id: post.id, voteId})"
       v-else
     >
-      <span class="glyphicon glyphicon-arrow-down"></span>
+      <i class="fa fa-arrow-down" aria-hidden="true" style="color:white"></i>
     </a>
     <div class="post-content">
       <h3>
         <a :href="post.url">{{post.title}}</a>
-        <span class="hidden-xs domain">{{post.url | domain}}</span>
+        <span class="hidden-xs-down domain">{{post.url | domain}}</span>
         <router-link
           :to="`/post/${post.id}/edit`"
           v-if="ownPost"
-          ><span class="edit">[edit]</edit></span>
+          ><span class="edit">Edit</edit></span>
         </router-link>
       </h3>
       <hr/>
       <p>
         {{post.votes.length | pluralize('vote') }},
         by <span class="author">{{post.user.username}}</span>
-        <span class="hidden-xs">{{ post.inserted_at | timeAgo}} ago</span>,
-        <router-link :to="`/post/${post.id}`" class="hidden-xs">
+      <span class="hidden-xs-down">{{ post.inserted_at | timeAgo}} ago,</span>
+        <router-link :to="`/post/${post.id}`" class="hidden-xs-down">
           {{post.comments.length}} comments
         </router-link>
-        <router-link :to="`/post/${post.id}`" class="visible-xs-*-inline">
+        <router-link :to="`/post/${post.id}`" class="hidden-sm-up">
           discuss
         </router-link>
       </p>

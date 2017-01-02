@@ -1,23 +1,27 @@
 <template>
-  <li :class="`dropdown ${showClass}`" @click.stop>
+  <li :class="`nav-item dropdown ${showClass}`" @click.stop>
     <a
       href="#"
-      class="dropdown-toggle my-toggle"
+      class="nav-link dropdown-toggle"
+      id="responsiveNavbarDropdown"
+      aria-haspopup="true"
+      aria-expanded="false"
       @click.prevent="toggleNotificationPanel"
     >
       Notifications
       <span
         v-if="notifications.length"
-        class="badge badge-inverse"
+        class="tag tag-default tag-pill"
       >
         {{notifications.length}}
       </span>
       <b class="caret"></b>
     </a>
-    <ul class="notification dropdown-menu">
+    <div class="dropdown-menu" aria-labelledby="responsiveNavbarDropdown">
       <li v-if="notifications.length">
         <a
           href="#"
+          class="dropdown-item"
           v-for="notification in notifications"
           @click.prevent="deleteNotification(notification)"
         >
@@ -25,7 +29,7 @@
         </a>
       </li>
       <li v-else><span>No Notifications</span></li>
-    </ul>
+    </div>
   </li>
 </template>
 

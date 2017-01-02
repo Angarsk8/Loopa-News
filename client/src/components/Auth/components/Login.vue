@@ -37,7 +37,7 @@
         Sign in
       </button>
     </div>
-    <div class="bottom text-center">
+    <div class="bottom text-xs-center">
       <span class="bottom-text">Not registered?</span>
       <a href="#" @click.prevent="setAuthView('signup')">Create account</a>
     </div>

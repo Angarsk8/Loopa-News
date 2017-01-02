@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="btn btn-block btn-default" @click="setAuthView('change')">
+    <button class="btn btn-block btn-warning" @click="setAuthView('change')">
       Change password
     </button>
     <button class="btn btn-block btn-primary" @click="signOut()">
