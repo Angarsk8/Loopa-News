@@ -11,7 +11,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'username' in registrationErrors"
       >{{ registrationErrors.username }}</p>
     </div>
@@ -26,7 +26,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'password' in registrationErrors"
       >{{ registrationErrors.password }}</p>
     </div>
@@ -42,7 +42,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'password_confirmation' in registrationErrors"
       >{{ registrationErrors.password_confirmation }}</p>
       </div>
@@ -50,7 +50,7 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary btn-block">Sign up</button>
     </div>
-    <div class="bottom text-xs-center">
+    <div class="auth-widget-bottom bottom text-xs-center">
       <span class="bottom-text">Already registered?</span>
       <a href="#" @click.prevent="setAuthView('login')">Sign in</a>
     </div>

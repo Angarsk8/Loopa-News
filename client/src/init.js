@@ -14,13 +14,6 @@ export default function init() {
     store.dispatch('currentUser')
   }
 
-  /* Fetch the initial data (posts) from the server */
-  store.dispatch('showLoading')
-  store.dispatch('getPosts')
-    .then(() => {
-      store.dispatch('hideLoading')
-    })
-
   /* Register "global" event listener on the HTML Document */
   document.addEventListener('click', event => {
     if(store.getters.isAuthWidgetOpen) {

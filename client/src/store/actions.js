@@ -15,6 +15,14 @@ const actions = {
     commit(types.HIDE_LOADING)
   },
 
+  showfetchingMore({ commit }) {
+    commit(types.SHOW_FETCHING_MORE)
+  },
+
+  hidefetchingMore({ commit }) {
+    commit(types.HIDE_FETCHING_MORE)
+  },
+
   setAuthView({ commit }, name) {
     commit(types.SET_AUTH_VIEW, name)
   },

@@ -5,10 +5,31 @@ import { socketURL } from '../utils'
 import uniqueId from 'uniqid'
 import * as types from '../store/mutation-types'
 
+const isPostInStore = postId => {
+  return store.getters.posts
+    .find(post => post.id === postId)
+}
+
+const isInPostRoute = postId => {
+  return store.getters.routeParams.postId == postId
+}
+
+const isInBestRoute = () => {
+  return store.state.route.name === 'best'
+}
+
+const isInHomeRoute = () => {
+  return store.state.route.name === 'home'
+}
+
+const isInLatestRoute = () => {
+  return store.state.route.name === 'latest'
+}
+
 export const socket = new Socket(socketURL)
 
 export const joinUserChannel = ({ id, jwt }) => {
-  const userChannel = socket.channel(`users:${id}`, { token: jwt })
+  let userChannel = socket.channel(`users:${id}`, { token: jwt })
 
   userChannel.join()
     .receive('ok', _ => {
@@ -45,16 +66,29 @@ export const joinPostsChannel = () => {
     })
 
   postsChannel.on('posts:add_post', post => {
-    store.commit(types.ADD_POST, post)
+    if(isInBestRoute()) {
+      store.dispatch('getPosts', {
+        limit: store.getters.routeParams.limit,
+        by: 'most_upvoted'
+      })
+    }
+    if(isInHomeRoute() || isInLatestRoute()) {
+      store.dispatch('getPosts', {limit: store.getters.routeParams.limit})
+    }
   })
 
   postsChannel.on('posts:update_post', post => {
-    store.commit(types.UPDATE_POST, post)
+    if(isPostInStore(post.id)) {
+      store.commit(types.UPDATE_POST, post)
+    }
+    if(isInPostRoute(post.id)) {
+      store.commit(types.SET_CURRENT_POST, post)
+    }
   })
 
   postsChannel.on('posts:delete_post', post => {
-    const { currentUser, routeParams } = store.getters
-    if(routeParams.postId == post.id) {
+    const { currentUser } = store.getters
+    if(isInPostRoute(post.id)) {
       if ((currentUser && currentUser.id) !== post.user_id) {
         store.dispatch('addAlert', {
           id: uniqueId('alert_'),
@@ -64,27 +98,72 @@ export const joinPostsChannel = () => {
       }
       router.push('/')
     }
-    store.commit(types.DELETE_POST, post)
+    if(isInBestRoute()) {
+      store.dispatch('getPosts', {
+        limit: store.getters.routeParams.limit,
+        by: 'most_upvoted'
+      })
+    }
+    if(isInHomeRoute() || isInLatestRoute()) {
+      store.dispatch('getPosts', {limit: store.getters.routeParams.limit})
+    }
   })
 
   postsChannel.on('posts:add_comment', comment => {
-    store.commit(types.ADD_COMMENT, comment)
+    if(isPostInStore(comment.post_id)) {
+      store.commit(types.ADD_COMMENT, comment)
+    }
+    if(isInPostRoute(comment.post_id)) {
+      store.commit(types.ADD_COMMENT_IN_CURRENT_POST, comment)
+    }
   })
 
   postsChannel.on('posts:update_comment', comment => {
-    store.commit(types.UPDATE_COMMENT, comment)
+    if(isPostInStore(comment.post_id)) {
+      store.commit(types.UPDATE_COMMENT, comment)
+    }
+    if(isInPostRoute(comment.post_id)) {
+      store.commit(types.UPDATE_COMMENT_IN_CURRENT_POST, comment)
+    }
   })
 
   postsChannel.on('posts:delete_comment', comment => {
-    store.commit(types.DELETE_COMMENT, comment)
+    if(isPostInStore(comment.post_id)) {
+      store.commit(types.DELETE_COMMENT, comment)
+    }
+    if(isInPostRoute(comment.post_id)) {
+      store.commit(types.DELETE_COMMENT_IN_CURRENT_POST, comment)
+    }
   })
 
   postsChannel.on('posts:upvote_post', vote => {
-    store.commit(types.UPVOTE_POST, vote)
+    if(isPostInStore(vote.post_id)) {
+      store.commit(types.UPVOTE_POST, vote)
+    }
+    if(isInPostRoute(vote.post_id)) {
+      store.commit(types.UPVOTE_POST_IN_CURRENT_POST, vote)
+    }
+    if(isInBestRoute()) {
+      store.dispatch('getPosts', {
+        limit: store.getters.routeParams.limit,
+        by: 'most_upvoted'
+      })
+    }
   })
 
   postsChannel.on('posts:downvote_post', vote => {
-    store.commit(types.DOWNVOTE_POST, vote)
+    if(isPostInStore(vote.post_id)) {
+      store.commit(types.DOWNVOTE_POST, vote)
+    }
+    if(isInPostRoute(vote.post_id)) {
+      store.commit(types.DOWNVOTE_POST_IN_CURRENT_POST, vote)
+    }
+    if(isInBestRoute()) {
+      store.dispatch('getPosts', {
+        limit: store.getters.routeParams.limit,
+        by: 'most_upvoted'
+      })
+    }
   })
 
   return postsChannel

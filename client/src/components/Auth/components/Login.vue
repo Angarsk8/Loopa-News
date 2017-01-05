@@ -6,7 +6,7 @@
     @submit.prevent="signIn(user)"
   >
     <transition name="fade">
-      <div class="custom-alert-danger" v-if="sessionError">
+      <div class="custom-alert-danger small" v-if="sessionError">
         {{sessionError}}
       </div>
     </transition>
@@ -37,7 +37,7 @@
         Sign in
       </button>
     </div>
-    <div class="bottom text-xs-center">
+    <div class="auth-widget-bottom bottom text-xs-center">
       <span class="bottom-text">Not registered?</span>
       <a href="#" @click.prevent="setAuthView('signup')">Create account</a>
     </div>

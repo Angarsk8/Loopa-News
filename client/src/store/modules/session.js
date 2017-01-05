@@ -9,6 +9,8 @@ import {
   httpDelete
 } from '../../utils'
 
+let userChannel = null
+
 const state = {
   currentUser: null,
   sessionError: null,
@@ -28,7 +30,7 @@ const actions = {
     return httpPost(`${apiURL}/sessions`, { session })
       .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
-        joinUserChannel({ id: user.id, jwt })
+        userChannel = joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
         commit(types.CLEAR_SESSION_ERROR)
         dispatch('toggleAuthWidget')
@@ -53,7 +55,6 @@ const actions = {
         })
       })
       .catch((error) => {
-        console.log(error)
         error.response.json()
         .then((errorJSON) => {
           commit(types.SET_CHANGE_PASSWORD_ERRORS, errorJSON.errors)
@@ -61,11 +62,14 @@ const actions = {
       })
   },
 
-  signOut({ commit }) {
+  signOut({ commit, dispatch }) {
     return httpDelete(`${apiURL}/sessions`)
       .then((_) => {
         localStorage.removeItem('id_token')
         commit(types.USER_SIGNED_OUT)
+        userChannel.leave().receive("ok", () => {
+          console.log("user left the channel successfully!")
+        })
       })
   },
 
@@ -73,7 +77,7 @@ const actions = {
     return httpPost(`${apiURL}/registrations`, { user })
       .then(({ jwt, user }) => {
         localStorage.setItem('id_token', jwt)
-        joinUserChannel({ id: user.id, jwt })
+        userChannel = joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
         dispatch('clearRegistrationErrors')
         dispatch('toggleAuthWidget')
@@ -90,7 +94,7 @@ const actions = {
     return httpGet(`${apiURL}/current_user`)
       .then(({ user }) => {
         const jwt = localStorage.getItem('id_token')
-        joinUserChannel({ id: user.id, jwt })
+        userChannel = joinUserChannel({ id: user.id, jwt })
         commit(types.SET_CURRENT_USER, { ...user, jwt })
       })
   },

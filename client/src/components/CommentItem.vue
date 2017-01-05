@@ -3,7 +3,9 @@
     <div class="">
       <h4>
         <span class="author">{{comment.author}}</span>
-        <span class="date"> commented {{comment.inserted_at | timeAgo}} ago</span>
+        <span class="date hidden-xs-down">
+          commented {{comment.inserted_at | timeAgo}} ago
+        </span>
         <template v-if="isEdited">
           <span class="date hidden-xs-down"> | </span>
           <span class="date text-warning hidden-xs-down" v-if="isEdited">
@@ -30,10 +32,14 @@
       <!-- Nav tabs -->
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Write</a>
+          <a class="nav-link active" data-toggle="tab" href="#home" role="tab">
+            Write
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Preview</a>
+          <a class="nav-link" data-toggle="tab" href="#profile" role="tab">
+            Preview
+          </a>
         </li>
       </ul>
       <!-- Tab panes -->

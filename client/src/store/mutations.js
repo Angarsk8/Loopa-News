@@ -9,6 +9,14 @@ const mutations = {
     state.isLoading = false
   },
 
+  [types.SHOW_FETCHING_MORE](state) {
+    state.isFetchingMore = true
+  },
+
+  [types.HIDE_FETCHING_MORE](state) {
+    state.isFetchingMore = false
+  },
+
   [types.SET_NOTIFICATIONS](state, notifications) {
     state.notifications = notifications
   },

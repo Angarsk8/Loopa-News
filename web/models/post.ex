@@ -37,7 +37,14 @@ defmodule Microscope.Post do
 
   def order_asc_by_insertion(query) do
     from p in query,
-      order_by: [asc: :inserted_at],
+      order_by: [desc: :inserted_at],
       select: p
+  end
+
+  def most_upvoted(query) do
+    from p in query,
+      group_by: p.id,
+      join: v in assoc(p, :votes),
+      order_by: [desc: count(v.id)]
   end
 end

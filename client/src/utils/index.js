@@ -3,12 +3,20 @@ import { polyfill } from 'es6-promise'
 
 const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
   process.env.NODE_ENV === 'production'
-  ? { SOCKET_SCHEME: 'wss'
-    , SCHEME: 'https'
-    , HOSTNAME: window.location.hostname }
+  ? { SOCKET_SCHEME: 'ws'
+    , SCHEME: 'http'
+    , HOSTNAME: 'localhost:4000' }
   : { SOCKET_SCHEME: 'ws'
     , SCHEME: 'http'
     , HOSTNAME: 'localhost:4000' }
+// const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
+//   process.env.NODE_ENV === 'production'
+//   ? { SOCKET_SCHEME: 'wss'
+//     , SCHEME: 'https'
+//     , HOSTNAME: window.location.hostname }
+//   : { SOCKET_SCHEME: 'ws'
+//     , SCHEME: 'http'
+//     , HOSTNAME: 'localhost:4000' }
 
 const defaultHeaders = {
   'Accept': 'application/json',

@@ -14,6 +14,7 @@ const state = {
   authView: 'login',
   notifications: [],
   isLoading: false,
+  isFetchingMore: false,
   isAuthWidgetOpen: false,
   isNotificationPanelOpen: false,
   appAlerts: []

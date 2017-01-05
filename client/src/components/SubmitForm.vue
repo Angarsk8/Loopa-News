@@ -16,7 +16,7 @@
           required
         />
         <p
-          class="form-control-feedback"
+          class="form-control-feedback small"
           v-if="'url' in postErrors"
         >{{ postErrors.url }}</p>
       </div>
@@ -33,7 +33,7 @@
           required
         />
         <p
-          class="form-control-feedback"
+          class="form-control-feedback small"
           v-if="'title' in postErrors"
         >{{ postErrors.title }}</p>
       </div>

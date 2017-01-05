@@ -11,7 +11,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'current_password' in changePasswordErrors"
       >{{ changePasswordErrors.current_password }}</p>
     </div>
@@ -26,7 +26,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'password' in changePasswordErrors"
       >{{ changePasswordErrors.password }}</p>
     </div>
@@ -42,7 +42,7 @@
         required
       />
       <p
-        class="form-control-feedback"
+        class="form-control-feedback small"
         v-if="'password_confirmation' in changePasswordErrors"
       >{{ changePasswordErrors.password_confirmation }}</p>
       </div>

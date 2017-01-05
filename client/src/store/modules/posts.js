@@ -10,25 +10,34 @@ import {
 
 const state = {
   postErrors: {},
-  posts: []
+  posts: [],
+  pagination: null,
+  currentPost: null
 }
 
 const getters = {
   postErrors: state => state.postErrors,
-  posts: state => state.posts
+  posts: state => state.posts,
+  pagination: state => state.pagination,
+  currentPost: state => state.currentPost
 }
 
 const actions = {
-  getPosts({ commit }) {
-    return httpGet(`${apiURL}/posts`)
-      .then(({ posts }) => {
+  getPosts({ commit }, {limit: limit = 5, by: by = "latest"}) {
+    return httpGet(`${apiURL}/posts?by=${by}&page_size=${limit}`)
+      .then(({ posts, pagination }) => {
         commit(types.SET_POSTS, posts)
+        commit(types.SET_POSTS_PAGINATION, pagination)
       })
   },
 
   getPost({ commit, dispatch }, id) {
     return httpGet(`${apiURL}/posts/${id}`)
+      .then(({ post }) => {
+        commit(types.SET_CURRENT_POST, post)
+      })
       .catch((error) => {
+        console.log(error)
         error.response.json()
         .then((errorJSON) => {
           dispatch('addAlert', {
@@ -101,12 +110,18 @@ const actions = {
 }
 
 const mutations = {
+
+  /* START <POSTS MUTATION HANDLERS> */
   [types.SET_POSTS](state, posts) {
     state.posts = posts
   },
 
+  [types.SET_POSTS_PAGINATION](state, pagination) {
+    state.pagination = pagination
+  },
+
   [types.ADD_POST](state, post) {
-    state.posts = [...state.posts, post]
+    state.posts = [post, ...state.posts]
   },
 
   [types.UPDATE_POST](state, post) {
@@ -115,8 +130,7 @@ const mutations = {
   },
 
   [types.DELETE_POST](state, post) {
-    const posts = state.posts.filter(_post => _post.id !== post.id)
-    state.posts = [...posts]
+    state.posts = state.posts.filter(_post => _post.id !== post.id)
   },
 
   [types.ADD_COMMENT](state, comment) {
@@ -132,23 +146,49 @@ const mutations = {
 
   [types.DELETE_COMMENT](state, comment) {
     const post = state.posts.find(post => post.id === comment.post_id)
-    const comments = post.comments.filter(_comment => _comment.id !== comment.id)
-
-    post.comments = [...comments]
-  },
-
-  [types.UPVOTE_POST](state, vote) {
-    const post = state.posts.find(post => post.id === vote.post_id)
-
-    post.votes = [...post.votes, vote]
+    post.comments = post.comments
+      .filter(_comment => _comment.id !== comment.id)
   },
 
   [types.DOWNVOTE_POST](state, _vote) {
     const post = state.posts.find(post => post.id === _vote.post_id)
-    const votes = post.votes.filter(vote => vote.id !== _vote.id)
-
-    post.votes = [...votes]
+    post.votes =  post.votes.filter(vote => vote.id !== _vote.id)
   },
+
+  [types.UPVOTE_POST](state, vote) {
+    const post = state.posts.find(post => post.id === vote.post_id)
+    post.votes = [...post.votes, vote]
+  },
+  /* END <POSTS MUTATION HANDLERS> */
+
+  /* START <CURRENT POST MUTATION HANDLERS> */
+  [types.SET_CURRENT_POST](state, post) {
+    state.currentPost = post
+  },
+
+  [types.ADD_COMMENT_IN_CURRENT_POST](state, comment) {
+    state.currentPost.comments = [...state.currentPost.comments, comment]
+  },
+
+  [types.UPDATE_COMMENT_IN_CURRENT_POST](state, comment) {
+    state.currentPost.comments = state.currentPost.comments
+      .map(_comment => _comment.id === comment.id ? comment : _comment)
+  },
+
+  [types.DELETE_COMMENT_IN_CURRENT_POST](state, comment) {
+    state.currentPost.comments = state.currentPost.comments
+      .filter(_comment => _comment.id !== comment.id)
+  },
+
+  [types.UPVOTE_POST_IN_CURRENT_POST](state, vote) {
+    state.currentPost.votes = [...state.currentPost.votes, vote]
+  },
+
+  [types.DOWNVOTE_POST_IN_CURRENT_POST](state, _vote) {
+    state.currentPost.votes =  state.currentPost.votes
+      .filter(vote => vote.id !== _vote.id)
+  },
+  /* END <CURRENT POST MUTATION HANDLERS> */
 
   [types.SET_POST_ERRORS](state, errors) {
     state.postErrors = errors

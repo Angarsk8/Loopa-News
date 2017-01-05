@@ -35,7 +35,7 @@
         </div>
         <button type="submit" class="btn btn-primary">Comment</button>
       </form>
-      <p v-else>Please log in to leave a comment</p>
+      <p class="login-message" v-else>Please log in to leave a comment</p>
     </div>
   </div>
 </template>
@@ -67,17 +67,16 @@ export default {
     ...mapGetters([
       'routeParams',
       'currentUser',
-      'posts',
+      'currentPost',
       'isLoading'
     ]),
     post() {
-      return JSON.parse(JSON.stringify(this.posts))
-        .find(post => post.id == this.routeParams.postId)
+      return JSON.parse(JSON.stringify(this.currentPost))
     },
     comments() {
       return this.post.comments
         .sort((a, b) => {
-          return new Date(a.inserted_at) - new Date(b.inserted_at);
+          return new Date(a.inserted_at) - new Date(b.inserted_at)
         })
     },
     comment() {
@@ -108,18 +107,23 @@ export default {
 </script>
 
 <style scoped>
-  .markdown-support {
-    margin-top: 5px;
-    margin-bottom: 12px;
-    font-size: 12px;
-    margin-left: 5px;
-    color: #787d81;
-  }
+.markdown-support {
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  margin-left: 5px;
+  color: #787d81;
+}
 
-  .markdown-support .markdown-tag {
-    border-radius: 2px;
-    margin-right: 2px;
-    font-size: 8px;
-    background-color: #6d7275;
-  }
+.markdown-support .markdown-tag {
+  border-radius: 2px;
+  margin-right: 2px;
+  font-size: 8px;
+  background-color: #6d7275;
+}
+
+.login-message {
+  font-size: 13px;
+  color: #7e8081;
+}
 </style>

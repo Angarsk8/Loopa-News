@@ -17,7 +17,15 @@ defmodule Microscope.UserChannel do
     end
   end
 
+  def leave(_reason, socket) do
+    {:ok, socket}
+  end
+
   def notify(event, notification = %Notification{user_id: id}) do
     Endpoint.broadcast_from!(self, "users:#{id}", "user:#{event}", notification)
+  end
+
+  def leave(id) do
+    Endpoint.broadcast_from!(self, "users:#{id}", "user:left", %{})
   end
 end

@@ -11,6 +11,18 @@
     <router-link class="navbar-brand" to="/">Microscope</router-link>
     <div class="collapse navbar-toggleable-sm" id="navbarResponsive">
       <ul class="nav navbar-nav">
+        <li :class="`nav-item ${activeRouteClass('home', 'latest')}`">
+          <router-link
+            class="nav-link"
+            to="/latest"
+          >Latest</router-link>
+        </li>
+        <li :class="`nav-item ${activeRouteClass('best')}`">
+          <router-link
+            class="nav-link"
+            to="/best"
+          >Best</router-link>
+        </li>
         <li :class="`new-nav-item nav-item ${activeRouteClass('postSubmit')}`">
           <router-link
             class="new btn btn-outline-success nav-link"

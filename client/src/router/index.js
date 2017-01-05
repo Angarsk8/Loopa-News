@@ -4,6 +4,12 @@ import SubmitForm from '../components/SubmitForm'
 import EditForm from '../components/EditForm'
 import NotFound from '../components/NotFound'
 import PostPage from '../components/PostPage'
+import {
+  fetchPosts,
+  fetchLatestPosts,
+  fetchBestPosts,
+  fetchPost
+} from './guards'
 
 const router = new VueRouter({
   mode: 'history',
@@ -12,7 +18,20 @@ const router = new VueRouter({
     {
       name: 'home',
       path: '/',
-      component: Home
+      component: Home,
+      beforeEnter: fetchPosts
+    },
+    {
+      name: 'latest',
+      path: '/latest/:limit?',
+      component: Home,
+      beforeEnter: fetchLatestPosts
+    },
+    {
+      name: 'best',
+      path: '/best/:limit?',
+      component: Home,
+      beforeEnter: fetchBestPosts
     },
     {
       name: 'postSubmit',
@@ -22,12 +41,14 @@ const router = new VueRouter({
     {
       name: 'postPage',
       path: '/post/:postId',
-      component: PostPage
+      component: PostPage,
+      beforeEnter: fetchPost
     },
     {
       name: 'postEdit',
       path: '/post/:postId/edit',
-      component: EditForm
+      component: EditForm,
+      beforeEnter: fetchPost
     },
     {
       path: '*',

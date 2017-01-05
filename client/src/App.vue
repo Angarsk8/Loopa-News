@@ -59,7 +59,7 @@ button {
 }
 
 #app {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 #main {
@@ -238,6 +238,7 @@ button {
   height: 60px;
   line-height: 60px;
   margin-bottom: 10px;
+  margin-top: 15px;
 }
 
 .load-more:hover {
@@ -280,5 +281,9 @@ button {
 
 .fade-enter, .fade-leave-active {
   opacity: 0;
+}
+
+.auth-widget-bottom {
+  font-size: 14px;
 }
 </style>

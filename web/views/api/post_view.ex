@@ -3,9 +3,15 @@ defmodule Microscope.PostView do
 
   import Microscope.Views.Helpers, only: [render_detail: 1]
 
-  def render("index.json", %{posts: posts}) do
+  def render("index.json", %{posts: posts, page: page}) do
     %{
-      posts: posts
+      posts: posts,
+      pagination: %{
+        page_number: page.page_number,
+        page_size: page.page_size,
+        total_pages: page.total_pages,
+        total_entries: page.total_entries
+      }
     }
   end
 

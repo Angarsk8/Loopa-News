@@ -21,7 +21,7 @@
               required
             />
             <p
-              class="form-control-feedback"
+              class="form-control-feedback small"
               v-if="'url' in postErrors"
             >{{ postErrors.url }}</p>
           </div>
@@ -38,7 +38,7 @@
               required
             />
             <p
-              class="form-control-feedback"
+              class="form-control-feedback small"
               v-if="'title' in postErrors"
             >{{ postErrors.title }}</p>
           </div>
@@ -81,13 +81,12 @@ export default {
     ...mapGetters([
       'routeParams',
       'currentUser',
+      'currentPost',
       'postErrors',
-      'posts',
       'isLoading'
     ]),
     post() {
-      return JSON.parse(JSON.stringify(this.posts))
-        .find(post => post.id == this.routeParams.postId)
+      return JSON.parse(JSON.stringify(this.currentPost))
     },
     ownPost() {
       return this.post.user.id === this.currentUser.id
