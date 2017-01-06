@@ -8,24 +8,6 @@ defmodule Microscope.PostController do
 
   alias Microscope.{Repo, Post, PostChannel}
 
-  # def index(conn, params) do
-  #   posts = Post.preload
-  #     |> Repo.aggregate(:avg, :visits)
-  #     # |> Repo.paginate(params)
-  #
-  #   conn
-  #   |> put_status(:ok)
-  #   |> render("index.json", posts: posts, page: %{})
-  # end
-  def index(conn, %{"by" => "most_upvoted"} = params) do
-    page = Post.preload
-      |> Post.most_upvoted
-      |> Repo.paginate(params)
-
-    conn
-    |> put_status(:ok)
-    |> render("index.json", posts: page.entries, page: page)
-  end
   def index(conn, params) do
     page = Post.preload
       |> Post.order_asc_by_insertion

@@ -6,7 +6,7 @@
     @submit.prevent="signIn(user)"
   >
     <transition name="fade">
-      <div class="custom-alert-danger small" v-if="sessionError">
+      <div class="custom-alert-danger" v-if="sessionError">
         {{sessionError}}
       </div>
     </transition>
@@ -83,5 +83,6 @@ export default {
   text-align: center;
   width: auto;
   float: none;
+  font-size: 14px;
 }
 </style>

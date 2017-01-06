@@ -4,26 +4,15 @@ import store from '../store'
 import { socketURL } from '../utils'
 import uniqueId from 'uniqid'
 import * as types from '../store/mutation-types'
+import { setDocumentTitle } from '../utils'
 
 const isPostInStore = postId => {
-  return store.getters.posts
-    .find(post => post.id === postId)
+  return store.getters.posts.find(post => post.id === postId)
 }
 
-const isInPostRoute = postId => {
-  return store.getters.routeParams.postId == postId
-}
-
-const isInBestRoute = () => {
-  return store.state.route.name === 'best'
-}
-
-const isInHomeRoute = () => {
-  return store.state.route.name === 'home'
-}
-
-const isInLatestRoute = () => {
-  return store.state.route.name === 'latest'
+const isCurrentPost = postId => {
+  const currentPost = store.getters.currentPost
+  return currentPost && currentPost.id == postId
 }
 
 export const socket = new Socket(socketURL)
@@ -66,54 +55,39 @@ export const joinPostsChannel = () => {
     })
 
   postsChannel.on('posts:add_post', post => {
-    if(isInBestRoute()) {
-      store.dispatch('getPosts', {
-        limit: store.getters.routeParams.limit,
-        by: 'most_upvoted'
-      })
-    }
-    if(isInHomeRoute() || isInLatestRoute()) {
-      store.dispatch('getPosts', {limit: store.getters.routeParams.limit})
-    }
+    store.commit(types.ADD_POST, post)
   })
 
   postsChannel.on('posts:update_post', post => {
     if(isPostInStore(post.id)) {
       store.commit(types.UPDATE_POST, post)
     }
-    if(isInPostRoute(post.id)) {
+    if(isCurrentPost(post.id)) {
       store.commit(types.SET_CURRENT_POST, post)
     }
   })
 
   postsChannel.on('posts:delete_post', post => {
     const { currentUser } = store.getters
-    if(isInPostRoute(post.id)) {
+    if(isCurrentPost(post.id)) {
       if ((currentUser && currentUser.id) !== post.user_id) {
         store.dispatch('addAlert', {
           id: uniqueId('alert_'),
           type: 'danger',
-          message: 'The post you were looking was deleted by its author 😓'
+          message: 'The post you were looking was deleted 😓'
         })
       }
+      store.commit(types.DELETE_CURRENT_POST)
       router.push('/')
     }
-    if(isInBestRoute()) {
-      store.dispatch('getPosts', {
-        limit: store.getters.routeParams.limit,
-        by: 'most_upvoted'
-      })
-    }
-    if(isInHomeRoute() || isInLatestRoute()) {
-      store.dispatch('getPosts', {limit: store.getters.routeParams.limit})
-    }
+    store.commit(types.DELETE_POST, post)
   })
 
   postsChannel.on('posts:add_comment', comment => {
     if(isPostInStore(comment.post_id)) {
       store.commit(types.ADD_COMMENT, comment)
     }
-    if(isInPostRoute(comment.post_id)) {
+    if(isCurrentPost(comment.post_id)) {
       store.commit(types.ADD_COMMENT_IN_CURRENT_POST, comment)
     }
   })
@@ -122,7 +96,7 @@ export const joinPostsChannel = () => {
     if(isPostInStore(comment.post_id)) {
       store.commit(types.UPDATE_COMMENT, comment)
     }
-    if(isInPostRoute(comment.post_id)) {
+    if(isCurrentPost(comment.post_id)) {
       store.commit(types.UPDATE_COMMENT_IN_CURRENT_POST, comment)
     }
   })
@@ -131,7 +105,7 @@ export const joinPostsChannel = () => {
     if(isPostInStore(comment.post_id)) {
       store.commit(types.DELETE_COMMENT, comment)
     }
-    if(isInPostRoute(comment.post_id)) {
+    if(isCurrentPost(comment.post_id)) {
       store.commit(types.DELETE_COMMENT_IN_CURRENT_POST, comment)
     }
   })
@@ -140,14 +114,8 @@ export const joinPostsChannel = () => {
     if(isPostInStore(vote.post_id)) {
       store.commit(types.UPVOTE_POST, vote)
     }
-    if(isInPostRoute(vote.post_id)) {
+    if(isCurrentPost(vote.post_id)) {
       store.commit(types.UPVOTE_POST_IN_CURRENT_POST, vote)
-    }
-    if(isInBestRoute()) {
-      store.dispatch('getPosts', {
-        limit: store.getters.routeParams.limit,
-        by: 'most_upvoted'
-      })
     }
   })
 
@@ -155,14 +123,8 @@ export const joinPostsChannel = () => {
     if(isPostInStore(vote.post_id)) {
       store.commit(types.DOWNVOTE_POST, vote)
     }
-    if(isInPostRoute(vote.post_id)) {
+    if(isCurrentPost(vote.post_id)) {
       store.commit(types.DOWNVOTE_POST_IN_CURRENT_POST, vote)
-    }
-    if(isInBestRoute()) {
-      store.dispatch('getPosts', {
-        limit: store.getters.routeParams.limit,
-        by: 'most_upvoted'
-      })
     }
   })
 

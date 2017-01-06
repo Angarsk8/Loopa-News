@@ -23,8 +23,8 @@ const getters = {
 }
 
 const actions = {
-  getPosts({ commit }, {limit: limit = 5, by: by = "latest"}) {
-    return httpGet(`${apiURL}/posts?by=${by}&page_size=${limit}`)
+  getPosts({ commit }, limit = 5) {
+    return httpGet(`${apiURL}/posts?page_size=${limit}`)
       .then(({ posts, pagination }) => {
         commit(types.SET_POSTS, posts)
         commit(types.SET_POSTS_PAGINATION, pagination)
@@ -37,7 +37,6 @@ const actions = {
         commit(types.SET_CURRENT_POST, post)
       })
       .catch((error) => {
-        console.log(error)
         error.response.json()
         .then((errorJSON) => {
           dispatch('addAlert', {
@@ -164,6 +163,10 @@ const mutations = {
   /* START <CURRENT POST MUTATION HANDLERS> */
   [types.SET_CURRENT_POST](state, post) {
     state.currentPost = post
+  },
+
+  [types.DELETE_CURRENT_POST](state) {
+    state.currentPost = null
   },
 
   [types.ADD_COMMENT_IN_CURRENT_POST](state, comment) {

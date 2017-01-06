@@ -7,7 +7,6 @@ import PostPage from '../components/PostPage'
 import {
   fetchPosts,
   fetchLatestPosts,
-  fetchBestPosts,
   fetchPost
 } from './guards'
 
@@ -26,12 +25,6 @@ const router = new VueRouter({
       path: '/latest/:limit?',
       component: Home,
       beforeEnter: fetchLatestPosts
-    },
-    {
-      name: 'best',
-      path: '/best/:limit?',
-      component: Home,
-      beforeEnter: fetchBestPosts
     },
     {
       name: 'postSubmit',

@@ -1,22 +1,14 @@
 import fetch from 'isomorphic-fetch'
 import { polyfill } from 'es6-promise'
 
-const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
+const { socketScheme, scheme, hostname } =
   process.env.NODE_ENV === 'production'
-  ? { SOCKET_SCHEME: 'ws'
-    , SCHEME: 'http'
-    , HOSTNAME: 'localhost:4000' }
-  : { SOCKET_SCHEME: 'ws'
-    , SCHEME: 'http'
-    , HOSTNAME: 'localhost:4000' }
-// const { SOCKET_SCHEME, SCHEME, HOSTNAME } =
-//   process.env.NODE_ENV === 'production'
-//   ? { SOCKET_SCHEME: 'wss'
-//     , SCHEME: 'https'
-//     , HOSTNAME: window.location.hostname }
-//   : { SOCKET_SCHEME: 'ws'
-//     , SCHEME: 'http'
-//     , HOSTNAME: 'localhost:4000' }
+  ? { socketScheme: 'wss'
+    , scheme: 'https'
+    , hostname: window.location.hostname }
+  : { socketScheme: 'ws'
+    , scheme: 'http'
+    , hostname: 'localhost:4000' }
 
 const defaultHeaders = {
   'Accept': 'application/json',
@@ -28,9 +20,9 @@ function buildHeaders() {
   return { ...defaultHeaders, Authorization: authToken }
 }
 
-export const apiURL = `${SCHEME}://${HOSTNAME}/api`
+export const apiURL = `${scheme}://${hostname}/api`
 
-export const socketURL = `${SOCKET_SCHEME}://${HOSTNAME}/socket`
+export const socketURL = `${socketScheme}://${hostname}/socket`
 
 export function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
@@ -87,8 +79,4 @@ export function httpUpdate(url, data) {
   })
   .then(checkStatus)
   .then(parseJSON)
-}
-
-export function setDocumentTitle(title) {
-  document.title = `${title} | Microscope`
 }

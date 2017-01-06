@@ -1,7 +1,7 @@
 defmodule Microscope.SessionController do
   use Microscope.Web, :controller
 
-  alias Microscope.{User, UserChannel}
+  alias Microscope.User
 
   plug :scrub_params, "session" when action in [:create]
 
@@ -60,14 +60,11 @@ defmodule Microscope.SessionController do
   end
 
   def delete(conn, _) do
-    user_id = Guardian.Plug.current_resource(conn).id
     {:ok, claims} = Guardian.Plug.claims(conn)
 
     conn
     |> Guardian.Plug.current_token
     |> Guardian.revoke!(claims)
-
-    UserChannel.leave(user_id)
 
     conn
     |> render("delete.json")

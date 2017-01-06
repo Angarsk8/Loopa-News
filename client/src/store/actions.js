@@ -15,11 +15,11 @@ const actions = {
     commit(types.HIDE_LOADING)
   },
 
-  showfetchingMore({ commit }) {
+  showFetchingMore({ commit }) {
     commit(types.SHOW_FETCHING_MORE)
   },
 
-  hidefetchingMore({ commit }) {
+  hideFetchingMore({ commit }) {
     commit(types.HIDE_FETCHING_MORE)
   },
 

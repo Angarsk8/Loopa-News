@@ -31,17 +31,10 @@ export default {
   watch: {
     '$route': function(to, from) {
       if(to.name === 'latest' && from.name === 'latest') {
-        this.$store.dispatch('showfetchingMore')
-        this.$store.dispatch('getPosts', {limit: this.$route.params.limit})
+        this.$store.dispatch('showFetchingMore')
+        this.$store.dispatch('getPosts', this.$route.params.limit)
           .then(() => {
-            this.$store.dispatch('hidefetchingMore')
-          })
-      }
-      if(to.name === 'best' && from.name === 'best') {
-        this.$store.dispatch('showfetchingMore')
-        this.$store.dispatch('getPosts', {limit: this.$route.params.limit, by: 'most_upvoted'})
-          .then(() => {
-            this.$store.dispatch('hidefetchingMore')
+            this.$store.dispatch('hideFetchingMore')
           })
       }
     }

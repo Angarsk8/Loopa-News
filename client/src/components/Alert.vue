@@ -36,7 +36,7 @@ export default {
     ]),
     deleteNotification({ id, post_id }) {
       this.$store.dispatch('deleteNotification', id)
-        .then((isNotificationPanelOpen) => {
+        .then(() => {
           if(this.isNotificationPanelOpen) {
             this.$store.dispatch('toggleNotificationPanel')
           }
@@ -49,7 +49,8 @@ export default {
 
 <style>
 .alert {
-  width: 300px;
+  min-width: 250px;
+  max-width: 350px;
   float: right;
   clear: both;
   margin-bottom: 5px;
