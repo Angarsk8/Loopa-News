@@ -9,15 +9,15 @@
         :to="`/${routeName}/${nextLimit}`"
         v-else-if="loadMore"
       >
-        Load more
+        Load more {{more}}/{{rest}}
       </router-link>
     </div>
   </div>
 </template>
 
 <script>
-import CustomLoading from './CustomLoading'
-import PostItem from './PostItem'
+import CustomLoading from '../components/CustomLoading'
+import PostItem from '../components/PostItem'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -59,7 +59,15 @@ export default {
       return this.posts.length < this.pagination.total_entries
     },
     nextLimit() {
-      return this.posts.length + this.pagination.page_size
+      return this.posts.length + this.more
+    },
+    more() {
+      return this.rest > this.pagination.page_size
+        ? this.pagination.page_size
+        : this.rest
+    },
+    rest() {
+      return this.pagination.total_entries - this.posts.length
     }
   }
 }

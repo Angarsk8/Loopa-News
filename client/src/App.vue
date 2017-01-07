@@ -34,8 +34,6 @@ export default {
 .main,
 .post,
 .comments > li {
-  background: #fff;
-  border-radius: 3px;
   padding: 10px;
   margin-bottom: 10px;
 }
@@ -48,6 +46,7 @@ export default {
 hr {
   margin-top: 10px;
   margin-bottom: 10px;
+  border-top: 2px dashed rgba(0,0,0,.15);
 }
 
 a {
@@ -168,7 +167,8 @@ button {
 
 .comments li h4 {
   font-size: 18px;
-  margin: 0;
+  margin-bottom: 15px;
+  margin-left: 5px;
 }
 
 .comments li h4 .date {
@@ -183,6 +183,7 @@ button {
 .comments li pre p:last-child {
   margin-bottom: 0;
 }
+
 
 .comment-body {
   margin: 0 0 0 5px;

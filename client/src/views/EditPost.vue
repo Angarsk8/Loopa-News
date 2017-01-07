@@ -2,7 +2,10 @@
   <div>
     <custom-loading v-if="isLoading"></custom-loading>
     <div v-else>
-      <access-denied message="Please log in" v-if="!currentUser"></access-denied>
+      <access-denied
+        message="Please log in"
+        v-if="!currentUser"
+      ></access-denied>
       <not-found v-else-if="!post"></not-found>
       <form
         class="main form page"
@@ -59,13 +62,13 @@
 </template>
 
 <script>
-import CustomLoading from './CustomLoading'
+import CustomLoading from '../components/CustomLoading'
 import AccessDenied from './AccessDenied'
 import NotFound from './NotFound'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'EditForm',
+  name: 'EditPost',
 
   components: {
     CustomLoading,

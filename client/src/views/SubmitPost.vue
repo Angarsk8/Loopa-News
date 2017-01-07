@@ -45,11 +45,10 @@
 
 <script>
 import AccessDenied from './AccessDenied'
-import { setDocumentTitle } from '../utils'
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'SubmitForm',
+  name: 'SubmitPost',
 
   components: {
     'access-denied': AccessDenied

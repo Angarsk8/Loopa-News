@@ -13,7 +13,7 @@ defmodule Microscope.Post do
     timestamps()
   end
 
-  @url_format ~r/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/
+  @url_format ~r/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\* \.-]*)*\/?/
 
   def changeset(struct, params \\ %{}) do
     struct

@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import CustomLoading from './CustomLoading'
-import PostItem from './PostItem'
-import CommentItem from './CommentItem'
+import CustomLoading from '../components/CustomLoading'
+import PostItem from '../components/PostItem'
+import CommentItem from '../components/CommentItem'
 import NotFound from './NotFound'
 import { mapGetters } from 'vuex'
 
@@ -125,5 +125,6 @@ export default {
 .login-message {
   font-size: 13px;
   color: #7e8081;
+  margin: 10px 0 0 10px;
 }
 </style>

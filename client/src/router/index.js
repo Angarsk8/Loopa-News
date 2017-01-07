@@ -1,9 +1,9 @@
 import VueRouter from 'vue-router'
-import Home from '../components/Home'
-import SubmitForm from '../components/SubmitForm'
-import EditForm from '../components/EditForm'
-import NotFound from '../components/NotFound'
-import PostPage from '../components/PostPage'
+import Home from '../views/Home'
+import SubmitPost from '../views/SubmitPost'
+import EditPost from '../views/EditPost'
+import NotFound from '../views/NotFound'
+import PostPage from '../views/PostPage'
 import {
   fetchPosts,
   fetchLatestPosts,
@@ -29,7 +29,7 @@ const router = new VueRouter({
     {
       name: 'postSubmit',
       path: '/submit',
-      component: SubmitForm
+      component: SubmitPost
     },
     {
       name: 'postPage',
@@ -40,7 +40,7 @@ const router = new VueRouter({
     {
       name: 'postEdit',
       path: '/post/:postId/edit',
-      component: EditForm,
+      component: EditPost,
       beforeEnter: fetchPost
     },
     {

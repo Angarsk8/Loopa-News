@@ -8,7 +8,7 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     ></button>
-    <router-link class="navbar-brand" to="/">Phoenixscope</router-link>
+    <router-link class="navbar-brand" to="/">Loopa-News</router-link>
     <div class="collapse navbar-toggleable-sm" id="navbarResponsive">
       <ul class="nav navbar-nav">
         <li :class="`nav-item ${activeRouteClass('home', 'latest')}`">
