@@ -8,19 +8,19 @@
 
 * User Accounts (Sign Up, Sign In, Sign Out & Change Password)
 * Authentication with JSON Web Tokens
-* Reactive RESTful APIs [[1]](#reactive-rest-api)
+* Reactive RESTful APIs [**1**]
 * Realtime notifications & alerts
 * Comments with Markdown support
 * Edit comments with Markdown preview
 * Pagination & many more...
 
-<p name="reactive-rest-api">[1] React to model changes from the controller and broadcast them to all the clients subscribed to a particular Phoenix channel.</p>
+[**1**] React to model changes from the controller and broadcast them to all the clients subscribed to a particular Phoenix channel.
 
 ## Demo
 
-Demo available [here]().
+Demo available [here](https://loopa-news.herokuapp.com/).
 
-![Demo GIF](demo.gif)
+![Demo GIF](DEMO.gif)
 
 ## Setup
 
