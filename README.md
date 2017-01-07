@@ -20,7 +20,7 @@
 
 Demo available [here]().
 
-![Demo GIF](http://i.giphy.com/3oz8xCgpY7ViXKIFtS.gif)
+![Demo GIF](demo.gif)
 
 ## Setup
 
