@@ -34,7 +34,7 @@ To start this application locally:
 * Start the Express development server: `$ npm run dev`
 
 To build the frontend for production:
-* In the client directory, run `$ npm run build` (this will execute the `build/build.js` script and will copy the produced files to the `server/priv/js/` and `server/priv/css/` directories)
+* In the client directory, run `$ npm run build` (this will execute the `build/build.js` script and will copy the produced files to the `priv/static/js/` and `priv/static/css/` directories)
 
 To deploy this application on Heroku:
 * Follow this [guide](http://www.phoenixframework.org/docs/heroku) in the Phoenix website.
