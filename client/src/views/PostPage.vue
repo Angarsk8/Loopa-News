@@ -63,6 +63,21 @@ export default {
     }
   },
 
+  watch: {
+    '$route': function(to, from) {
+      const samePage = to.name === 'postPage' && from.name === 'postPage'
+      const differentPost = this.post.id !== this.$route.params.postId
+
+      if(samePage && differentPost) {
+        this.$store.dispatch('showLoading')
+        this.$store.dispatch('getPost', this.$route.params.postId)
+          .then(() => {
+            this.$store.dispatch('hideLoading')
+          })
+      }
+    }
+  },
+
   computed: {
     ...mapGetters([
       'routeParams',
