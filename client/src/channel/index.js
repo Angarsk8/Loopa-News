@@ -4,7 +4,6 @@ import store from '../store'
 import { socketURL } from '../utils'
 import uniqueId from 'uniqid'
 import * as types from '../store/mutation-types'
-import { setDocumentTitle } from '../utils'
 
 const isPostInStore = postId => {
   return store.getters.posts.find(post => post.id === postId)

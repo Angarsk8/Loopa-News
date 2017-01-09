@@ -48,6 +48,7 @@ const actions = {
       .then((resp) => {
         dispatch('clearChangePasswordErrors')
         dispatch('toggleAuthWidget')
+        dispatch('setAuthView', 'logout')
         dispatch('addAlert', {
           id: uniqueId('alert_'),
           type: 'success',

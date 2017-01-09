@@ -8,19 +8,19 @@
 
 * User Accounts (Sign Up, Sign In, Sign Out & Change Password)
 * Authentication with JSON Web Tokens
-* Reactive RESTful APIs [[1]](#reactive-rest-api)
+* Reactive RESTful APIs [**1**]
 * Realtime notifications & alerts
 * Comments with Markdown support
 * Edit comments with Markdown preview
 * Pagination & many more...
 
-<p name="reactive-rest-api">[1] React to model changes from the controller and broadcast them to all the clients subscribed to a particular Phoenix channel.</p>
+[**1**] React to model changes from the controller and broadcast them to all the clients subscribed to a particular Phoenix channel.
 
 ## Demo
 
-Demo available [here]().
+Demo available [here](https://loopa-news.herokuapp.com/).
 
-![Demo GIF](demo.gif)
+![Demo GIF](DEMO.gif)
 
 ## Setup
 
@@ -34,7 +34,7 @@ To start this application locally:
 * Start the Express development server: `$ npm run dev`
 
 To build the frontend for production:
-* In the client directory, run `$ npm run build` (this will execute the `build/build.js` script and will copy the produced files to the `server/priv/js/` and `server/priv/css/` directories)
+* In the client directory, run `$ npm run build` (this will execute the `build/build.js` script and will copy the produced files to the `priv/static/js/` and `priv/static/css/` directories)
 
 To deploy this application on Heroku:
 * Follow this [guide](http://www.phoenixframework.org/docs/heroku) in the Phoenix website.
