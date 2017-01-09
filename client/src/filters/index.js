@@ -9,7 +9,7 @@ const pluralize = (time, label) => {
 }
 
 const timeAgo = time => {
-  const between = Date.now()/1000 - new Date(time)/1000
+  const between = Date.now()/1000 - new Date(`${time}Z`)/1000
   if (between < 3600) {
     return pluralize(~~(between/60), 'minute')
   } else if (between < 86400) {
