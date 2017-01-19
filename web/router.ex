@@ -36,7 +36,10 @@ defmodule Microscope.Router do
   end
 
   forward "/api", Absinthe.Plug, schema: Microscope.Schema
-  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Microscope.Schema
+
+  if Mix.env !== :prod do
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: Microscope.Schema
+  end
 
   scope "/", Microscope do
     pipe_through :browser
