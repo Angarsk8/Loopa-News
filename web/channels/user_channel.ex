@@ -21,7 +21,7 @@ defmodule Microscope.UserChannel do
     {:ok, socket}
   end
 
-  def notify(event, notification = %Notification{user_id: id}) do
+  def notify(event, %Notification{user_id: id} = notification) do
     Endpoint.broadcast_from!(self, "users:#{id}", "user:#{event}", notification)
   end
 end

@@ -8,6 +8,7 @@ defmodule Microscope.Post do
     field :title, :string
     belongs_to :user, Microscope.User
     has_many :comments, Microscope.Comment, on_delete: :delete_all
+    has_many :notifications, Microscope.Notification, on_delete: :delete_all
     has_many :votes, Microscope.Vote, on_delete: :delete_all
 
     timestamps()

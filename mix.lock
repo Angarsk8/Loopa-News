@@ -1,4 +1,7 @@
-%{"base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], []},
+%{"absinthe": {:hex, :absinthe, "1.2.3", "634da49aacc4c9568760cdf3fe8c400ce9368815985e366e893ea8fcbe58f405", [:mix], []},
+  "absinthe_ecto": {:git, "https://github.com/absinthe-graphql/absinthe_ecto.git", "84020ab5c185264182e9387777af10d81d64c1e0", []},
+  "absinthe_plug": {:hex, :absinthe_plug, "1.2.0", "5cccb5ee6bb26ab7e0e9285731db1d1ac30864a7217fb1a76b6a3edb3070af4a", [:mix], [{:absinthe, "~> 1.2.0", [hex: :absinthe, optional: false]}, {:plug, "~> 1.0", [hex: :plug, optional: false]}]},
+  "base64url": {:hex, :base64url, "0.0.1", "36a90125f5948e3afd7be97662a1504b934dd5dac78451ca6e9abf85a10286be", [:rebar], []},
   "comeonin": {:hex, :comeonin, "2.6.0", "74c288338b33205f9ce97e2117bb9a2aaab103a1811d243443d76fdb62f904ac", [:make, :make, :mix], []},
   "connection": {:hex, :connection, "1.0.4", "a1cae72211f0eef17705aaededacac3eb30e6625b04a6117c1b2db6ace7d5976", [:mix], []},
   "corsica": {:hex, :corsica, "0.5.0", "eb5b2fccc5bc4f31b8e2b77dd15f5f302aca5d63286c953e8e916f806056d50c", [:mix], [{:cowboy, ">= 1.0.0", [hex: :cowboy, optional: false]}, {:plug, ">= 0.9.0", [hex: :plug, optional: false]}]},

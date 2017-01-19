@@ -19,7 +19,8 @@ defmodule Microscope.Mixfile do
   def application do
     [mod: {Microscope, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :scrivener_ecto]]
+                    :phoenix_ecto, :postgrex, :scrivener_ecto, :absinthe,
+                    :absinthe_plug, :absinthe_ecto]]
   end
 
   # Specifies which paths to compile per environment.
@@ -40,7 +41,11 @@ defmodule Microscope.Mixfile do
      {:comeonin, "~> 2.6"},
      {:guardian, "~> 0.13.0"},
      {:corsica, "~> 0.5"},
-     {:scrivener_ecto, "~> 1.0"}]
+     {:scrivener_ecto, "~> 1.0"},
+     {:absinthe, "~> 1.2.0"},
+     {:absinthe_plug, "~> 1.1"},
+     {:absinthe_ecto, git: "https://github.com/absinthe-graphql/absinthe_ecto.git"}
+   ]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

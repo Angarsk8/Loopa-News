@@ -5,8 +5,9 @@ defmodule Microscope.Notification do
 
   schema "notifications" do
     field :username, :string
-    field :post_id, :integer
+    # field :post_id, :integer
     belongs_to :user, Microscope.User
+    belongs_to :post, Microscope.Post
 
     timestamps()
   end
