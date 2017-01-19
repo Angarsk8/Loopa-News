@@ -3,13 +3,8 @@
   <div class="post-page page" v-else>
     <not-found v-if="!post"></not-found>
     <div class="post-page page" v-else>
-      <post-item :post="post" :transition="'slide-fade-right'"></post-item>
-      <ul class="comments">
-        <comment-item
-          v-for="comment in comments"
-          :comment="comment"
-        ></comment-item>
-      </ul>
+      <post-item :post="post"></post-item>
+      <comment-list :comments="comments"></comment-list>
       <form
         name="comment"
         class="comment-form form"
@@ -43,7 +38,7 @@
 <script>
 import CustomLoading from '../components/CustomLoading'
 import PostItem from '../components/PostItem'
-import CommentItem from '../components/CommentItem'
+import CommentList from '../components/CommentList'
 import NotFound from './NotFound'
 import { mapGetters } from 'vuex'
 
@@ -53,7 +48,7 @@ export default {
   components: {
     CustomLoading,
     PostItem,
-    CommentItem,
+    CommentList,
     NotFound
   },
 

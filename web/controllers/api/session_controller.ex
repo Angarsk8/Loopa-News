@@ -36,7 +36,6 @@ defmodule Microscope.SessionController do
           "password_confirmation" => session_params["password_confirmation"]
         }
 
-
         changeset = User.changeset(user, user_params)
 
         case Repo.update(changeset) do

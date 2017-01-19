@@ -2,7 +2,7 @@
   <div>
     <custom-loading v-if="isLoading"></custom-loading>
     <div class="posts page" v-else>
-      <post-item v-for="post in posts" v-bind:post="post"></post-item>
+      <post-list :posts="posts"></post-list>
       <custom-loading v-if="isFetchingMore"></custom-loading>
       <router-link
         class="load-more"
@@ -17,7 +17,7 @@
 
 <script>
 import CustomLoading from '../components/CustomLoading'
-import PostItem from '../components/PostItem'
+import PostList from '../components/PostList'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -25,7 +25,7 @@ export default {
 
   components: {
     CustomLoading,
-    PostItem
+    PostList
   },
 
   watch: {

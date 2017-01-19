@@ -3,7 +3,7 @@ defmodule Microscope.UserChannel do
 
   alias Microscope.{Endpoint, GuardianSerializer, Notification}
 
-  def join("users:" <> user_id, %{"token" => token}, socket) do
+  def join("users:" <> _user_id, %{"token" => token}, socket) do
     case Guardian.decode_and_verify(token) do
       {:ok, claims} ->
         case GuardianSerializer.from_token(claims["sub"]) do

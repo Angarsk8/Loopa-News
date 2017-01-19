@@ -55,6 +55,7 @@ export const joinPostsChannel = () => {
 
   postsChannel.on('posts:add_post', post => {
     store.commit(types.ADD_POST, post)
+    store.commit(types.INCREMENT_PAGINATION_ENTRIES)
   })
 
   postsChannel.on('posts:update_post', post => {
@@ -80,6 +81,7 @@ export const joinPostsChannel = () => {
       router.push('/')
     }
     store.commit(types.DELETE_POST, post)
+    store.commit(types.DECREMENT_PAGINATION_ENTRIES)
   })
 
   postsChannel.on('posts:add_comment', comment => {

@@ -89,4 +89,8 @@ export default {
 #auth-dropdown .form-group {
   margin-bottom: 10px;
 }
+
+.auth-widget-bottom {
+  font-size: 14px;
+}
 </style>

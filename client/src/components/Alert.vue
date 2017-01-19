@@ -1,21 +1,19 @@
 <template>
-  <transition name="slide-fade">
-    <div
-      role="alert"
-      :class="`alert alert-${alert.type}`"
-      @click="removeAlert(alert.id)"
+  <div
+    role="alert"
+    :class="`alert alert-${alert.type}`"
+    @click="removeAlert(alert.id)"
+  >
+    <span class="close">&times;</span>
+    <a
+      href="#"
+      @click.prevent="deleteNotification(alert.notification)"
+      v-if="alert.notification"
     >
-      <span class="close">&times;</span>
-      <a
-        href="#"
-        @click.prevent="deleteNotification(alert.notification)"
-        v-if="alert.notification"
-      >
-        {{alert.message}}
-      </a>
-      <span v-else>{{alert.message}}</span>
-    </div>
-  </transition>
+      {{alert.message}}
+    </a>
+    <span v-else>{{alert.message}}</span>
+  </div>
 </template>
 
 <script>

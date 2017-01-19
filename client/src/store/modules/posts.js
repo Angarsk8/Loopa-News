@@ -158,6 +158,14 @@ const mutations = {
     const post = state.posts.find(post => post.id === vote.post_id)
     post.votes = [...post.votes, vote]
   },
+
+  [types.INCREMENT_PAGINATION_ENTRIES](state) {
+    state.pagination.total_entries += 1
+  },
+
+  [types.DECREMENT_PAGINATION_ENTRIES](state) {
+    state.pagination.total_entries -= 1
+  },
   /* END <POSTS MUTATION HANDLERS> */
 
   /* START <CURRENT POST MUTATION HANDLERS> */

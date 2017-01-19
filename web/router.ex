@@ -26,8 +26,6 @@ defmodule Microscope.Router do
 
     get "/current_user", CurrentUserController, :show
 
-
-
     resources "/posts", PostController, except: [:edit, :new] do
       resources "/comments", CommentController, except: [:show, :new, :edit]
       resources "/votes", VoteController, only: [:create, :delete]

@@ -19,9 +19,9 @@ defmodule Microscope.Schema do
     end
 
     @desc "Get user by id"
-    field :user, :user do
-      arg :id, non_null(:id)
-      # arg :username, non_null(:username)
+    field :user, type: :user do
+      arg :username, :string
+      arg :id, :id
       resolve &Microscope.UserResolver.find/2
     end
   end

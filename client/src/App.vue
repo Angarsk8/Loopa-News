@@ -1,8 +1,12 @@
 <template>
   <div id="app" class="container">
-    <div class="alerts">
-      <app-alert v-for="alert in appAlerts" :alert="alert"></app-alert>
-    </div>
+    <transition-group name="slide-fade" tag="div" class="alerts">
+      <app-alert
+        v-for="alert in appAlerts"
+        v-bind:key="alert.id"
+        :alert="alert"
+      ></app-alert>
+    </transition-group>
     <app-header></app-header>
     <div id="main">
       <router-view></router-view>
@@ -276,15 +280,20 @@ button {
   opacity: 0;
 }
 
+.slide-fade-right-enter-active, .slide-fade-right-leave-active {
+  transition: all .8s ease;
+}
+
+.slide-fade-right-enter, .slide-fade-right-leave-active {
+  transform: translateX(-20px);
+  opacity: 0;
+}
+
 .fade-enter-active, .fade-leave-active {
   transition: all .8s ease;
 }
 
 .fade-enter, .fade-leave-active {
   opacity: 0;
-}
-
-.auth-widget-bottom {
-  font-size: 14px;
 }
 </style>
