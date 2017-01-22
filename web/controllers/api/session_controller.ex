@@ -3,7 +3,7 @@ defmodule Microscope.SessionController do
 
   alias Microscope.User
 
-  plug :scrub_params, "session" when action in [:create]
+  plug :scrub_params, "session" when action in [:create, :update]
 
   def create(conn, %{"session" => session_params}) do
     case Microscope.Session.authenticate(session_params) do

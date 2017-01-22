@@ -1,35 +1,37 @@
 import store from '../store'
 
-export const fetchPosts = (to, from, next) => {
+const { dispatch } = store
+
+export function fetchPosts(to, from, next) {
   next()
-  store.dispatch('showLoading')
-  store.dispatch('getPosts')
+  dispatch('showLoading')
+  dispatch('getPosts')
     .then(() => {
-      store.dispatch('hideLoading')
+      dispatch('hideLoading')
     })
 }
 
-export const fetchLatestPosts = (to, from, next) => {
+export function fetchLatestPosts(to, from, next) {
   next()
   const fromHomeAndLimited = from.name === 'home' && to.params.limit
 
   fromHomeAndLimited
-    ? store.dispatch('showFetchingMore')
-    : store.dispatch('showLoading')
+    ? dispatch('showFetchingMore')
+    : dispatch('showLoading')
 
-  store.dispatch('getPosts', to.params.limit)
+  dispatch('getPosts', to.params.limit)
     .then(() => {
       fromHomeAndLimited
-        ? store.dispatch('hideFetchingMore')
-        : store.dispatch('hideLoading')
+        ? dispatch('hideFetchingMore')
+        : dispatch('hideLoading')
     })
 }
 
-export const fetchPost = (to, _, next) => {
+export function fetchPost(to, _, next) {
   next()
-  store.dispatch('showLoading')
-  store.dispatch('getPost', to.params.postId)
+  dispatch('showLoading')
+  dispatch('getPost', to.params.postId)
     .then(() => {
-      store.dispatch('hideLoading')
+      dispatch('hideLoading')
     })
 }

@@ -5,18 +5,18 @@ import { socketURL } from '../utils'
 import uniqueId from 'uniqid'
 import * as types from '../store/mutation-types'
 
-const isPostInStore = postId => {
+function isPostInStore(postId) {
   return store.getters.posts.find(post => post.id === postId)
 }
 
-const isCurrentPost = postId => {
+function isCurrentPost(postId) {
   const currentPost = store.getters.currentPost
   return currentPost && currentPost.id == postId
 }
 
 export const socket = new Socket(socketURL)
 
-export const joinUserChannel = ({ id, jwt }) => {
+export function joinUserChannel({ id, jwt }) {
   let userChannel = socket.channel(`users:${id}`, { token: jwt })
 
   userChannel.join()
@@ -45,7 +45,7 @@ export const joinUserChannel = ({ id, jwt }) => {
   return userChannel
 }
 
-export const joinPostsChannel = () => {
+export function joinPostsChannel() {
   const postsChannel = socket.channel('posts:lobby')
 
   postsChannel.join()

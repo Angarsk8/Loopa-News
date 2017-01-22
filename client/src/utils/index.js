@@ -12,19 +12,19 @@ const { socketScheme, scheme, hostname } =
 
 const defaultHeaders = {
   'Accept': 'application/json',
-  'Content-Type': 'application/json',
+  'Content-Type': 'application/json'
 }
 
 function buildHeaders() {
   const authToken = localStorage.getItem('id_token')
-  return { ...defaultHeaders, Authorization: authToken }
+
+  return new Headers({
+    ...defaultHeaders,
+    Authorization: authToken
+  })
 }
 
-export const apiURL = `${scheme}://${hostname}/api`
-
-export const socketURL = `${socketScheme}://${hostname}/socket`
-
-export function checkStatus(response) {
+function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
@@ -34,49 +34,44 @@ export function checkStatus(response) {
   }
 }
 
-export function parseJSON(response) {
-  return response.json()
-}
+export const apiURL    = `${scheme}://${hostname}/api`
+export const socketURL = `${socketScheme}://${hostname}/socket`
 
-export function httpGet(url) {
-
-  return fetch(url, {
-    headers: buildHeaders(),
+export async function httpGet(url) {
+  const response = await fetch(url, {
+    headers: buildHeaders()
   })
-  .then(checkStatus)
-  .then(parseJSON)
+
+  return checkStatus(response).json()
 }
 
-export function httpPost(url, data) {
+export async function httpPost(url, data) {
   const body = JSON.stringify(data)
-
-  return fetch(url, {
+  const response = await fetch(url, {
     method: 'post',
     headers: buildHeaders(),
-    body: body,
+    body: body
   })
-  .then(checkStatus)
-  .then(parseJSON)
+
+  return checkStatus(response).json()
 }
 
-export function httpDelete(url) {
-
-  return fetch(url, {
+export async function httpDelete(url) {
+  const response = await fetch(url, {
     method: 'delete',
-    headers: buildHeaders(),
+    headers: buildHeaders()
   })
-  .then(checkStatus)
-  .then(parseJSON)
+
+  return checkStatus(response).json()
 }
 
-export function httpUpdate(url, data) {
+export async function httpUpdate(url, data) {
   const body = JSON.stringify(data)
-
-  return fetch(url, {
+  const response = await fetch(url, {
     method: 'put',
     headers: buildHeaders(),
-    body: body,
+    body: body
   })
-  .then(checkStatus)
-  .then(parseJSON)
+
+  return checkStatus(response).json()
 }

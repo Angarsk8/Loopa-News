@@ -32,7 +32,6 @@ defmodule Microscope.Router do
     end
 
     resources "/notifications", NotificationController, only: [:index, :create, :delete]
-
   end
 
   forward "/api", Absinthe.Plug, schema: Microscope.Schema
