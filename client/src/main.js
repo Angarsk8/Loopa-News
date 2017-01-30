@@ -11,7 +11,6 @@ import init from './init'
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
-
 sync(store, router)
 
 Object.keys(filters).forEach(key => {

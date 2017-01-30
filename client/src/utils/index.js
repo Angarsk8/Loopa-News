@@ -18,10 +18,9 @@ const defaultHeaders = {
 function buildHeaders() {
   const authToken = localStorage.getItem('id_token')
 
-  return new Headers({
-    ...defaultHeaders,
+  return new Headers(Object.assign({}, defaultHeaders, {
     Authorization: authToken
-  })
+  }))
 }
 
 function checkStatus(response) {

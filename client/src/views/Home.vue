@@ -62,8 +62,8 @@ export default {
       return this.posts.length + this.more
     },
     more() {
-      return this.rest > this.pagination.page_size
-        ? this.pagination.page_size
+      return this.rest > this.pagination.increment
+        ? this.pagination.increment
         : this.rest
     },
     rest() {

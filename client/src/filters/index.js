@@ -1,7 +1,7 @@
 function domain(url) {
-  const a = document.createElement('a');
-  a.href = url;
-  return a.hostname;
+  const a = document.createElement('a')
+  a.href = url
+  return a.hostname
 }
 
 function pluralize(time, label) {

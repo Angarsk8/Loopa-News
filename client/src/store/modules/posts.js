@@ -27,7 +27,7 @@ const actions = {
     return httpGet(`${apiURL}/posts?page_size=${limit}`)
       .then(({ posts, pagination }) => {
         commit(types.SET_POSTS, posts)
-        commit(types.SET_POSTS_PAGINATION, pagination)
+        commit(types.SET_POSTS_PAGINATION, { ...pagination, increment: 5 })
       })
   },
 
